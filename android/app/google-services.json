@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "199688315400",
+    "project_id": "solaris-2af35",
+    "storage_bucket": "solaris-2af35.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:199688315400:android:14474ff948b4612a7167bd",
+        "android_client_info": {
+          "package_name": "com.solarpanel.solaris"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "199688315400-ah7k9rre9kiomkephitqi6tujcrqbg8b.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAbIPaMSjv5uzw8qCiaoFQ3U4ZMhAC52mI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "199688315400-ah7k9rre9kiomkephitqi6tujcrqbg8b.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
