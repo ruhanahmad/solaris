@@ -10,6 +10,8 @@ class AuthenticationService extends GetxController{
   final auth.FirebaseAuth _firebaseAuth = auth.FirebaseAuth.instance;
   CollectionReference users = FirebaseFirestore.instance.collection('users');
 
+
+var useri;
   User? _userFromFirebase(auth.User? user) {
     if (user == null) {
       return null;
@@ -26,14 +28,18 @@ class AuthenticationService extends GetxController{
     String email,
     String password,
   ) async {
+    EasyLoading.show();
+    
     final credential = await _firebaseAuth.signInWithEmailAndPassword(
       email: email,
       password: password,
     );
-
+     useri = credential.user!.uid;
+     update();
+EasyLoading.dismiss();
+     Get.to(()=>MyNavigationBar());
     return _userFromFirebase(credential.user);
   }
-var useri;
   Future<User?> createUserWithEmailAndPassword(
     String email,
     String password,
@@ -46,7 +52,8 @@ var useri;
       password: password,
     );
     final auth.User user = _firebaseAuth.currentUser!;
-     useri = _firebaseAuth.currentUser!;
+     useri = credential.user!.uid;
+     update();
     users.doc(user.uid).set({
       'email': email,
       'id': user.uid,
@@ -62,6 +69,8 @@ EasyLoading.dismiss();
   }
 
   Future<void> signOut() async {
+    
     return await _firebaseAuth.signOut();
+    
   }
 }

@@ -76,7 +76,9 @@
 import 'package:flutter/material.dart';
 import 'package:solaris/links.dart';
 import 'package:solaris/screens/aboutus.dart';
-import 'package:solaris/screens/complaint.dart';  
+import 'package:solaris/screens/complaint.dart';
+
+import 'screens/profile.dart';  
   
   
 class MyNavigationBar extends StatefulWidget {  
@@ -93,7 +95,8 @@ class _MyNavigationBarState extends State<MyNavigationBar > {
    Links(),
    ComplaintScreen(),
    Text("ss"),
-   AboutUsScreen()
+   AboutUsScreen(),
+    Profile(),
   ];  
   
   void _onItemTapped(int index) {  
@@ -137,6 +140,11 @@ class _MyNavigationBarState extends State<MyNavigationBar > {
             BottomNavigationBarItem(  
             icon: Icon(Icons.info),  
              label: "About us",   
+            backgroundColor: Colors.white,  
+          ),  
+           BottomNavigationBarItem(  
+            icon: Icon(Icons.verified_user),  
+             label: "Profile",   
             backgroundColor: Colors.white,  
           ),  
         ],  
