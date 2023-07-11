@@ -97,7 +97,7 @@ class LoginScreen extends StatelessWidget {
               SizedBox(height: 16.0),
               TextButton(
                 onPressed: () {
-                  Get.to(()=>Customer());
+                  Get.to(()=>MyNavigationBar());
                 },
                 child: Text(
                   'Forgot password?',
