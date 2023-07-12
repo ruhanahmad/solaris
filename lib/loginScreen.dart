@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import 'customer..dart';
+import 'customer.dart';
 
 class LoginScreen extends StatelessWidget {
   @override

@@ -1,11 +1,12 @@
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:solaris/controllerRef.dart';
-import 'package:solaris/customer..dart';
+import 'package:solaris/customer.dart';
 import 'package:solaris/models/user_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart' as auth;
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:solaris/siteEngineer/siteEnginner.dart';
 
 class AuthenticationService extends GetxController{
 
@@ -33,7 +34,7 @@ var useri;
   ) async {
     EasyLoading.show();
      await userController.prepaid(email);
-      if (userController.role != "nothing") {
+      if (userController.role == "customer") {
    final credential = await _firebaseAuth.signInWithEmailAndPassword(
       email: email,
       password: password,
@@ -46,6 +47,22 @@ EasyLoading.dismiss();
      Get.to(()=>MyNavigationBar());
       return _userFromFirebase(credential.user);
       }
+
+       else if (userController.role == "siteEngineer") {
+   final credential = await _firebaseAuth.signInWithEmailAndPassword(
+      email: email,
+      password: password,
+    );
+     useri = credential.user!.uid;
+     update();
+  
+
+EasyLoading.dismiss();
+     Get.to(()=>SiteEngineer());
+      return _userFromFirebase(credential.user);
+      }
+
+
   // else {
    
   // }    

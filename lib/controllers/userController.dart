@@ -26,6 +26,7 @@ var complaint;
   List<DocumentSnapshot> documents = [];
     List news = [];
     String? role;
+    String? userName;
   Future<dynamic> prepaid(String email) async {
     news.clear();
     documents.clear();
@@ -45,7 +46,7 @@ var complaint;
         // accountsList[0].accountB = "";
         var ids = documents.first.id;
         role = documents.first["role"];
-        
+        userName = documents.first["name"];
        update();
      
         
@@ -53,13 +54,14 @@ var complaint;
       }
        else if (documents.first["role"] == "siteEngineer") {
         role = documents.first["role"];
-        
+        userName = documents.first["name"];
        update();
      
     
       }
        else if (documents.first["role"] == "salesPerson") {
         role = documents.first["role"];
+        userName = documents.first["name"];
         
        update();
      
@@ -67,6 +69,7 @@ var complaint;
       }
        else if (documents.first["role"] == "netMetering") {
         role = documents.first["role"];
+        userName = documents.first["name"];
         
        update();
      
@@ -107,6 +110,9 @@ EasyLoading.dismiss();
 }
      FirebaseFirestore firebaseRef =  FirebaseFirestore.instance;
 
+
+      String? selectedUserId ;
+ String? selectedName;
      Future<UploadTask?> uploadFilesPassport(XFile? files,context) async {
   
     
@@ -136,17 +142,24 @@ EasyLoading.dismiss();
     if (kIsWeb) {
       uploadTask = ref.putData(await files.readAsBytes(), metadata);
     } else {
+      
       uploadTask = ref.putFile(io.File(files.path), metadata);
 
     await  uploadTask.whenComplete(() async {
         var uploadpaths = await uploadTask.snapshot.ref.getDownloadURL();
            FirebaseFirestore.instance.collection("complaint").add({
-             "userid":role == "customer" ?auths.useri : auths.useri,
-        'name': complaintName,
+             "userid":role == "customer" ?auths.useri : selectedUserId,
+        'customerName':role == "customer" ? userName: selectedName,
         'complaint': complaint,
                
                 "complaintImage":uploadpaths,
                 "role":role,
+                "dateTime":DateTime.now(),
+                "complaintBy": userName,
+                "status":"pending",
+                "assignedTo":"",
+                "ticketId":rand
+
                 
                
 

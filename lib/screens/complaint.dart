@@ -121,7 +121,8 @@ AuthenticationService auths = Get.put(AuthenticationService());
         automaticallyImplyLeading: false,
       ),
       body: SingleChildScrollView(
-        child: Container(
+        child:
+         Container(
           height: mediaQuery.size.height,
           padding: const EdgeInsets.all(16.0),
           decoration: BoxDecoration(

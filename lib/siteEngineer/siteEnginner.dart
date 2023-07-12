@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:solaris/links.dart';
 import 'package:solaris/screens/aboutus.dart';
 import 'package:solaris/screens/complaint.dart';
+import 'package:solaris/screens/profile.dart';
 import 'package:solaris/screens/test.dart';
 import 'package:solaris/siteEngineer/complaintSiteEngineer.dart';
 
@@ -24,7 +25,7 @@ class _SiteEngineerState extends State<SiteEngineer > {
   ComplaintScreenSiteEngineer(),
     Links(),
    AboutUsScreen(),
-   Links(),
+   Profile(),
   ];  
   
   void _onItemTapped(int index) {  
