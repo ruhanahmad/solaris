@@ -1,4 +1,5 @@
 import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:solaris/controllerRef.dart';
 import 'package:solaris/customer..dart';
 import 'package:solaris/models/user_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -7,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class AuthenticationService extends GetxController{
+
   final auth.FirebaseAuth _firebaseAuth = auth.FirebaseAuth.instance;
   CollectionReference users = FirebaseFirestore.instance.collection('users');
 
@@ -27,18 +29,28 @@ var useri;
   Future<User?> signInWithEmailAndPassword(
     String email,
     String password,
+    BuildContext context,
   ) async {
     EasyLoading.show();
-    
-    final credential = await _firebaseAuth.signInWithEmailAndPassword(
+     await userController.prepaid(email);
+      if (userController.role != "nothing") {
+   final credential = await _firebaseAuth.signInWithEmailAndPassword(
       email: email,
       password: password,
     );
      useri = credential.user!.uid;
      update();
+  
+
 EasyLoading.dismiss();
      Get.to(()=>MyNavigationBar());
-    return _userFromFirebase(credential.user);
+      return _userFromFirebase(credential.user);
+      }
+  // else {
+   
+  // }    
+ 
+   
   }
   Future<User?> createUserWithEmailAndPassword(
     String email,
@@ -58,6 +70,7 @@ EasyLoading.dismiss();
       'email': email,
       'id': user.uid,
       'name': name,
+      "role":""
     });
     user.updateDisplayName(name);
 

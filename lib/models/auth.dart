@@ -1,3 +1,4 @@
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
 import 'package:solaris/models/authentication_service.dart';
 import 'package:solaris/widgets/build_snack_error.dart';
@@ -409,6 +410,7 @@ class _AuthPageState extends State<AuthPage> {
                                         .signInWithEmailAndPassword(
                                       textfieldsStrings[1],
                                       textfieldsStrings[2],
+                                      context,
                                     );
                                   } on FirebaseAuthException catch (authEx) {
                                     if (authEx.code == "user-not-found") {
@@ -417,6 +419,7 @@ class _AuthPageState extends State<AuthPage> {
                                         context,
                                         size,
                                       );
+                                      EasyLoading.dismiss();
                                     } else if (authEx.code ==
                                         "insufficient-permission") {
                                       buildSnackError(
@@ -424,6 +427,7 @@ class _AuthPageState extends State<AuthPage> {
                                         context,
                                         size,
                                       );
+                                       EasyLoading.dismiss();
                                     } else if (authEx.code ==
                                         "internal-error") {
                                       buildSnackError(
@@ -431,6 +435,7 @@ class _AuthPageState extends State<AuthPage> {
                                         context,
                                         size,
                                       );
+                                       EasyLoading.dismiss();
                                     } else if (authEx.code ==
                                         "invalid-argument") {
                                       buildSnackError(
@@ -438,6 +443,7 @@ class _AuthPageState extends State<AuthPage> {
                                         context,
                                         size,
                                       );
+                                       EasyLoading.dismiss();
                                     } else if (authEx.code ==
                                         "invalid-credential") {
                                       buildSnackError(
@@ -445,12 +451,14 @@ class _AuthPageState extends State<AuthPage> {
                                         context,
                                         size,
                                       );
+                                       EasyLoading.dismiss();
                                     } else if (authEx.code == "invalid-email") {
                                       buildSnackError(
                                         "Invalid email adress",
                                         context,
                                         size,
                                       );
+                                       EasyLoading.dismiss();
                                     } else if (authEx.code ==
                                         "invalid-password") {
                                       buildSnackError(
@@ -458,12 +466,14 @@ class _AuthPageState extends State<AuthPage> {
                                         context,
                                         size,
                                       );
+                                       EasyLoading.dismiss();
                                     } else {
                                       buildSnackError(
                                         "Something went wrong, check your connection",
                                         context,
                                         size,
                                       );
+                                       EasyLoading.dismiss();
                                     }
                                   }
                                 }
