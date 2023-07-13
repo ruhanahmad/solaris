@@ -37,6 +37,21 @@ class Profile extends StatelessWidget {
                       child: Text("Logout"),
                     ),
                   ),
+                   Padding(
+                    padding: EdgeInsets.symmetric(
+                      vertical: mediaQuery.size.height * 0.01,
+                      horizontal: mediaQuery.size.width * 0.1,
+                    ),
+                    child: ElevatedButton(
+                      onPressed: ()async {
+                        
+                     userController.sendNotificationToUser();
+                      
+                        
+                        },
+                      child: Text("Logout"),
+                    ),
+                  ),
    ],
  )
     );

@@ -1,10 +1,12 @@
 
 import 'package:flutter/material.dart';
+import 'package:solaris/controllerRef.dart';
 import 'package:solaris/links.dart';
 import 'package:solaris/screens/aboutus.dart';
 import 'package:solaris/screens/complaint.dart';
 import 'package:solaris/screens/profile.dart';
 import 'package:solaris/screens/test.dart';
+import 'package:solaris/siteEngineer/complaintProcessing.dart';
 import 'package:solaris/siteEngineer/complaintSiteEngineer.dart';
 
 
@@ -18,12 +20,19 @@ class SiteEngineer extends StatefulWidget {
 }  
   
 class _SiteEngineerState extends State<SiteEngineer > {  
+
+  @override
+  void initState() {
+   userController.requestPermission();
+    // TODO: implement initState
+    super.initState();
+  }
   int _selectedIndex = 0;  
    List<Widget> _widgetOptions = <Widget>[  
 
    Links(),
   ComplaintScreenSiteEngineer(),
-    Links(),
+    ComplaintScreenProcessing(),
    AboutUsScreen(),
    Profile(),
   ];  

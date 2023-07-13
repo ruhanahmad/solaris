@@ -33,6 +33,7 @@ var useri;
     BuildContext context,
   ) async {
     EasyLoading.show();
+       await userController.storeFCMToken();
      await userController.prepaid(email);
       if (userController.role == "customer") {
    final credential = await _firebaseAuth.signInWithEmailAndPassword(
@@ -40,6 +41,7 @@ var useri;
       password: password,
     );
      useri = credential.user!.uid;
+     
      update();
   
 
@@ -75,6 +77,7 @@ EasyLoading.dismiss();
     String name,
     BuildContext buildContext,
   ) async {
+  
     EasyLoading.show();
     final credential = await _firebaseAuth.createUserWithEmailAndPassword(
       email: email,
@@ -87,7 +90,8 @@ EasyLoading.dismiss();
       'email': email,
       'id': user.uid,
       'name': name,
-      "role":""
+      "role":"",
+      "token":""
     });
     user.updateDisplayName(name);
 

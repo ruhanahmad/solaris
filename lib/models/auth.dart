@@ -1,5 +1,7 @@
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
+import 'package:onesignal_flutter/onesignal_flutter.dart';
+import 'package:solaris/controllerRef.dart';
 import 'package:solaris/models/authentication_service.dart';
 import 'package:solaris/widgets/build_snack_error.dart';
 import 'package:solaris/widgets/button_widget.dart';
@@ -18,6 +20,87 @@ class AuthPage extends StatefulWidget {
 }
 
 class _AuthPageState extends State<AuthPage> {
+
+
+@override
+  void initState() {
+    initPlatformState();
+    // TODO: implement initState
+    super.initState();
+  }
+  bool _requireConsent = true;
+String _debugLabelString = "";
+  String? _emailAddress;
+  String? _smsNumber;
+  String? _externalUserId;
+  String? _language;
+  bool _enableConsentButton = false;
+   Future<void> initPlatformState() async  {
+  OneSignal.shared.setLogLevel(OSLogLevel.verbose, OSLogLevel.none);
+
+
+
+    OneSignal.shared
+        .setNotificationOpenedHandler((OSNotificationOpenedResult result) {
+          print('NOTIFICATION OPENED HANDLER CALLED WITH: ${result}');
+          this.setState(() {
+          _debugLabelString =
+              "Opened notification: \n${result.notification.jsonRepresentation().replaceAll("\\n", "\n")}";
+      });
+    });
+
+
+
+
+      OneSignal.shared
+        .setNotificationWillShowInForegroundHandler((OSNotificationReceivedEvent event) {
+           print('FOREGROUND HANDLER CALLED WITH: ${event}');
+           /// Display Notification, send null to not display
+           event.complete(null);
+          
+           this.setState(() {
+           _debugLabelString =
+              "Notification received in foreground notification: \n${event.notification.jsonRepresentation().replaceAll("\\n", "\n")}";
+      });
+    });  
+
+    OneSignal.shared
+        .setInAppMessageClickedHandler((OSInAppMessageAction action) {
+        this.setState(() {
+        _debugLabelString =
+            "In App Message Clicked: \n${action.jsonRepresentation().replaceAll("\\n", "\n")}";
+      });
+    });
+
+    OneSignal.shared
+        .setSubscriptionObserver((OSSubscriptionStateChanges changes) {
+      print("SUBSCRIPTION STATE CHANGED: ${changes.jsonRepresentation()}");
+    });
+
+    OneSignal.shared.setPermissionObserver((OSPermissionStateChanges changes) {
+      print("PERMISSION STATE CHANGED: ${changes.jsonRepresentation()}");
+    });
+
+
+void _handlePromptForPushPermission() {
+    print("Prompting for Permission");
+    OneSignal.shared.promptUserForPushNotificationPermission().then((accepted) {
+      print("Accepted permission: $accepted");
+    });
+  }
+
+  void _handleGetDeviceState() async {
+    print("Getting DeviceState");
+    OneSignal.shared.getDeviceState().then((deviceState) {
+      print("DeviceState: ${deviceState?.jsonRepresentation()}");
+      this.setState(() {
+        _debugLabelString = deviceState?.jsonRepresentation() ?? "Device state null";
+      });
+    });
+  }
+   }
+
+  
   bool checkedValue = false;
   bool register = true;
   List textfieldsStrings = [
@@ -52,6 +135,12 @@ class _AuthPageState extends State<AuthPage> {
                 SingleChildScrollView(
                   child: Column(
                     children: [
+                      GestureDetector(
+                        onTap: () {
+                          userController.sendNotificationToUser();
+                        },
+                        
+                        child: Text("data")),
                       Padding(
                         padding: EdgeInsets.symmetric(
                           horizontal: size.width * 0.025,

@@ -298,3 +298,95 @@
 //     );
 //   }
 // }
+
+
+import 'package:flutter/material.dart';
+import 'package:onesignal_flutter/onesignal_flutter.dart';
+
+class NotificationPage extends StatelessWidget {
+  void sendNotification() async {
+     var deviceState = await OneSignal.shared.getDeviceState();
+
+    if (deviceState == null || deviceState.userId == null)
+        return;
+
+    var playerId = deviceState.userId!;
+     print("playeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeer" +playerId);
+    var notification = OSCreateNotification(
+      playerIds: [playerId], // Specify the player IDs or segments to target, leave empty for all users
+      content: 'Notification Body',
+      heading: 'Notification Title',
+    );
+
+    var response = await OneSignal.shared.postNotification(notification);
+    print('Notification sent: ${response}');
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('OneSignal Example'),
+      ),
+      body:
+       Center(
+        child: ElevatedButton(
+          onPressed: () {
+            sendNotification();
+          },
+          child: Text('Send Notification'),
+        ),
+      ),
+    );
+  }
+}
+
+void handleNotificationOpened(OSNotificationOpenedResult result) {
+  // Handle opened notification here
+  print('Notification opened: ${result.notification.jsonRepresentation()}');
+  print('Additional data: ${result.notification.additionalData}');
+}
+
+class NotificationOpenedHandler extends StatefulWidget {
+  @override
+  _NotificationOpenedHandlerState createState() =>
+      _NotificationOpenedHandlerState();
+}
+
+class _NotificationOpenedHandlerState extends State<NotificationOpenedHandler> {
+  @override
+  void initState() {
+    super.initState();
+    OneSignal.shared.setNotificationOpenedHandler(handleNotificationOpened);
+  }
+
+  void sendNotification() async {
+     var deviceState = await OneSignal.shared.getDeviceState();
+
+    if (deviceState == null || deviceState.userId == null)
+        return;
+
+    var playerId = deviceState.userId!;
+     print("playeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeer" +playerId);
+    var notification = OSCreateNotification(
+      playerIds: [playerId], // Specify the player IDs or segments to target, leave empty for all users
+      content: 'Notification Body',
+      heading: 'Notification Title',
+    );
+
+    var response = await OneSignal.shared.postNotification(notification);
+    print('Notification sent: ${response}');
+  }
+  @override
+  Widget build(BuildContext context) {
+    return  Center(
+        child: ElevatedButton(
+          onPressed: () {
+            sendNotification();
+          },
+          child: Text('Send Notification'),
+        ),
+      );
+  }
+}
+

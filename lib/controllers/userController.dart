@@ -3,6 +3,7 @@ import 'dart:io' as io;
 import 'dart:math';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
@@ -10,19 +11,111 @@ import 'package:flutter_easyloading/flutter_easyloading.dart';
 
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:onesignal_flutter/onesignal_flutter.dart';
 import 'package:solaris/controllerRef.dart';
 import 'package:solaris/main.dart';
 import 'package:flutter/material.dart';
 
-
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 class UserController extends GetxController {
 
 
-
+var token;
 var complaintName;
 var complaint;
 
+Future requestPermission() async{
+FirebaseMessaging messaging = FirebaseMessaging.instance;
 
+NotificationSettings settings = await messaging.requestPermission(
+  alert: true,
+  announcement: false,
+  badge: true,
+  carPlay: false,
+  criticalAlert: false,
+  provisional: false,
+  sound: true,
+);
+
+if (settings.authorizationStatus == AuthorizationStatus.authorized) {
+  print("user permission");
+}
+else if(settings.authorizationStatus == AuthorizationStatus.provisional) {
+    print("user permission Provisional");
+}
+else {
+  print("no permission");
+}
+
+print('User granted permission: ${settings.authorizationStatus}');
+
+}
+
+Future storeFCMToken()async {
+
+ token = await FirebaseMessaging.instance.getToken();
+}
+
+
+void updateToken() {
+  final usersRef = FirebaseFirestore.instance.collection('users');
+  usersRef.doc(auths.useri).update({'token': token});
+}
+
+
+
+void handleSendNotification() async {
+    var deviceState = await OneSignal.shared.getDeviceState();
+
+    if (deviceState == null || deviceState.userId == null)
+        return;
+
+    var playerId = deviceState.userId!;
+     print(playerId);
+    var imgUrlString =
+        "http://cdn1-www.dogtime.com/assets/uploads/gallery/30-impossibly-cute-puppies/impossibly-cute-puppy-2.jpg";
+
+    var notification = OSCreateNotification(
+        playerIds: [playerId],
+        content: "this is a test from OneSignal's Flutter SDK",
+        heading: "Test Notification",
+        iosAttachments: {"id1": imgUrlString},
+        bigPicture: imgUrlString,
+        buttons: [
+          OSActionButton(text: "test1", id: "id1"),
+          OSActionButton(text: "test2", id: "id2")
+        ]);
+
+    var response = await OneSignal.shared.postNotification(notification);
+print(response);
+   
+  }
+
+
+Future<void> sendNotificationToUser() async {
+  final url = Uri.parse('https://fcm.googleapis.com/fcm/send');
+  final headers = {
+    'Content-Type': 'application/json',
+    'Authorization': 'key=AAAALn5Z4gg:APA91bHBHnvi4zwko95_54v5Xp5hoqmd1mGXAHkGlMJ1FMcH2n1eSYD8iOP2Be6HaVG9Rrqc6YgNDT2R718QhHM-49P66w_Fl56BZQv7eIlm7RQCOW5_WCM3Dbevf6yK-68C8GwL3_3E',
+  };
+
+  final bodyData = {
+    'to': "f708BSKnRd-nGydxcIUFNz:APA91bHty0Q_e0RKqQ6jprUxhIpB9tzUaFaZCQn37kReORRpsocGXCy9VSuaHx8uZVd9wzmgAfgGxU8zsgDxZhxtSvJ8DEKTkAnM7H_N7u7CPfkM2s9E7cGWUi89o61wSc2iz5NVf04P",
+    'notification': {
+      'title': "hi this is frm api",
+      'body': "this is from body",
+    },
+  };
+
+  final response = await http.post(url, headers: headers, body: jsonEncode(bodyData));
+  print(response);
+  if (response.statusCode == 200) {
+    print('Notification sent successfully');
+  } else {
+    print('Failed to send notification. Error: ${response.body}');
+  }
+}
   List<DocumentSnapshot> documents = [];
     List news = [];
     String? role;

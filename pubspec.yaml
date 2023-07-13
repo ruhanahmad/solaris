@@ -47,6 +47,10 @@ dependencies:
   path_provider:
   sizer:
   image_picker: 
+  firebase_messaging:
+  http: ^1.1.0
+  onesignal_flutter:
+  flutter_local_notifications: ^15.1.0+1
 
 
   # The following adds the Cupertino Icons font to your application.
