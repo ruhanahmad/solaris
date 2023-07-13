@@ -12,6 +12,13 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 // import 'package:provider/provider.dart';
 
+
+void handleNotificationOpened(OSNotificationOpenedResult result) {
+  // Handle opened notification here
+  print('Notification opened: ${result.notification.jsonRepresentation()}');
+  print('Additional data: ${result.notification.additionalData}');
+}
+
 class AuthPage extends StatefulWidget {
   const AuthPage({Key? key}) : super(key: key);
 
@@ -25,9 +32,13 @@ class _AuthPageState extends State<AuthPage> {
 @override
   void initState() {
     initPlatformState();
+//  OneSignal.shared.setNotificationOpenedHandler(handleNotificationOpened);
     // TODO: implement initState
     super.initState();
   }
+
+
+
   bool _requireConsent = true;
 String _debugLabelString = "";
   String? _emailAddress;
@@ -39,7 +50,7 @@ String _debugLabelString = "";
   OneSignal.shared.setLogLevel(OSLogLevel.verbose, OSLogLevel.none);
 
 
-
+ OneSignal.shared.setNotificationOpenedHandler(handleNotificationOpened);
     OneSignal.shared
         .setNotificationOpenedHandler((OSNotificationOpenedResult result) {
           print('NOTIFICATION OPENED HANDLER CALLED WITH: ${result}');

@@ -18,19 +18,29 @@ import 'controllerRef.dart';
 
 
 final navigatorKey = GlobalKey<NavigatorState>;
+void handleNotificationOpened(OSNotificationOpenedResult result) {
+  // Handle opened notification here
+  print('Notification opened: ${result.notification.jsonRepresentation()}');
+  print('Additional data: ${result.notification.additionalData}');
+}
 void main()async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
-await FirebaseMessagingService().getToken();
+// await FirebaseMessagingService().getToken();
    OneSignal.shared.setLogLevel(OSLogLevel.verbose, OSLogLevel.none);
 
 OneSignal.shared.setAppId("cfc491ba-dd50-4822-90a3-814ca06bc214");
+OneSignal.shared.setNotificationWillShowInForegroundHandler((OSNotificationReceivedEvent event) {
 
+print(event.notification);
+
+event.complete(event.notification);
+});
 // The promptForPushNotificationsWithUserResponse function will show the iOS or Android push notification prompt. We recommend removing the following code and instead using an In-App Message to prompt for notification permission
 OneSignal.shared.promptUserForPushNotificationPermission().then((accepted) {
     print("Accepted permission: $accepted");
 });
-
+    OneSignal.shared.setNotificationOpenedHandler(handleNotificationOpened);
 
  
   // final usersRef = FirebaseFirestore.instance.collection('users');
@@ -54,8 +64,8 @@ class MyApp extends StatelessWidget {
       ),
       home: 
       // NotificationPage(),
-      NotificationOpenedHandler(),
-      // AuthPage(),
+      // NotificationOpenedHandler(),
+      AuthPage(),
       // LoginScreen(),
       builder: EasyLoading.init(),
     );

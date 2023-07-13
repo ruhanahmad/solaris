@@ -24,6 +24,15 @@ class UserController extends GetxController {
 var token;
 var complaintName;
 var complaint;
+Future updateToken()async {
+  final usersRef = await FirebaseFirestore.instance.collection('users');
+ await usersRef.doc().update({'token': ""});
+}
+//notification=======================
+
+
+
+
 
 Future requestPermission() async{
 FirebaseMessaging messaging = FirebaseMessaging.instance;
@@ -58,9 +67,11 @@ Future storeFCMToken()async {
 }
 
 
-void updateToken() {
-  final usersRef = FirebaseFirestore.instance.collection('users');
-  usersRef.doc(auths.useri).update({'token': token});
+Future updateWorkAssign(String id,String name)async {
+  EasyLoading.show();
+  final usersRef = await FirebaseFirestore.instance.collection('complaint');
+ await  usersRef.doc(id).update({'assignedTo': name});
+ EasyLoading.dismiss();
 }
 
 
@@ -168,6 +179,14 @@ Future<void> sendNotificationToUser() async {
      
     
       }
+       else if (documents.first["role"] == "electrician") {
+        role = documents.first["role"];
+        userName = documents.first["name"];
+        
+       update();
+     
+    
+      }
    
     } else {
       Get.snackbar(
@@ -251,7 +270,9 @@ EasyLoading.dismiss();
                 "complaintBy": userName,
                 "status":"pending",
                 "assignedTo":"",
-                "ticketId":rand
+                "ticketId":rand,
+                "dateTimeCompleted":"",
+                "customerReviews":"",
 
                 
                

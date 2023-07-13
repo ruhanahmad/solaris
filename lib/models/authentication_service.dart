@@ -8,6 +8,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:solaris/siteEngineer/siteEnginner.dart';
 
+import '../electrician/electricianhomePage.dart';
+
 class AuthenticationService extends GetxController{
 
   final auth.FirebaseAuth _firebaseAuth = auth.FirebaseAuth.instance;
@@ -33,7 +35,8 @@ var useri;
     BuildContext context,
   ) async {
     EasyLoading.show();
-       await userController.storeFCMToken();
+  
+   
      await userController.prepaid(email);
       if (userController.role == "customer") {
    final credential = await _firebaseAuth.signInWithEmailAndPassword(
@@ -43,7 +46,7 @@ var useri;
      useri = credential.user!.uid;
      
      update();
-  
+    await notificationController.getPlayerId();
 
 EasyLoading.dismiss();
      Get.to(()=>MyNavigationBar());
@@ -57,10 +60,24 @@ EasyLoading.dismiss();
     );
      useri = credential.user!.uid;
      update();
-  
+    await notificationController.getPlayerId();
 
 EasyLoading.dismiss();
      Get.to(()=>SiteEngineer());
+      return _userFromFirebase(credential.user);
+      }
+
+ else if (userController.role == "electrician") {
+   final credential = await _firebaseAuth.signInWithEmailAndPassword(
+      email: email,
+      password: password,
+    );
+     useri = credential.user!.uid;
+     update();
+    await notificationController.getPlayerId();
+
+EasyLoading.dismiss();
+     Get.to(()=>Electricians());
       return _userFromFirebase(credential.user);
       }
 

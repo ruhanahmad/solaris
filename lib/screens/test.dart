@@ -300,7 +300,9 @@
 // }
 
 
+import "package:firebase_messaging/firebase_messaging.dart";
 import 'package:flutter/material.dart';
+import "package:flutter_local_notifications/flutter_local_notifications.dart";
 import 'package:onesignal_flutter/onesignal_flutter.dart';
 
 class NotificationPage extends StatelessWidget {
@@ -361,15 +363,15 @@ class _NotificationOpenedHandlerState extends State<NotificationOpenedHandler> {
   }
 
   void sendNotification() async {
-     var deviceState = await OneSignal.shared.getDeviceState();
+    //  var deviceState = await OneSignal.shared.getDeviceState();
 
-    if (deviceState == null || deviceState.userId == null)
-        return;
+    // if (deviceState == null || deviceState.userId == null)
+    //     return;
 
-    var playerId = deviceState.userId!;
-     print("playeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeer" +playerId);
+    // var playerId = deviceState.userId!;
+    //  print("playeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeer" +playerId);
     var notification = OSCreateNotification(
-      playerIds: [playerId], // Specify the player IDs or segments to target, leave empty for all users
+      playerIds: ["a99a04ce-f1f2-4d40-8bef-1df6b0187644"], // Specify the player IDs or segments to target, leave empty for all users
       content: 'Notification Body',
       heading: 'Notification Title',
     );
@@ -390,3 +392,46 @@ class _NotificationOpenedHandlerState extends State<NotificationOpenedHandler> {
   }
 }
 
+class Demo extends StatefulWidget {
+@override
+_DemoState createState() => _DemoState();
+}
+class _DemoState extends State<Demo> {
+FirebaseMessaging messaging = FirebaseMessaging.instance;
+late FlutterLocalNotificationsPlugin fltNotification;
+void pushFCMtoken() async {
+String? token=await messaging.getToken();
+print(token);
+//you will get token here in the console
+}
+@override
+void initState() {
+ super.initState();
+ pushFCMtoken();
+ initMessaging();
+}
+@override
+Widget build(BuildContext context) {
+return Scaffold(
+ backgroundColor: Colors.white,
+ body: Center(child: Text("Flutter Push Notifiction"),),);
+}
+void initMessaging() {
+var androiInit = AndroidInitializationSettings("@mipmap/ic_launcher");
+// var iosInit = IOSInitializationSettings();
+var initSetting = InitializationSettings(android: androiInit, );
+fltNotification = FlutterLocalNotificationsPlugin();
+fltNotification.initialize(initSetting);
+var androidDetails =
+AndroidNotificationDetails("1", "channelName", channelDescription: "channelDescription");
+// var iosDetails = IOSNotificationDetails();
+var generalNotificationDetails =
+NotificationDetails(android: androidDetails,);
+FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+RemoteNotification? notification=message.notification;
+AndroidNotification? android=message.notification?.android;
+if(notification!=null && android!=null){
+fltNotification.show(
+notification.hashCode, notification.title, notification.body, generalNotificationDetails);
+}});}
+}

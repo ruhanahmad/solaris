@@ -11,46 +11,18 @@ import 'package:solaris/models/authentication_service.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:solaris/screens/test.dart';
 import '../models/user_model.dart';
-void handleNotificationOpened(OSNotificationOpenedResult result) {
-  // Handle opened notification here
-  print('Notification opened: ${result.notification.jsonRepresentation()}');
-  print('Additional data: ${result.notification.additionalData}');
-}
-class ComplaintScreenProcessing extends StatefulWidget {
+
+class ReceivedComplaintElectrician extends StatefulWidget {
   @override
-  State<ComplaintScreenProcessing> createState() => _ComplaintScreenProcessingState();
+  State<ReceivedComplaintElectrician> createState() => _ReceivedComplaintElectricianState();
 }
 
-class _ComplaintScreenProcessingState extends State<ComplaintScreenProcessing> {
+class _ReceivedComplaintElectricianState extends State<ReceivedComplaintElectrician> {
  final TextEditingController _nameController = TextEditingController();
   final TextEditingController _complaintController = TextEditingController();
   
 AuthenticationService auths = Get.put(AuthenticationService());
-// @override
-//   void initState() {
 
-//     // TODO: implement initState
-//     super.initState();
-//             OneSignal.shared.setNotificationOpenedHandler(handleNotificationOpened);
-//   }
-
-void sendNotification() async {
-    //  var deviceState = await OneSignal.shared.getDeviceState();
-
-    // if (deviceState == null || deviceState.userId == null)
-    //     return;
-
-    // var playerId = deviceState.userId!;
-    //  print("playeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeer" +playerId);
-    var notification = OSCreateNotification(
-      playerIds: ["d153d22c-6083-449f-aa5c-c7bd5b294175"], // Specify the player IDs or segments to target, leave empty for all users
-      content: 'Notification Body',
-      heading: 'Notification Title',
-    );
-
-    var response = await OneSignal.shared.postNotification(notification);
-    print('Notification sent: ${response}');
-  }
   
     Future<void>? alerts(){
     showDialog(context: context, builder: (context){
@@ -123,7 +95,7 @@ void sendNotification() async {
      
     return Scaffold(
       appBar: AppBar(
-        title: Text('Complaint Processing'),
+        title: Text('Complaint Recieved'),
         automaticallyImplyLeading: false,
       ),
       body: SingleChildScrollView(
@@ -141,9 +113,11 @@ void sendNotification() async {
               SizedBox(height: halfHeight * 0.1),
 
   StreamBuilder<QuerySnapshot>(
-               stream:  FirebaseFirestore.instance
-        .collection('complaint')
-        .snapshots(),
+               stream:  
+                           FirebaseFirestore.instance
+                              .collection('complaint')
+                              .where('assignedTo', isEqualTo:userController.userName )
+                              .snapshots(),
                
                builder: (context, snapshot) {
                  if (!snapshot.hasData) {
@@ -181,48 +155,6 @@ void sendNotification() async {
                           children: [
              
                          
-//                          StreamBuilder<QuerySnapshot>(
-//   stream: FirebaseFirestore.instance
-//                               .collection('users')
-//                               .where('id', isEqualTo:userId )
-//                               .snapshots(),
-    
-//   builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
-//     if (snapshot.hasError) {
-//       return Text('Error: ${snapshot.error}');
-//     }
-
-//     if (snapshot.connectionState == ConnectionState.waiting) {
-//       return Text('Loading...');
-//     }
-
-//       // Access the data and display it
-//       final data = snapshot.data!.docs;
-
-//       return ListView.builder(
-//         itemCount: data.length,
-//         itemBuilder: (BuildContext context, int index) {
-//           // Access individual document data
-//           final documentData = data[index].data();
-//            var ids = documents[index].id;
-        
-//                                         var token = documents[index]["token"];
-
-//           // Display the desired field in a Text widget
-//           return Text(token);
-//         },
-//       );
- 
-
-
-//   },
-// ),
-/////////////////////////////////////////////////////
-///
-///
-///
-///
-///
                          
                             ListTile(
                               leading: CircleAvatar(
@@ -234,66 +166,15 @@ void sendNotification() async {
                               subtitle:Text("Complaint received from ${ids} " ), 
                             ),
                                         
-                           StreamBuilder<QuerySnapshot>(
-                                     stream:  FirebaseFirestore.instance
-                              .collection('users')
-                              .where('role', isEqualTo:"electrician" )
-                              .snapshots(),
-                                     
-                                     builder: (context, snapshot) {
-                                       if (!snapshot.hasData) {
-                         return CircularProgressIndicator();
-                                       }
-                            
-                                       List<DocumentSnapshot> documents = snapshot.data!.docs;
-                            
-                                       List<String> names = documents.map((doc) => doc['name'] as String ).toList() ;
-                            
-                                       return
-                        Container(
-                         width: MediaQuery.of(context).size.width /4,
-                         child: DropdownButton<String>(
-                           value: null, // selected value
-                           items: names.map<DropdownMenuItem<String>>((String value) {
-                             return 
-                             DropdownMenuItem<String>(
-                               value: value,
-                               child: Text(value),
-                             );
-                           }).toList(),
-                             onChanged: (dynamic selectedName) {
-                             String selectedNameString = selectedName as String;
-                                       
-                               DocumentSnapshot<Object?>? selectedDoc = documents.firstWhere(
-                               (doc) => doc['name'] == selectedNameString,
-                               // orElse: () => null,
-                             );
-                             setState(() {
-                                selectedValues = selectedDoc;
-                             });
-                                 
-                             if (selectedDoc != null) {
-                                userController.selectedUserId = selectedDoc['id'] as String;
-                                userController.update();
-                               userController.selectedName = selectedDoc['name'] as String;
-                                      userController.update();
-                                       
-                               // Call your other function with the selected user ID and email
-                              //  otherFunction(selectedUserId, selectedEmail);
-                             }
-                           },
-                         ),
-                                       );
-                                     },
-                                   ),
+                       
                                         ElevatedButton(
                         onPressed: () async{
                   // sendNotification();
-    await  userController.updateWorkAssign(ids,userController.selectedName!);
+    await  electricianController.updateToken(ids);
                 //  Get.to(()=>NotificationOpenedHandler()); 
                           print('Button Pressed!');
                         },
-                        child: Text('Send'),
+                        child: Text('Resolve'),
                                         )
                                         
                                         
