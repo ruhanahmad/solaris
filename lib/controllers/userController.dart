@@ -24,6 +24,7 @@ class UserController extends GetxController {
 var token;
 var complaintName;
 var complaint;
+var reviews;
 Future updateToken()async {
   final usersRef = await FirebaseFirestore.instance.collection('users');
  await usersRef.doc().update({'token': ""});
@@ -71,6 +72,13 @@ Future updateWorkAssign(String id,String name)async {
   EasyLoading.show();
   final usersRef = await FirebaseFirestore.instance.collection('complaint');
  await  usersRef.doc(id).update({'assignedTo': name});
+ EasyLoading.dismiss();
+}
+
+Future giveReviews(String id,double reviews)async {
+  EasyLoading.show();
+  final usersRef = await FirebaseFirestore.instance.collection('complaint');
+ await  usersRef.doc(id).update({'customerReviews':reviews });
  EasyLoading.dismiss();
 }
 

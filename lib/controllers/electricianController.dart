@@ -14,7 +14,7 @@ class ElectricianController extends GetxController {
 Future updateToken(String id,)async {
   try{
  final usersRef = await FirebaseFirestore.instance.collection('complaint');
- await usersRef.doc(id).update({'status':"complete","dateTimeCompleted":DateTime.now(),});
+ await usersRef.doc(id).update({'status':"completed","dateTimeCompleted":DateTime.now(),});
   }catch(e){
  Get.snackbar("Error", "Issue in updating ${e}");
   }

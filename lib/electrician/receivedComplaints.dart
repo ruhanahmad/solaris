@@ -116,7 +116,7 @@ AuthenticationService auths = Get.put(AuthenticationService());
                stream:  
                            FirebaseFirestore.instance
                               .collection('complaint')
-                              .where('assignedTo', isEqualTo:userController.userName )
+                              .where('assignedTo', isEqualTo:userController.userName ).where('status', isEqualTo:"pending" )
                               .snapshots(),
                
                builder: (context, snapshot) {

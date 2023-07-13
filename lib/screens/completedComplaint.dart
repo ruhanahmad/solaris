@@ -11,13 +11,13 @@ import 'package:solaris/models/authentication_service.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:solaris/screens/test.dart';
 import '../models/user_model.dart';
-
-class PreviousComplaint extends StatefulWidget {
+import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+class CompletedComplaint extends StatefulWidget {
   @override
-  State<PreviousComplaint> createState() => _PreviousComplaintState();
+  State<CompletedComplaint> createState() => _CompletedComplaintState();
 }
 
-class _PreviousComplaintState extends State<PreviousComplaint> {
+class _CompletedComplaintState extends State<CompletedComplaint> {
  final TextEditingController _nameController = TextEditingController();
   final TextEditingController _complaintController = TextEditingController();
   
@@ -56,7 +56,7 @@ AuthenticationService auths = Get.put(AuthenticationService());
 
   StreamBuilder<QuerySnapshot>(
                stream:  FirebaseFirestore.instance
-        .collection('complaint').where('userid', isEqualTo:auths.useri ).where("status",isEqualTo:"pending")
+        .collection('complaint').where('userid', isEqualTo:auths.useri ).where('status', isEqualTo:"completed" )
         .snapshots(),
                
                builder: (context, snapshot) {
@@ -85,6 +85,7 @@ AuthenticationService auths = Get.put(AuthenticationService());
                                         var token = documents[index]["token"];
                                         var ticketId = documents[index]["ticketId"];
                                         var assignedTo = documents[index]["assignedTo"];
+                                        var reviews = documents[index]["customerReviews"];
                               
                  return     Padding(
                       padding: const EdgeInsets.all(4.0),
@@ -103,12 +104,43 @@ AuthenticationService auths = Get.put(AuthenticationService());
                                 radius: 50,
                                 backgroundImage: NetworkImage(image ?? ""),
                               ),
-                              title:assignedTo == "" ?  Text("Your Complaint Generated ticket number: ${ticketId}.Description : ${complaintDescription} " ):Text("Your Complaint Generated ticket number: ${ticketId}. ${assignedTo} is Working on your Complaint.Description : ${complaintDescription} " ), 
+                              title:  Text("Your Complaint Generated ticket number: ${ticketId}.Description : ${complaintDescription} is Completed.Kindly give reviews " ), 
                               trailing:Text("${status}",style: TextStyle(color: Colors.green),) ,
-                              subtitle:Text("Complaint received from ${ids} " ), 
+                              subtitle:
+                              
+                              RatingBar.builder(
+   initialRating:reviews ==0 ? 0 :reviews,
+   minRating: 1,
+   direction: Axis.horizontal,
+   allowHalfRating: true,
+   itemCount: 5,
+   itemPadding: EdgeInsets.symmetric(horizontal: 4.0),
+   itemBuilder: (context, _) => Icon(
+     Icons.star,
+     color: Colors.amber,
+   ),
+   onRatingUpdate: (rating) {
+    //  print(rating);
+      userController.reviews = rating;
+   
+      userController.update();
+   },
+)
+                              // Text("Complaint received from ${ids} " )
+                              
+                              , 
                             ),
-                                        
+                                   reviews == 0 ?     
                      
+                                        ElevatedButton(
+                        onPressed: () async{
+                  // sendNotification();
+    await  userController.giveReviews(ids,userController.reviews!);
+                //  Get.to(()=>NotificationOpenedHandler()); 
+                          print('Button Pressed!');
+                        },
+                        child: Text('Send'),
+                                        ): Container()
                                         
                                         
                           ],

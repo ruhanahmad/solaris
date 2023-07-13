@@ -116,10 +116,10 @@ AuthenticationService auths = Get.put(AuthenticationService());
     final halfHeight = mediaQuery.size.height * 0.5;
 
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Complaint'),
-        automaticallyImplyLeading: false,
-      ),
+      // appBar: AppBar(
+      //   title: Text('Complaint'),
+      //   automaticallyImplyLeading: false,
+      // ),
       body: SingleChildScrollView(
         child:
          Container(

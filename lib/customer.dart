@@ -77,6 +77,7 @@ import 'package:flutter/material.dart';
 import 'package:solaris/links.dart';
 import 'package:solaris/screens/aboutus.dart';
 import 'package:solaris/screens/complaint.dart';
+import 'package:solaris/screens/tabbar.dart';
 import 'package:solaris/screens/test.dart';
 
 import 'screens/profile.dart';  
@@ -94,7 +95,7 @@ class _MyNavigationBarState extends State<MyNavigationBar > {
    List<Widget> _widgetOptions = <Widget>[  
 
    Links(),
-   ComplaintScreen(),
+  tabBars(),
      Profile(),
    AboutUsScreen(),
     Profile(),
