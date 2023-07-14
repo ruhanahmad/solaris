@@ -82,7 +82,7 @@ AuthenticationService auths = Get.put(AuthenticationService());
                   var status = documents[index]['status'];
                                 var image = documents[index]["complaintImage"];
                                         var userId = documents[index]["userid"];
-                                        var token = documents[index]["token"];
+                //                         var token = documents[index]["token"];
                                         var ticketId = documents[index]["ticketId"];
                                         var assignedTo = documents[index]["assignedTo"];
                               

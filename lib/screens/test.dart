@@ -305,133 +305,242 @@ import 'package:flutter/material.dart';
 import "package:flutter_local_notifications/flutter_local_notifications.dart";
 import 'package:onesignal_flutter/onesignal_flutter.dart';
 
-class NotificationPage extends StatelessWidget {
-  void sendNotification() async {
-     var deviceState = await OneSignal.shared.getDeviceState();
+// class NotificationPage extends StatelessWidget {
+//   void sendNotification() async {
+//      var deviceState = await OneSignal.shared.getDeviceState();
 
-    if (deviceState == null || deviceState.userId == null)
-        return;
+//     if (deviceState == null || deviceState.userId == null)
+//         return;
 
-    var playerId = deviceState.userId!;
-     print("playeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeer" +playerId);
-    var notification = OSCreateNotification(
-      playerIds: [playerId], // Specify the player IDs or segments to target, leave empty for all users
-      content: 'Notification Body',
-      heading: 'Notification Title',
-    );
+//     var playerId = deviceState.userId!;
+//      print("playeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeer" +playerId);
+//     var notification = OSCreateNotification(
+//       playerIds: [playerId], // Specify the player IDs or segments to target, leave empty for all users
+//       content: 'Notification Body',
+//       heading: 'Notification Title',
+//     );
 
-    var response = await OneSignal.shared.postNotification(notification);
-    print('Notification sent: ${response}');
-  }
+//     var response = await OneSignal.shared.postNotification(notification);
+//     print('Notification sent: ${response}');
+//   }
+
+//   @override
+//   Widget build(BuildContext context) {
+//     return Scaffold(
+//       appBar: AppBar(
+//         title: Text('OneSignal Example'),
+//       ),
+//       body:
+//        Center(
+//         child: ElevatedButton(
+//           onPressed: () {
+//             sendNotification();
+//           },
+//           child: Text('Send Notification'),
+//         ),
+//       ),
+//     );
+//   }
+// }
+
+// void handleNotificationOpened(OSNotificationOpenedResult result) {
+//   // Handle opened notification here
+//   print('Notification opened: ${result.notification.jsonRepresentation()}');
+//   print('Additional data: ${result.notification.additionalData}');
+// }
+
+// class NotificationOpenedHandler extends StatefulWidget {
+//   @override
+//   _NotificationOpenedHandlerState createState() =>
+//       _NotificationOpenedHandlerState();
+// }
+
+// class _NotificationOpenedHandlerState extends State<NotificationOpenedHandler> {
+//   @override
+//   void initState() {
+//     super.initState();
+//     OneSignal.shared.setNotificationOpenedHandler(handleNotificationOpened);
+//   }
+
+//   void sendNotification() async {
+//     //  var deviceState = await OneSignal.shared.getDeviceState();
+
+//     // if (deviceState == null || deviceState.userId == null)
+//     //     return;
+
+//     // var playerId = deviceState.userId!;
+//     //  print("playeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeer" +playerId);
+//     var notification = OSCreateNotification(
+//       playerIds: ["a99a04ce-f1f2-4d40-8bef-1df6b0187644"], // Specify the player IDs or segments to target, leave empty for all users
+//       content: 'Notification Body',
+//       heading: 'Notification Title',
+//     );
+
+//     var response = await OneSignal.shared.postNotification(notification);
+//     print('Notification sent: ${response}');
+//   }
+//   @override
+//   Widget build(BuildContext context) {
+//     return  Center(
+//         child: ElevatedButton(
+//           onPressed: () {
+//             sendNotification();
+//           },
+//           child: Text('Send Notification'),
+//         ),
+//       );
+//   }
+// }
+
+// class Demo extends StatefulWidget {
+// @override
+// _DemoState createState() => _DemoState();
+// }
+// class _DemoState extends State<Demo> {
+// FirebaseMessaging messaging = FirebaseMessaging.instance;
+// late FlutterLocalNotificationsPlugin fltNotification;
+// void pushFCMtoken() async {
+// String? token=await messaging.getToken();
+// print(token);
+// //you will get token here in the console
+// }
+// @override
+// void initState() {
+//  super.initState();
+//  pushFCMtoken();
+//  initMessaging();
+// }
+// @override
+// Widget build(BuildContext context) {
+// return Scaffold(
+//  backgroundColor: Colors.white,
+//  body: Center(child: Text("Flutter Push Notifiction"),),);
+// }
+// void initMessaging() {
+// var androiInit = AndroidInitializationSettings("@mipmap/ic_launcher");
+// // var iosInit = IOSInitializationSettings();
+// var initSetting = InitializationSettings(android: androiInit, );
+// fltNotification = FlutterLocalNotificationsPlugin();
+// fltNotification.initialize(initSetting);
+// var androidDetails =
+// AndroidNotificationDetails("1", "channelName", channelDescription: "channelDescription");
+// // var iosDetails = IOSNotificationDetails();
+// var generalNotificationDetails =
+// NotificationDetails(android: androidDetails,);
+// FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+// RemoteNotification? notification=message.notification;
+// AndroidNotification? android=message.notification?.android;
+// if(notification!=null && android!=null){
+// fltNotification.show(
+// notification.hashCode, notification.title, notification.body, generalNotificationDetails);
+// }});}
+// }
+import 'package:flutter/material.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+
+
+
+class HomeScreenss extends StatelessWidget {
+  final CollectionReference _dataCollection =
+      FirebaseFirestore.instance.collection('data');
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('OneSignal Example'),
+        title: Text('Data Fetching Example'),
       ),
-      body:
-       Center(
-        child: ElevatedButton(
-          onPressed: () {
-            sendNotification();
-          },
-          child: Text('Send Notification'),
-        ),
+      body: StreamBuilder<QuerySnapshot>(
+        stream:  FirebaseFirestore.instance
+        .collection('complaint').where("status",isEqualTo: "pending")
+        .snapshots(),
+        builder: (context, snapshot) {
+          if (!snapshot.hasData) {
+            return Center(
+              child: CircularProgressIndicator(),
+            );
+          }
+
+          final data = snapshot.data!.docs;
+
+          return ListView.builder(
+            itemCount: data.length,
+            itemBuilder: (context, index) {
+              final document = data[index];
+              final fieldValue = document['complaint'];
+
+              return Column(
+                children: [
+                  ListTile(
+                    title: Text(fieldValue),
+                  ),
+                  StreamBuilder<QuerySnapshot>(
+                    stream:
+                 FirebaseFirestore.instance
+                              .collection('users')
+                              .where('role', isEqualTo:"electrician" )
+                              .snapshots(),
+                    builder: (context, snapshot) {
+                      if (!snapshot.hasData) {
+                        return SizedBox();
+                      }
+
+                      final dropdownData = snapshot.data!.docs;
+
+                      return ListView.builder(
+                        shrinkWrap: true,
+                        physics: NeverScrollableScrollPhysics(),
+                        itemCount: dropdownData.length,
+                        itemBuilder: (context, index) {
+                          final dropdownDocument = dropdownData[index];
+                          final dropdownValue =
+                              dropdownDocument['name'];
+                          bool isButtonVisible = false;
+
+                          return ListTile(
+                            title: DropdownButtonHideUnderline(
+                              child: DropdownButton<String>(
+                                value: dropdownValue,
+                                items: dropdownData
+                                    .map((dropdownDocument) =>
+                                        DropdownMenuItem<String>(
+                                          value:
+                                              dropdownDocument['dropdownValue'],
+                                          child: Text(
+                                              dropdownDocument['dropdownValue']),
+                                        ))
+                                    .toList(),
+                                onChanged: (value) {
+                                  if (value != dropdownValue) {
+                                    isButtonVisible = false;
+                                  } else {
+                                    isButtonVisible = true;
+                                  }
+                                },
+                              ),
+                            ),
+                            trailing: Visibility(
+                              visible: isButtonVisible,
+                              child: ElevatedButton(
+                                child: Text('Button'),
+                                onPressed: () {
+                                  // Handle button press here
+                                  print('Button pressed for $fieldValue');
+                                },
+                              ),
+                            ),
+                          );
+                        },
+                      );
+                    },
+                  ),
+                ],
+              );
+            },
+          );
+        },
       ),
     );
   }
 }
 
-void handleNotificationOpened(OSNotificationOpenedResult result) {
-  // Handle opened notification here
-  print('Notification opened: ${result.notification.jsonRepresentation()}');
-  print('Additional data: ${result.notification.additionalData}');
-}
-
-class NotificationOpenedHandler extends StatefulWidget {
-  @override
-  _NotificationOpenedHandlerState createState() =>
-      _NotificationOpenedHandlerState();
-}
-
-class _NotificationOpenedHandlerState extends State<NotificationOpenedHandler> {
-  @override
-  void initState() {
-    super.initState();
-    OneSignal.shared.setNotificationOpenedHandler(handleNotificationOpened);
-  }
-
-  void sendNotification() async {
-    //  var deviceState = await OneSignal.shared.getDeviceState();
-
-    // if (deviceState == null || deviceState.userId == null)
-    //     return;
-
-    // var playerId = deviceState.userId!;
-    //  print("playeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeer" +playerId);
-    var notification = OSCreateNotification(
-      playerIds: ["a99a04ce-f1f2-4d40-8bef-1df6b0187644"], // Specify the player IDs or segments to target, leave empty for all users
-      content: 'Notification Body',
-      heading: 'Notification Title',
-    );
-
-    var response = await OneSignal.shared.postNotification(notification);
-    print('Notification sent: ${response}');
-  }
-  @override
-  Widget build(BuildContext context) {
-    return  Center(
-        child: ElevatedButton(
-          onPressed: () {
-            sendNotification();
-          },
-          child: Text('Send Notification'),
-        ),
-      );
-  }
-}
-
-class Demo extends StatefulWidget {
-@override
-_DemoState createState() => _DemoState();
-}
-class _DemoState extends State<Demo> {
-FirebaseMessaging messaging = FirebaseMessaging.instance;
-late FlutterLocalNotificationsPlugin fltNotification;
-void pushFCMtoken() async {
-String? token=await messaging.getToken();
-print(token);
-//you will get token here in the console
-}
-@override
-void initState() {
- super.initState();
- pushFCMtoken();
- initMessaging();
-}
-@override
-Widget build(BuildContext context) {
-return Scaffold(
- backgroundColor: Colors.white,
- body: Center(child: Text("Flutter Push Notifiction"),),);
-}
-void initMessaging() {
-var androiInit = AndroidInitializationSettings("@mipmap/ic_launcher");
-// var iosInit = IOSInitializationSettings();
-var initSetting = InitializationSettings(android: androiInit, );
-fltNotification = FlutterLocalNotificationsPlugin();
-fltNotification.initialize(initSetting);
-var androidDetails =
-AndroidNotificationDetails("1", "channelName", channelDescription: "channelDescription");
-// var iosDetails = IOSNotificationDetails();
-var generalNotificationDetails =
-NotificationDetails(android: androidDetails,);
-FirebaseMessaging.onMessage.listen((RemoteMessage message) {
-RemoteNotification? notification=message.notification;
-AndroidNotification? android=message.notification?.android;
-if(notification!=null && android!=null){
-fltNotification.show(
-notification.hashCode, notification.title, notification.body, generalNotificationDetails);
-}});}
-}

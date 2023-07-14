@@ -240,9 +240,29 @@ EasyLoading.dismiss();
  var uniqueKeys = firebaseRef.collection("users");
     var uniqueKey = firebaseRef.collection("users");
     if (files == null) {
-    Get.snackbar("Title", "No file was selected");
+      EasyLoading.show();
+      FirebaseFirestore.instance.collection("complaint").add({
+             "userid":role == "customer" ?auths.useri : selectedUserId,
+        'customerName':role == "customer" ? userName: selectedName,
+        'complaint': complaint,
+               
+                "complaintImage":"",
+                "role":role,
+                "dateTime":DateTime.now(),
+                "complaintBy": userName,
+                "status":"pending",
+                "assignedTo":"",
+                "ticketId":rand,
+                "dateTimeCompleted":"",
+                "customerReviews":"",
 
-      return null;
+                
+               
+
+           });
+           EasyLoading.dismiss();
+           return null;
+           
     }
 
     UploadTask uploadTask;

@@ -82,8 +82,57 @@ AuthenticationService auths = Get.put(AuthenticationService());
     // }
   
   }
+  String _selectedValue = '';
+ void openBottomSheet(BuildContext context) {
+    showModalBottomSheet(
+      context: context,
+      builder: (context) {
+        return StreamBuilder<QuerySnapshot>(
+          stream:  FirebaseFirestore.instance
+        .collection('users')
+        .where('role', isEqualTo:"customer" )
+        .snapshots(),
+               
+          builder: (context, snapshot) {
+            if (!snapshot.hasData) {
+              return CircularProgressIndicator();
+            }
 
+            final records = snapshot.data!.docs;
+            return ListView.builder(
+              itemCount: records.length,
+              itemBuilder: (context, index) {
+                final fieldValue = records[index]['name'];
+                return ListTile(
+                  title: Text(fieldValue),
+                  onTap: () {
+                    setState(() {
+                      _selectedValue = fieldValue;
+                    });
+                     DocumentSnapshot<Object?>? selectedDoc = records.firstWhere(
+                             (doc) => doc['name'] == _selectedValue,);
+  if (selectedDoc != null) {
+   
+                              userController.selectedUserId = selectedDoc['id'] as String;
+                              print(userController.selectedUserId);
+                              userController.update();
+                             userController.selectedName = selectedDoc['name'] as String;
+                               print(userController.selectedName);
+                                    userController.update();
+                     
+                           }
 
+                    Navigator.pop(context);
+                  },
+                );
+                
+              },
+            );
+          },
+        );
+      },
+    );
+  }
 
 
   var selectedValues;
@@ -124,40 +173,52 @@ AuthenticationService auths = Get.put(AuthenticationService());
                  List<DocumentSnapshot> documents = snapshot.data!.docs;
       
                  List<String> names = documents.map((doc) => doc['name'] as String ).toList() ;
-      
-                 return Container(
-                   width: MediaQuery.of(context).size.width /4,
-                   child: DropdownButton<String>(
-                     value: null, // selected value
-                     items: names.map<DropdownMenuItem<String>>((String value) {
-                       return 
-                       DropdownMenuItem<String>(
-                         value: value,
-                         child: Text(value),
-                       );
-                     }).toList(),
-                       onChanged: (dynamic selectedName) {
-                       String selectedNameString = selectedName as String;
-                 
-                         DocumentSnapshot<Object?>? selectedDoc = documents.firstWhere(
-                         (doc) => doc['name'] == selectedNameString,
-                         // orElse: () => null,
-                       );
-                       setState(() {
-                          selectedValues = selectedDoc;
-                       });
-                           
-                       if (selectedDoc != null) {
-                          userController.selectedUserId = selectedDoc['id'] as String;
-                          userController.update();
-                         userController.selectedName = selectedDoc['name'] as String;
-                                userController.update();
-                 
-                         // Call your other function with the selected user ID and email
-                        //  otherFunction(selectedUserId, selectedEmail);
-                       }
-                     },
-                   ),
+        String fieldData = documents.first['name'];
+                 return Column(
+                   children: [
+                   ElevatedButton(
+                onPressed: () {
+                  // Open the bottom sheet passing the field data
+                   openBottomSheet(context);
+                },
+                child: Text('Select Customer'),
+              ),
+         _selectedValue == "" ?     Text("Customer Name :No Customer Selected"):Text("Customer Name ${_selectedValue}"),
+                     Container(
+                       width: MediaQuery.of(context).size.width /4,
+                       child: DropdownButton<String>(
+                         value: null, // selected value
+                         items: names.map<DropdownMenuItem<String>>((String value) {
+                           return 
+                           DropdownMenuItem<String>(
+                             value: value,
+                             child: Text(value),
+                           );
+                         }).toList(),
+                           onChanged: (dynamic selectedName) {
+                           String selectedNameString = selectedName as String;
+                     
+                             DocumentSnapshot<Object?>? selectedDoc = documents.firstWhere(
+                             (doc) => doc['name'] == selectedNameString,
+                             // orElse: () => null,
+                           );
+                           setState(() {
+                              selectedValues = selectedDoc;
+                           });
+                               
+                           if (selectedDoc != null) {
+                              userController.selectedUserId = selectedDoc['id'] as String;
+                              userController.update();
+                             userController.selectedName = selectedDoc['name'] as String;
+                                    userController.update();
+                     
+                             // Call your other function with the selected user ID and email
+                            //  otherFunction(selectedUserId, selectedEmail);
+                           }
+                         },
+                       ),
+                     ),
+                   ],
                  );
                },
              ),
@@ -268,7 +329,7 @@ AuthenticationService auths = Get.put(AuthenticationService());
 
 
 
-         selectedValues !=null ?
+        _selectedValue != "" ?
               SizedBox(
                 width: double.infinity,
                 height: 48.0,
@@ -300,4 +361,6 @@ AuthenticationService auths = Get.put(AuthenticationService());
       ),
     );
   }
+
+
 }

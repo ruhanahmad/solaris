@@ -70,7 +70,7 @@ AuthenticationService auths = Get.put(AuthenticationService());
       
                  return
                  Container(
-                  height: 400,
+                  height: MediaQuery.of(context).size.height,
                   width: MediaQuery.of(context).size.width,
                    child: 
                    ListView.builder(
@@ -86,6 +86,17 @@ AuthenticationService auths = Get.put(AuthenticationService());
                                         var ticketId = documents[index]["ticketId"];
                                         var assignedTo = documents[index]["assignedTo"];
                                         var reviews = documents[index]["customerReviews"];
+                                        Timestamp dateTime = documents[index]["dateTime"] as Timestamp;
+                                     DateTime  one=   dateTime.toDate();
+                                        Timestamp dateTimeCompleted = documents[index]["dateTimeCompleted"] as Timestamp;
+                                    DateTime two =    dateTimeCompleted.toDate();
+                                        Duration difference  =two.difference(one);
+                                        int days = difference.inDays;
+  int hours = difference.inHours.remainder(24);
+  int minutes = difference.inMinutes.remainder(60);
+                                       
+                                      
+
                               
                  return     Padding(
                       padding: const EdgeInsets.all(4.0),
@@ -104,7 +115,9 @@ AuthenticationService auths = Get.put(AuthenticationService());
                                 radius: 50,
                                 backgroundImage: NetworkImage(image ?? ""),
                               ),
-                              title:  Text("Your Complaint Generated ticket number: ${ticketId}.Description : ${complaintDescription} is Completed.Kindly give reviews " ), 
+                              title:  Text("Your Complaint Generated ticket number: ${ticketId}.Description : ${complaintDescription} is Completed.Kindly give reviews.Total time spent to complete this task is ${days} day , ${hours} hours and ${minutes} minutes "
+                              
+                               ), 
                               trailing:Text("${status}",style: TextStyle(color: Colors.green),) ,
                               subtitle:
                               

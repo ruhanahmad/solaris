@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:solaris/controllerRef.dart';
 import 'package:solaris/models/auth.dart';
 import 'package:solaris/models/authentication_service.dart';
+import 'package:solaris/screens/tests.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 
@@ -21,7 +22,7 @@ class Profile extends StatelessWidget {
       body: 
  Column(
    children: [
-    Text("data : ${userController.userName}"),
+    Text("Name : ${userController.userName}"),
      Padding(
                     padding: EdgeInsets.symmetric(
                       vertical: mediaQuery.size.height * 0.01,
@@ -44,8 +45,8 @@ class Profile extends StatelessWidget {
                     ),
                     child: ElevatedButton(
                       onPressed: ()async {
-                        
-                     userController.sendNotificationToUser();
+                        // Get.to(()=>HomeScreenss());
+                    //  userController.sendNotificationToUser();
                       
                         
                         },

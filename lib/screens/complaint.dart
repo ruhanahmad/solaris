@@ -152,24 +152,24 @@ AuthenticationService auths = Get.put(AuthenticationService());
                 ),
               ),
               SizedBox(height: halfHeight * 0.1),
-              TextField(
-                onChanged: (value) {
-                  userController.complaintName = value;
-                },
-                controller: _nameController,
-                decoration: InputDecoration(
-                  filled: true,
-                  fillColor: Colors.green.withOpacity(0.2),
-                  hintText: 'Name',
-                  hintStyle: TextStyle(color: Colors.green),
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(8.0),
-                    borderSide: BorderSide.none,
-                  ),
-                  prefixIcon: Icon(Icons.person, color: Colors.green),
-                ),
-                style: TextStyle(color: Colors.green),
-              ),
+              // TextField(
+              //   onChanged: (value) {
+              //     userController.complaintName = value;
+              //   },
+              //   controller: _nameController,
+              //   decoration: InputDecoration(
+              //     filled: true,
+              //     fillColor: Colors.green.withOpacity(0.2),
+              //     hintText: 'Name',
+              //     hintStyle: TextStyle(color: Colors.green),
+              //     border: OutlineInputBorder(
+              //       borderRadius: BorderRadius.circular(8.0),
+              //       borderSide: BorderSide.none,
+              //     ),
+              //     prefixIcon: Icon(Icons.person, color: Colors.green),
+              //   ),
+              //   style: TextStyle(color: Colors.green),
+              // ),
               SizedBox(height: 16.0),
               TextField(
                   onChanged: (value) {

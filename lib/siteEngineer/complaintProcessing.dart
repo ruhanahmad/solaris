@@ -26,6 +26,13 @@ class _ComplaintScreenProcessingState extends State<ComplaintScreenProcessing> {
   final TextEditingController _complaintController = TextEditingController();
   
 AuthenticationService auths = Get.put(AuthenticationService());
+
+// @override
+//   void initState() {
+//     // TODO: implement initState
+//      selectedValues = "";
+//     super.initState();
+//   }
 // @override
 //   void initState() {
 
@@ -33,7 +40,70 @@ AuthenticationService auths = Get.put(AuthenticationService());
 //     super.initState();
 //             OneSignal.shared.setNotificationOpenedHandler(handleNotificationOpened);
 //   }
+  String _selectedValue = '';
+  bool  _isButtonVisible =  false;
+ void openBottomSheet(BuildContext context,String id) {
+    showModalBottomSheet(
+      context: context,
+      builder: (context) {
+        return StreamBuilder<QuerySnapshot>(
+          stream:  FirebaseFirestore.instance
+                              .collection('users')
+                              .where('role', isEqualTo:"electrician" )
+                              .snapshots(),
+               
+          builder: (context, snapshot) {
+            if (!snapshot.hasData) {
+              return CircularProgressIndicator();
+            }
 
+            final records = snapshot.data!.docs;
+            return ListView.builder(
+              itemCount: records.length,
+              itemBuilder: (context, index) {
+                final fieldValue = records[index]['name'];
+                // final bool isButtonVisible = fieldValue == 'visible';
+                return ListTile(
+                  title: Text(fieldValue),
+                  onTap: () async{
+                    setState(() {
+                      _selectedValue = fieldValue;
+                     
+                    });
+                     DocumentSnapshot<Object?>? selectedDoc = records.firstWhere(
+                             (doc) => doc['name'] == _selectedValue,);
+  if (selectedDoc != null) {
+   
+                              userController.selectedUserId = selectedDoc['id'] as String;
+                              print(userController.selectedUserId);
+                              userController.update();
+                             userController.selectedName = selectedDoc['name'] as String;
+                               print(userController.selectedName);
+                                    userController.update();
+                               
+                              
+  try{
+ final usersRef = await FirebaseFirestore.instance.collection('complaint');
+ await usersRef.doc(id).update({"assignedTo":userController.selectedName});
+  }catch(e){
+ Get.snackbar("Error", "Issue in updating ${e}");
+  }
+
+
+
+                           }
+
+                    Navigator.pop(context);
+                  },
+                );
+                
+              },
+            );
+          },
+        );
+      },
+    );
+  }
 void sendNotification() async {
     //  var deviceState = await OneSignal.shared.getDeviceState();
 
@@ -106,10 +176,7 @@ void sendNotification() async {
 
     });
     
-    // if (images !=null) {
-    //     userController.imageFile = images.path == null ? "" :images.path;
-    // userController.update();
-    // }
+  
   
   }
 
@@ -142,7 +209,7 @@ void sendNotification() async {
 
   StreamBuilder<QuerySnapshot>(
                stream:  FirebaseFirestore.instance
-        .collection('complaint')
+        .collection('complaint').where("status",isEqualTo: "pending")
         .snapshots(),
                
                builder: (context, snapshot) {
@@ -156,7 +223,7 @@ void sendNotification() async {
       
                  return
                  Container(
-                  height: 400,
+                  height:580,
                   width: MediaQuery.of(context).size.width,
                    child: 
                    ListView.builder(
@@ -166,9 +233,11 @@ void sendNotification() async {
                        var cusName = documents[index]['customerName'];
                 var complaintDescription = documents[index]['complaint'];
                   var status = documents[index]['status'];
-                                var image = documents[index]["complaintImage"];
+                                var image = documents[index]["complaintImage"] ?? "";
                                         var userId = documents[index]["userid"];
-                                        var token = documents[index]["token"];
+
+                                        var assignedTo = documents[index]["assignedTo"] ?? "";
+                                        // var token = documents[index]["token"];
                               
                  return     Padding(
                       padding: const EdgeInsets.all(4.0),
@@ -180,54 +249,12 @@ void sendNotification() async {
                         child: Column(
                           children: [
              
-                         
-//                          StreamBuilder<QuerySnapshot>(
-//   stream: FirebaseFirestore.instance
-//                               .collection('users')
-//                               .where('id', isEqualTo:userId )
-//                               .snapshots(),
-    
-//   builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
-//     if (snapshot.hasError) {
-//       return Text('Error: ${snapshot.error}');
-//     }
 
-//     if (snapshot.connectionState == ConnectionState.waiting) {
-//       return Text('Loading...');
-//     }
-
-//       // Access the data and display it
-//       final data = snapshot.data!.docs;
-
-//       return ListView.builder(
-//         itemCount: data.length,
-//         itemBuilder: (BuildContext context, int index) {
-//           // Access individual document data
-//           final documentData = data[index].data();
-//            var ids = documents[index].id;
-        
-//                                         var token = documents[index]["token"];
-
-//           // Display the desired field in a Text widget
-//           return Text(token);
-//         },
-//       );
- 
-
-
-//   },
-// ),
-/////////////////////////////////////////////////////
-///
-///
-///
-///
-///
                          
                             ListTile(
                               leading: CircleAvatar(
                                 radius: 50,
-                                backgroundImage: NetworkImage(image ?? ""),
+                                backgroundImage: NetworkImage(image ??  'https://via.placeholder.com/150'),
                               ),
                               title: Text("Complaint received from ${cusName}.Description : ${complaintDescription} " ), 
                               trailing:Text("${status}",style: TextStyle(color: Colors.green),) ,
@@ -250,51 +277,68 @@ void sendNotification() async {
                                        List<String> names = documents.map((doc) => doc['name'] as String ).toList() ;
                             
                                        return
-                        Container(
-                         width: MediaQuery.of(context).size.width /4,
-                         child: DropdownButton<String>(
-                           value: null, // selected value
-                           items: names.map<DropdownMenuItem<String>>((String value) {
-                             return 
-                             DropdownMenuItem<String>(
-                               value: value,
-                               child: Text(value),
-                             );
-                           }).toList(),
-                             onChanged: (dynamic selectedName) {
-                             String selectedNameString = selectedName as String;
-                                       
-                               DocumentSnapshot<Object?>? selectedDoc = documents.firstWhere(
-                               (doc) => doc['name'] == selectedNameString,
-                               // orElse: () => null,
-                             );
-                             setState(() {
-                                selectedValues = selectedDoc;
-                             });
-                                 
-                             if (selectedDoc != null) {
-                                userController.selectedUserId = selectedDoc['id'] as String;
-                                userController.update();
-                               userController.selectedName = selectedDoc['name'] as String;
-                                      userController.update();
-                                       
-                               // Call your other function with the selected user ID and email
-                              //  otherFunction(selectedUserId, selectedEmail);
-                             }
-                           },
-                         ),
-                                       );
+                        Column(
+                          children: [
+                                            ElevatedButton(
+                onPressed: () {
+                  // Open the bottom sheet passing the field data
+                   openBottomSheet(context,ids);
+                },
+                child: Text('Select Customer'),
+              ),
+                            // Container(
+                            //  width: MediaQuery.of(context).size.width /4,
+                            //  child: DropdownButton<String>(
+                            //    value: null, // selected value
+                            //    items: names.map<DropdownMenuItem<String>>((String value) {
+                            //      return 
+                            //      DropdownMenuItem<String>(
+                            //        value: value,
+                            //        child: Text(value),
+                            //      );
+                            //    }).toList(),
+                            //      onChanged: (dynamic selectedName) {
+                            //      String selectedNameString = selectedName as String;
+                                           
+                            //        DocumentSnapshot<Object?>? selectedDoc = documents.firstWhere(
+                            //        (doc) => doc['name'] == selectedNameString,
+                            //        // orElse: () => null,
+                            //      );
+                            //      setState(() {
+                            //         selectedValues = selectedDoc;
+                            //      });
+                                     
+                            //      if (selectedDoc != null) {
+                            //         userController.selectedUserId = selectedDoc['id'] as String;
+                            //         userController.update();
+                            //        userController.selectedName = selectedDoc['name'] as String;
+                            //               userController.update();
+                                           
+                            //        // Call your other function with the selected user ID and email
+                            //       //  otherFunction(selectedUserId, selectedEmail);
+                            //      }
+                            //    },
+                            //  ),
+                            //                ),
+                                          //  Text("${ userController.selectedName}"),
+                                         assignedTo == ""?
+                                         Text("Select Electrican First"):
+                                         Text("Selected electrician is ${assignedTo}")
+                                        // ElevatedButton(
+                                        //                       onPressed: () async{
+                                        //                 // sendNotification();
+                                        //   await  userController.updateWorkAssign(ids,userController.selectedName!);
+                                        //               //  Get.to(()=>NotificationOpenedHandler()); 
+                                        //                         print('Button Pressed!');
+                                        //                       },
+                                        //                       child: Text('Send'),
+                                        // )
+                                        
+                          ],
+                        );
                                      },
                                    ),
-                                        ElevatedButton(
-                        onPressed: () async{
-                  // sendNotification();
-    await  userController.updateWorkAssign(ids,userController.selectedName!);
-                //  Get.to(()=>NotificationOpenedHandler()); 
-                          print('Button Pressed!');
-                        },
-                        child: Text('Send'),
-                                        )
+                                 
                                         
                                         
                           ],
@@ -320,3 +364,9 @@ void sendNotification() async {
     );
   }
 }
+
+
+
+
+
+
