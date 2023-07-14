@@ -1,6 +1,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:solaris/controllerRef.dart';
+import 'package:solaris/electrician/electricianDoComplaints.dart';
 import 'package:solaris/electrician/receivedComplaints.dart';
 import 'package:solaris/links.dart';
 import 'package:solaris/screens/aboutus.dart';
@@ -32,7 +33,7 @@ class _ElectriciansState extends State<Electricians > {
    List<Widget> _widgetOptions = <Widget>[  
 
    Links(),
-  ReceivedComplaintElectrician(),
+  ComplaintScreenElectrician(),
   ReceivedComplaintElectrician(),
    AboutUsScreen(),
    Profile(),

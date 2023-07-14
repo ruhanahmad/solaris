@@ -43,26 +43,26 @@ class _AboutUsScreenState extends State<AboutUsScreen> {
                 style: TextStyle(fontSize: 16.0),
               ),
             ),
-            Container(
-              height: 300,
-              child: GoogleMap(
-                initialCameraPosition: CameraPosition(
-                  target: _companyLocation,
-                  zoom: 15,
-                ),
-                markers: {
-                  Marker(
-                    markerId: MarkerId('companyMarker'),
-                    position: _companyLocation,
-                  ),
-                },
-                onMapCreated: (GoogleMapController controller) {
-                  setState(() {
-                    _mapController = controller;
-                  });
-                },
-              ),
-            ),
+            // Container(
+            //   height: 300,
+            //   child: GoogleMap(
+            //     initialCameraPosition: CameraPosition(
+            //       target: _companyLocation,
+            //       zoom: 15,
+            //     ),
+            //     markers: {
+            //       Marker(
+            //         markerId: MarkerId('companyMarker'),
+            //         position: _companyLocation,
+            //       ),
+            //     },
+            //     onMapCreated: (GoogleMapController controller) {
+            //       setState(() {
+            //         _mapController = controller;
+            //       });
+            //     },
+            //   ),
+            // ),
             Padding(
               padding: EdgeInsets.all(16.0),
               child: Text(

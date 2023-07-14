@@ -82,7 +82,7 @@ AuthenticationService auths = Get.put(AuthenticationService());
                   var status = documents[index]['status'];
                                 var image = documents[index]["complaintImage"];
                                         var userId = documents[index]["userid"];
-                                        var token = documents[index]["token"];
+                                     
                                         var ticketId = documents[index]["ticketId"];
                                         var assignedTo = documents[index]["assignedTo"];
                                         var reviews = documents[index]["customerReviews"];
@@ -122,7 +122,7 @@ AuthenticationService auths = Get.put(AuthenticationService());
                               subtitle:
                               
                               RatingBar.builder(
-   initialRating:reviews ==0 ? 0 :reviews,
+   initialRating:reviews == 0 ? 0 :reviews,
    minRating: 1,
    direction: Axis.horizontal,
    allowHalfRating: true,

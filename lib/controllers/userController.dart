@@ -254,13 +254,14 @@ EasyLoading.dismiss();
                 "assignedTo":"",
                 "ticketId":rand,
                 "dateTimeCompleted":"",
-                "customerReviews":"",
+                "customerReviews":0,
 
                 
                
 
            });
            EasyLoading.dismiss();
+           Get.snackbar("Complaint Register", "Complained  registered successfully");
            return null;
            
     }
@@ -300,7 +301,7 @@ EasyLoading.dismiss();
                 "assignedTo":"",
                 "ticketId":rand,
                 "dateTimeCompleted":"",
-                "customerReviews":"",
+                "customerReviews":0,
 
                 
                

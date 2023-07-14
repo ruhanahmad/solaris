@@ -10,12 +10,12 @@ import 'package:solaris/models/authentication_service.dart';
 import 'package:image_picker/image_picker.dart';
 import '../models/user_model.dart';
 
-class ComplaintScreenSiteEngineer extends StatefulWidget {
+class ComplaintScreenElectrician extends StatefulWidget {
   @override
-  State<ComplaintScreenSiteEngineer> createState() => _ComplaintScreenSiteEngineerState();
+  State<ComplaintScreenElectrician> createState() => _ComplaintScreenElectricianState();
 }
 
-class _ComplaintScreenSiteEngineerState extends State<ComplaintScreenSiteEngineer> {
+class _ComplaintScreenElectricianState extends State<ComplaintScreenElectrician> {
  final TextEditingController _nameController = TextEditingController();
   final TextEditingController _complaintController = TextEditingController();
   
