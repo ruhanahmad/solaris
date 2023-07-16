@@ -48,6 +48,8 @@ dependencies:
   onesignal_flutter:
   flutter_local_notifications: ^15.1.0+1
   flutter_rating_bar: ^4.0.1
+  pdf:
+  path_provider:
   # record_mp3: 
   # audioplayers:
   # path_provider:

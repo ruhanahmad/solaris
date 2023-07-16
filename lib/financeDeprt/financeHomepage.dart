@@ -13,31 +13,26 @@ import 'package:solaris/screens/test.dart';
 import 'package:solaris/siteEngineer/complaintProcessing.dart';
 import 'package:solaris/siteEngineer/complaintSiteEngineer.dart';
 
-import 'officerSendForApproval.dart';
+
 
 
   
   
-class OfficerHomeScreen extends StatefulWidget {  
-  OfficerHomeScreen ({Key? key}) : super(key: key);  
+class FinanceHomeScreen extends StatefulWidget {  
+  FinanceHomeScreen ({Key? key}) : super(key: key);  
   
   @override  
-  _OfficerHomeScreenState createState() => _OfficerHomeScreenState();  
+  _FinanceHomeScreenState createState() => _FinanceHomeScreenState();  
 }  
   
-class _OfficerHomeScreenState extends State<OfficerHomeScreen > {  
+class _FinanceHomeScreenState extends State<FinanceHomeScreen > {  
 
-  @override
-  void initState() {
-   userController.requestPermission();
-    // TODO: implement initState
-    super.initState();
-  }
+
   int _selectedIndex = 0;  
    List<Widget> _widgetOptions = <Widget>[  
 
    Links(),
-  OfficerSendForApproval(),
+  Links(),
   NetMeteringCustomers(),
    AboutUsScreen(),
    Profile(),

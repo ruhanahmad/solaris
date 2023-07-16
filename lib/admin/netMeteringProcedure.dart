@@ -35,9 +35,9 @@ class _netMeteringProcedureState extends State<netMeteringProcedure> {
         body: TabBarView(
           children: [
             // Contents of Tab 1
-           ApprovalScreen(),
+           ApprovalScreen(id:widget.id,name:widget.name),
             // Contents of Tab 2
-           StepsCompleted(),
+           StepsCompleted(id:widget.id,name:widget.name),
           
           ],
         ),

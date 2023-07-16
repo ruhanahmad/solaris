@@ -13,6 +13,9 @@ import 'package:solaris/screens/test.dart';
 import '../models/user_model.dart';
 
 class ApprovalScreen extends StatefulWidget {
+    String? id;
+  String? name;
+  ApprovalScreen({required this.id,required this.name});
   @override
   State<ApprovalScreen> createState() => _ApprovalScreenState();
 }
@@ -46,7 +49,7 @@ class _ApprovalScreenState extends State<ApprovalScreen> {
   StreamBuilder<QuerySnapshot>(
                stream:  
                            FirebaseFirestore.instance
-                              .collection('users').doc(adminController.id).collection('netMeteringProcedure')
+                              .collection('users').doc(widget.id).collection('netMeteringProcedure')
                               .where("approved",isEqualTo: false)
                               .snapshots(),
                
@@ -73,7 +76,10 @@ class _ApprovalScreenState extends State<ApprovalScreen> {
                         var ids = documents[index].id;
                        var name = documents[index]['name'];
                 var approved = documents[index]['approved'];
-                var netMeteringOfficerName  =documents[index]['netMeteringOfficerName'];
+                var netMeteringOfficerName  =documents[index]['officerName'];
+                var description = documents[index]["description"];
+                var payment = documents[index]["payment"];
+                var customerName = documents[index]["customerName"];
                  
                                         // var token = documents[index]["token"];
                               
@@ -91,18 +97,30 @@ class _ApprovalScreenState extends State<ApprovalScreen> {
                          
                             ListTile(
                         
-                              title: Text("Approval request from ${netMeteringOfficerName}.Description :Step Name ${name} " ), 
+                              title: Text("Approval request from ${netMeteringOfficerName}.Description :Step Name ::${name} " ), 
                              
-                              subtitle:Text("Complaint received from ${ids} " ), 
+                              subtitle:Text("${description} ---- ${payment} " ), 
                             ),
                                         
                        
                                         ElevatedButton(
                         onPressed: () async{
-                  // sendNotification();
+                          payment == "" ?
+           await      adminController.updateApproval(widget.id!,ids)
+           :
+            await      adminController.generateAndUploadPdf(netMeteringOfficerName,description,payment,customerName,widget.id!,ids)
+           ;       
+     
+//  try{
 
+//  final usersRef = await FirebaseFirestore.instance.collection('users');
+//  await usersRef.doc(widget.id).collection("netMeteringProcedure").doc(ids).update({'approved':true,});
+//   }catch(e){
+//  Get.snackbar("Error", "Issue in updating ${e}");
+//   }
+  
       
-                          print('Need Approal');
+                        
                         },
                         child: Text('Approve'),
                                         )

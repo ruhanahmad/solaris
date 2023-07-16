@@ -13,6 +13,10 @@ import 'package:solaris/screens/test.dart';
 import '../models/user_model.dart';
 
 class StepsCompleted extends StatefulWidget {
+
+  String? id;
+  String? name;
+  StepsCompleted({required this.id,required this.name});
   @override
   State<StepsCompleted> createState() => _StepsCompletedState();
 }
@@ -46,7 +50,7 @@ class _StepsCompletedState extends State<StepsCompleted> {
   StreamBuilder<QuerySnapshot>(
                stream:  
                            FirebaseFirestore.instance
-                              .collection('users').doc(adminController.id).collection('netMeteringProcedure')
+                              .collection('users').doc(widget.id).collection('netMeteringProcedure')
                               .where("approved",isEqualTo: true)
                               .snapshots(),
                
@@ -72,7 +76,7 @@ class _StepsCompletedState extends State<StepsCompleted> {
                         var ids = documents[index].id;
                        var name = documents[index]['name'];
                 var approved = documents[index]['approved'];
-                var netMeteringOfficerName  =documents[index]['netMeteringOfficerName'];
+                var netMeteringOfficerName  =documents[index]['officerName'];
                               
                  return     Padding(
                       padding: const EdgeInsets.all(4.0),
@@ -85,7 +89,7 @@ class _StepsCompletedState extends State<StepsCompleted> {
                           children: [
              
                          
-                         Text("Step ${index} \n   | \n | "),
+                         Text("Step ${index} \n | \n | \n | \n | "),
                             ListTile(
                               
                               title: Text("${name} : Completed by ${netMeteringOfficerName} " ), 
@@ -94,15 +98,15 @@ class _StepsCompletedState extends State<StepsCompleted> {
                             ),
                                         
                        
-                                        ElevatedButton(
-                        onPressed: () async{
-                  // sendNotification();
-    // await  electricianController.updateToken(ids);
-                //  Get.to(()=>NotificationOpenedHandler()); 
-                          print('Button Pressed!');
-                        },
-                        child: Text('Resolve'),
-                                        )
+    //                                     ElevatedButton(
+    //                     onPressed: () async{
+    //               // sendNotification();
+    // // await  electricianController.updateToken(ids);
+    //             //  Get.to(()=>NotificationOpenedHandler()); 
+    //                       print('Button Pressed!');
+    //                     },
+    //                     child: Text('Resolve'),
+    //                                     )
                                         
                                         
                           ],
