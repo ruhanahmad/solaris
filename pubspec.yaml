@@ -42,16 +42,16 @@ dependencies:
   google_maps_flutter: ^2.3.1
   tap_debouncer:
   permission_handler: 
-  record_mp3: 
-  # audioplayers:
-  path_provider:
-  sizer:
   image_picker: 
   firebase_messaging:
   http: ^1.1.0
   onesignal_flutter:
   flutter_local_notifications: ^15.1.0+1
   flutter_rating_bar: ^4.0.1
+  # record_mp3: 
+  # audioplayers:
+  # path_provider:
+  # sizer:
 
 
   # The following adds the Cupertino Icons font to your application.

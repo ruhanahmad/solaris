@@ -179,7 +179,7 @@ Future<void> sendNotificationToUser() async {
      
     
       }
-       else if (documents.first["role"] == "netMetering") {
+       else if (documents.first["role"] == "netMeteringAdmin") {
         role = documents.first["role"];
         userName = documents.first["name"];
         
@@ -188,6 +188,22 @@ Future<void> sendNotificationToUser() async {
     
       }
        else if (documents.first["role"] == "electrician") {
+        role = documents.first["role"];
+        userName = documents.first["name"];
+        
+       update();
+     
+    
+      }
+       else if (documents.first["role"] == "netMeteringAdmin") {
+        role = documents.first["role"];
+        userName = documents.first["name"];
+        
+       update();
+     
+    
+      }
+        else if (documents.first["role"] == "netMeteringOfficer") {
         role = documents.first["role"];
         userName = documents.first["name"];
         

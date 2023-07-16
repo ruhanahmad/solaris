@@ -1,4 +1,5 @@
 import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:solaris/admin/adminHomeScreen.dart';
 import 'package:solaris/controllerRef.dart';
 import 'package:solaris/customer.dart';
 import 'package:solaris/models/user_model.dart';
@@ -6,6 +7,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart' as auth;
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:solaris/netMeteringOfficer/officerHomeScreen.dart';
 import 'package:solaris/siteEngineer/siteEnginner.dart';
 
 import '../electrician/electricianhomePage.dart';
@@ -80,7 +82,33 @@ EasyLoading.dismiss();
      Get.to(()=>Electricians());
       return _userFromFirebase(credential.user);
       }
+       else if (userController.role == "netMeteringAdmin") {
+   final credential = await _firebaseAuth.signInWithEmailAndPassword(
+      email: email,
+      password: password,
+    );
+     useri = credential.user!.uid;
+     update();
+    await notificationController.getPlayerId();
 
+EasyLoading.dismiss();
+     Get.to(()=>AdminHomeScreen());
+      return _userFromFirebase(credential.user);
+      }
+
+ else if (userController.role == "netMeteringOfficer") {
+   final credential = await _firebaseAuth.signInWithEmailAndPassword(
+      email: email,
+      password: password,
+    );
+     useri = credential.user!.uid;
+     update();
+    await notificationController.getPlayerId();
+
+EasyLoading.dismiss();
+     Get.to(()=>OfficerHomeScreen());
+      return _userFromFirebase(credential.user);
+      }
 
   // else {
    
@@ -92,6 +120,8 @@ EasyLoading.dismiss();
     String email,
     String password,
     String name,
+    // String role,
+    
     BuildContext buildContext,
   ) async {
   
@@ -108,7 +138,9 @@ EasyLoading.dismiss();
       'id': user.uid,
       'name': name,
       "role":"",
-      "token":""
+      "token":"",
+      // role == "customer" ?"netMetering":false :null
+
     });
     user.updateDisplayName(name);
 
