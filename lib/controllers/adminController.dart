@@ -79,28 +79,28 @@ final output = await File('${appDocumentsDir.path}/$num.pdf').create();
 }
 
 
-void downloadPdf(String documentId) async {
-    final pdf = pw.Document();
-  final firestore = FirebaseFirestore.instance;
-  final docSnapshot =  await firestore.collection('users').doc(userId).collection("netMeteringProcedure").doc(docId).get();
-  final data = docSnapshot.data();
-  final downloadURL = data!['pdfURL'];
+// void downloadPdf(String documentId) async {
+//     final pdf = pw.Document();
+//   final firestore = FirebaseFirestore.instance;
+//   final docSnapshot =  await firestore.collection('users').doc(userId).collection("netMeteringProcedure").doc(docId).get();
+//   final data = docSnapshot.data();
+//   final downloadURL = data!['pdfURL'];
 
 
- final appDocumentsDir = await getApplicationDocumentsDirectory();
-final output = await File('${appDocumentsDir.path}/$docId.pdf').create();
-  await output.writeAsBytes(await pdf.save());
-  // final appDir = Directory('path_to_save_downloaded_pdf');
-  // await appDir.create(recursive: true);
-  // final file = File('${appDir.path}/$userId.pdf');
+//  final appDocumentsDir = await getApplicationDocumentsDirectory();
+// final output = await File('${appDocumentsDir.path}/$docId.pdf').create();
+//   await output.writeAsBytes(await pdf.save());
+//   // final appDir = Directory('path_to_save_downloaded_pdf');
+//   // await appDir.create(recursive: true);
+//   // final file = File('${appDir.path}/$userId.pdf');
 
-  final http = HttpClient();
-  final request = await http.getUrl(Uri.parse(downloadURL));
-  final response = await request.close();
-  await response.pipe(output.openWrite());
+//   final http = HttpClient();
+//   final request = await http.getUrl(Uri.parse(downloadURL));
+//   final response = await request.close();
+//   await response.pipe(output.openWrite());
 
-  print('PDF downloaded successfully.');
-}
+//   print('PDF downloaded successfully.');
+// }
 
 Future updateApproval(String id,String netId) async{
 try{
