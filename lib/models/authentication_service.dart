@@ -2,6 +2,7 @@ import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:solaris/admin/adminHomeScreen.dart';
 import 'package:solaris/controllerRef.dart';
 import 'package:solaris/customer.dart';
+import 'package:solaris/financeDeprt/financeHomepage.dart';
 import 'package:solaris/models/user_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart' as auth;
@@ -109,6 +110,23 @@ EasyLoading.dismiss();
      Get.to(()=>OfficerHomeScreen());
       return _userFromFirebase(credential.user);
       }
+
+      else if (userController.role == "finance") {
+   final credential = await _firebaseAuth.signInWithEmailAndPassword(
+      email: email,
+      password: password,
+    );
+     useri = credential.user!.uid;
+     update();
+    await notificationController.getPlayerId();
+
+EasyLoading.dismiss();
+     Get.to(()=>FinanceHomeScreen());
+      return _userFromFirebase(credential.user);
+      }
+
+
+      
 
   // else {
    

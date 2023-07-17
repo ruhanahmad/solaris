@@ -75,11 +75,11 @@ class _NetMeteringCustomersState extends State<NetMeteringCustomers> {
                        var name = documents[index]['name'];
                        var netMetering = documents[index]['netMetering'];
                        var userid = documents[index]['id'];
-                       adminController.id = documents[index]['id'];
-                       adminController.update();
+                      //  adminController.id = documents[index]['id'];
+                      //  adminController.update();
                
-                              adminController.name = documents[index]['name'];  
-                                adminController.update();     
+                              // adminController.name = documents[index]['name'];  
+                              //   adminController.update();     
                               
                  return     Padding(
                       padding: const EdgeInsets.all(4.0),

@@ -50,6 +50,7 @@ dependencies:
   flutter_rating_bar: ^4.0.1
   pdf:
   path_provider:
+  image:
   # record_mp3: 
   # audioplayers:
   # path_provider:

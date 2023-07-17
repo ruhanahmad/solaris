@@ -1,4 +1,6 @@
 
+import 'dart:typed_data';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:onesignal_flutter/onesignal_flutter.dart';
 import 'package:solaris/controllerRef.dart';
@@ -18,6 +20,9 @@ import 'package:pdf/widgets.dart' as pw;
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 
 
+import 'package:image/image.dart' as img;
+
+
 class AdminController extends GetxController {
 
 UserController userController = Get.put(UserController());
@@ -28,8 +33,24 @@ String? name = "";
  
  Future<void> generateAndUploadPdf(String officerName,String desc,String payment,String customerName,String userId,String docId) async {
 
+// Uint8List writeDataOnImage(String data) {
+//   // Create an image (400x200) with a white background
+//   final image = img.Image(width: 200,height: 200);
+//   final white = img.getColor(255, 255, 255);
+//   img.fill(image, white);
 
-  // Generate PDF
+//   // Create a font
+//   final font = img.Font.ttf(await rootBundle.load('assets/fonts/YourFont.ttf'), 20);
+
+//   // Draw the text on the image (centered horizontally and vertically)
+//   final text = img.TextStyle(color: img.getColor(0, 0, 0), font: font);
+//   img.drawString(image, img.CenteredText(data, style: text), 200, 100);
+
+//   // Convert the image to bytes
+//   return img.encodePng(image);
+// }
+
+
   final pdf = pw.Document();
   pdf.addPage(
     pw.Page(
@@ -57,7 +78,7 @@ String? name = "";
   );
 var num;
   num  = await userController.tenNumberGenerated();
-  // Save the PDF to a temporary file
+
   String customFilePath = '/path/to/save/pdf.pdf';
  final appDocumentsDir = await getApplicationDocumentsDirectory();
 final output = await File('${appDocumentsDir.path}/$num.pdf').create();

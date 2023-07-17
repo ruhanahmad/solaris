@@ -36,9 +36,7 @@ List<bool> _checkBoxStates = [];
       builder: (context) {
         return StreamBuilder<QuerySnapshot>(
           stream:  FirebaseFirestore.instance
-                              .collection('netMeteringSteps')
-                             
-                              .snapshots(),
+                              .collection('netMeteringSteps').snapshots(),
                               
                
           builder: (context, snapshot) {
@@ -55,16 +53,23 @@ List<bool> _checkBoxStates = [];
             return ListView.builder(
               itemCount: records.length,
               itemBuilder: (context, index) {
+                if(_controllers.isEmpty){
                  _controllers = List.generate(
      records.length,
       (index) => TextEditingController(),
     );
-
+    }
     //  _checkBoxStates = List<bool>.filled(records.length, false);
-    _textControllers = List<TextEditingController>.generate(
+    if(_textControllers.isEmpty){
+    _textControllers = List.generate(
       records.length,
       (index) => TextEditingController(),
     );
+    }
+
+    print("text"+_controllers.length.toString());
+    print("here-----");
+    print("controller ${_textControllers.length}");
 
                 final fieldValue = records[index]['name'];
                 // final bool isButtonVisible = fieldValue == 'visible';
@@ -80,14 +85,14 @@ List<bool> _checkBoxStates = [];
                           TextFormField(
              controller: _controllers[index],
             
-              decoration: InputDecoration(
+              decoration: const InputDecoration(
                     hintText: 'Enter description (optional)',
               ),
             ),
 
                         TextFormField(
              controller: _textControllers[index],
-             
+              keyboardType: TextInputType.number,
               decoration: InputDecoration(
                 hintText: 'Enter Price (optional)',
               ),
@@ -96,14 +101,31 @@ List<bool> _checkBoxStates = [];
                       ),
                       trailing:    GestureDetector(
               onTap: ()async {
+                print("here");
+                debugPrint(_controllers[index].text);
+                debugPrint(_textControllers[index].text);
 //  await NetMeteringOfficerController.prepaid(userid,fieldValue);
                     try{
                       EasyLoading.show();
 
  final usersRef = await FirebaseFirestore.instance.collection('users');
- await usersRef.doc(id).collection("netMeteringProcedure").add({"name":fieldValue,"approved":false,"officerName":userController.userName,"description":_controllers[index].text,"payment":_textControllers[index].text,"customerName":name,"pdfUrl":""});
+ await usersRef.doc(id).collection("netMeteringProcedure").add({
+  "name":fieldValue,
+  "approved":false,
+  "officerName":userController.userName,
+  "description":_controllers[index].text,
+  "payment":_textControllers[index].text,
+  "customerName":name,
+  "pdfUrl":"",
+  "userIdCustomer":id,
+  "sendApprovalDateTime":DateTime.now(),
+  });
+  _controllers[index].text  = "";
+  _textControllers[index].text  = "";
   EasyLoading.dismiss();
   }catch(e){
+      _controllers[index].text  = "";
+  _textControllers[index].text  = "";
  Get.snackbar("Error", "Issue in updating ${e}");
   EasyLoading.dismiss();
   }
@@ -114,7 +136,7 @@ List<bool> _checkBoxStates = [];
 
                         Navigator.pop(context);
                     // Perform an action when the button is pressed
-                    print('Button pressed!');
+                    // print('Button pressed!');
               },
               child: Container(
                     padding: EdgeInsets.all(8.0),

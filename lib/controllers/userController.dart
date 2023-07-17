@@ -211,6 +211,14 @@ Future<void> sendNotificationToUser() async {
      
     
       }
+       else if (documents.first["role"] == "finance") {
+        role = documents.first["role"];
+        userName = documents.first["name"];
+        
+       update();
+     
+    
+      }
    
     } else {
       Get.snackbar(

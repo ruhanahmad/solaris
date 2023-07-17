@@ -1,6 +1,49 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
+
+
+
+import 'package:flutter/material.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+
+class MyStreamScreen extends StatelessWidget {
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Stream Screen'),
+      ),
+      body: 
+      StreamBuilder<QuerySnapshot>(
+        stream: _firestore.collection('your_collection').snapshots(),
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            List<QueryDocumentSnapshot> documents = snapshot.data!.docs;
+            
+            // Access and process the data as needed
+            // ...
+
+            String textToShow = ''; // Variable to store the text to display
+
+            for (var doc in documents) {
+              textToShow += doc['your_field'].toString() + '\n';
+            }
+
+            return Text(textToShow);
+          } else if (snapshot.hasError) {
+            return Text('Error: ${snapshot.error}');
+          } else {
+            return CircularProgressIndicator();
+          }
+        },
+      ),
+    );
+  }
+}
+
 void main() {
   runApp(MyApp());
 }
