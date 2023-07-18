@@ -2,6 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:solaris/admin/NetMeteringCustomers.dart';
 import 'package:solaris/admin/addSteps.dart';
+import 'package:solaris/admin/netMeteringOfficersReviews.dart';
 import 'package:solaris/controllerRef.dart';
 import 'package:solaris/electrician/electricianDoComplaints.dart';
 import 'package:solaris/electrician/receivedComplaints.dart';
@@ -38,7 +39,10 @@ class _AdminHomeScreenState extends State<AdminHomeScreen > {
   AddSteps(),
   NetMeteringCustomers(),
    AboutUsScreen(),
+
+   NetMeteringOfficersReviews(),
    Profile(),
+
   ];  
   
   void _onItemTapped(int index) {  
@@ -87,6 +91,11 @@ class _AdminHomeScreenState extends State<AdminHomeScreen > {
            BottomNavigationBarItem(  
             icon: Icon(Icons.verified_user),  
              label: "Profile",   
+            backgroundColor: Colors.white,  
+          ),  
+           BottomNavigationBarItem(  
+            icon: Icon(Icons.verified_user),  
+             label: "Performance",   
             backgroundColor: Colors.white,  
           ),  
         ],  

@@ -1,3 +1,5 @@
+
+
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -12,15 +14,13 @@ import 'package:image_picker/image_picker.dart';
 import 'package:solaris/screens/test.dart';
 import '../models/user_model.dart';
 
-class ApprovalScreen extends StatefulWidget {
-    String? id;
-  String? name;
-  ApprovalScreen({required this.id,required this.name});
+class NetMeteringOfficersReviews extends StatefulWidget {
+   
   @override
-  State<ApprovalScreen> createState() => _ApprovalScreenState();
+  State<NetMeteringOfficersReviews> createState() => _NetMeteringOfficersReviewsState();
 }
 
-class _ApprovalScreenState extends State<ApprovalScreen> {
+class _NetMeteringOfficersReviewsState extends State<NetMeteringOfficersReviews> {
  
   @override
   Widget build(BuildContext context) {
@@ -29,7 +29,7 @@ class _ApprovalScreenState extends State<ApprovalScreen> {
      
     return Scaffold(
       appBar: AppBar(
-        title: Text('Approval Recieved'),
+        title: Text('Performance'),
         automaticallyImplyLeading: false,
       ),
       body: SingleChildScrollView(
@@ -49,8 +49,8 @@ class _ApprovalScreenState extends State<ApprovalScreen> {
   StreamBuilder<QuerySnapshot>(
                stream:  
                            FirebaseFirestore.instance
-                              .collection('users').doc(widget.id).collection('netMeteringProcedure')
-                              .where("approved",isEqualTo: false)
+                              .collection('users')
+                              .where("approved",isEqualTo: false).where("payment",isNotEqualTo: "")
                               .snapshots(),
                
                builder: (context, snapshot) {
@@ -81,6 +81,7 @@ class _ApprovalScreenState extends State<ApprovalScreen> {
                 var payment = documents[index]["payment"];
                 var customerName = documents[index]["customerName"];
                  var sentForApproval = documents[index]["sentForApproval"];
+                 var noted = documents[index]["noted"];
                                         // var token = documents[index]["token"];
                               
                  return   
@@ -106,10 +107,8 @@ class _ApprovalScreenState extends State<ApprovalScreen> {
                        
                                         ElevatedButton(
                         onPressed: () async{
-                          payment == "" ?
-           await      adminController.updateApproval(widget.id!,ids)
-           :
-            await   sentForApproval == false ?   adminController.generateAndUploadPdf(netMeteringOfficerName,description,payment,customerName,widget.id!,ids):Get.snackbar("Sent", "Already sent ")
+
+                    
            ;       
      
 //  try{
@@ -124,9 +123,9 @@ class _ApprovalScreenState extends State<ApprovalScreen> {
                         
                         },
                         child: 
-                    payment == "" ?
-                        Text('Approve'):
-                         Text('Sending for approval to finance')
+                     noted == false ?
+                       
+                         Text('Sending for approval to finance'):Text("Approve")
                         ,
                                         )
                                         

@@ -119,6 +119,9 @@ List<bool> _checkBoxStates = [];
   "pdfUrl":"",
   "userIdCustomer":id,
   "sendApprovalDateTime":DateTime.now(),
+  "noted":false,
+  "approvalDateTimeFinance":"",
+  "sentForApproval":false,
   });
   _controllers[index].text  = "";
   _textControllers[index].text  = "";

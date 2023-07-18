@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:solaris/admin/approvalScreen.dart';
+import 'package:solaris/admin/approvalScreenPayment.dart';
 import 'package:solaris/admin/stepsCompleted.dart';
 import 'package:solaris/screens/complaint.dart';
 import 'package:solaris/screens/completedComplaint.dart';
@@ -27,6 +28,7 @@ class _netMeteringProcedureState extends State<netMeteringProcedure> {
           bottom: TabBar(
             tabs: [
               Tab(text: 'Approval Pending'),
+              //  Tab(text: 'Approval Pending Payment '),
               Tab(text: 'Steps Completed'),
           
             ],
@@ -37,6 +39,7 @@ class _netMeteringProcedureState extends State<netMeteringProcedure> {
             // Contents of Tab 1
            ApprovalScreen(id:widget.id,name:widget.name),
             // Contents of Tab 2
+            // ApprovalScreenPayment(id:widget.id,name:widget.name),
            StepsCompleted(id:widget.id,name:widget.name),
           
           ],

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:get/get.dart';
 
 class ForApproal extends StatelessWidget {
   @override
@@ -20,7 +22,7 @@ class ForApproal extends StatelessWidget {
               return StreamBuilder<QuerySnapshot>(
                 stream: FirebaseFirestore.instance.collection('users').doc(userId).collection('netMeteringProcedure')
                   .where('payment', isNotEqualTo: 
-                "")
+                "").where("noted",isEqualTo: false)
                   .snapshots(),
                 builder: (context, subSnapshot) {
                   if (subSnapshot.hasData) {
@@ -34,6 +36,9 @@ class ForApproal extends StatelessWidget {
                         final subDoc = subDocs[subIndex];
                         final officerName = subDoc['officerName'];
                         final payment= subDoc['payment'];
+                        final customerName = subDoc["customerName"];
+                        final ids = subDoc.id;
+
                         // ...
 
                         return 
@@ -51,27 +56,34 @@ class ForApproal extends StatelessWidget {
                          
                             ListTile(
                         
-                              title: Text("Approval request from ${officerName}.Description :Step Name ::${payment} " ), 
+                              title: Text(" ${officerName} apply for payment clearance to approved thePayment: ${payment}. for the Customer -- ${customerName} " ), 
                              
                               // subtitle:Text("${description} ---- ${payment} " ), 
                             ),
                                         
                        
-          //                               ElevatedButton(
-          //               onPressed: () async{
-          //                 payment == "" ?
-          //  await      adminController.updateApproval(widget.id!,ids)
-          //  :
-          //   await      adminController.generateAndUploadPdf(netMeteringOfficerName,description,payment,customerName,widget.id!,ids)
-          //  ;       
-     
+                                        ElevatedButton(
+                        onPressed: () async{
+                         
+       try{
+        EasyLoading.show();
+ final usersRef = await FirebaseFirestore.instance.collection('users').doc(userId).collection('netMeteringProcedure');
+               
+ await usersRef.doc(ids).update({'noted':true,"approvalDateTimeFinance":DateTime.now()});
+
+ EasyLoading.dismiss();
+  }catch(e){
+ Get.snackbar("Error", "Issue in updating ${e}");
+ EasyLoading.dismiss();
+  }
+ 
 
   
       
                         
-          //               },
-          //               child: Text('Approve'),
-          //                               )
+                        },
+                        child: Text('Noted'),
+                                        )
                                         
                                         
                           ],

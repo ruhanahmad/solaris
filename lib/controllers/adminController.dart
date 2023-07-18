@@ -2,6 +2,7 @@
 import 'dart:typed_data';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:onesignal_flutter/onesignal_flutter.dart';
 import 'package:solaris/controllerRef.dart';
 import 'package:solaris/controllers/userController.dart';
@@ -49,7 +50,7 @@ String? name = "";
 //   // Convert the image to bytes
 //   return img.encodePng(image);
 // }
-
+EasyLoading.show();
 
   final pdf = pw.Document();
   pdf.addPage(
@@ -95,8 +96,10 @@ final output = await File('${appDocumentsDir.path}/$num.pdf').create();
   // Store the download URL in Firestore
   final firestore = FirebaseFirestore.instance;
   await firestore.collection('users').doc(userId).collection("netMeteringProcedure").doc(docId).update({
-    'pdfUrl': downloadURL,
+    'pdfUrl': downloadURL,"sentForApproval":true,"approved":true
   });
+
+  EasyLoading.dismiss();
 }
 
 
