@@ -12,12 +12,12 @@ import 'package:image_picker/image_picker.dart';
 import 'package:solaris/screens/test.dart';
 import '../models/user_model.dart';
 
-class ReferalClients extends StatefulWidget {
+class PersonalClients extends StatefulWidget {
   @override
-  State<ReferalClients> createState() => _ReferalClientsState();
+  State<PersonalClients> createState() => _PersonalClientsState();
 }
 
-class _ReferalClientsState extends State<ReferalClients> {
+class _PersonalClientsState extends State<PersonalClients> {
 
 
  
@@ -52,7 +52,7 @@ class _ReferalClientsState extends State<ReferalClients> {
   StreamBuilder<QuerySnapshot>(
                stream:  
                            FirebaseFirestore.instance
-                              .collection('ReferalCustomers')
+                              .collection('ReferalCustomers').where("PickBy",isEqualTo: userController.userName)
                             
                               .snapshots(),
                
@@ -103,7 +103,7 @@ class _ReferalClientsState extends State<ReferalClients> {
                             ),
                                         
                        
-                                 PickBy == "" ?      
+                                
                                    ElevatedButton(
                         onPressed: () async{
                   // sendNotification();
@@ -111,9 +111,9 @@ class _ReferalClientsState extends State<ReferalClients> {
                 //  Get.to(()=>NotificationOpenedHandler()); 
                           print('Button Pressed!');
                         },
-                        child: Text('Add to leads'),
+                        child: Text('Add to Customer'),
                                         )
-                                        : 
+                                        
     //                                                            ElevatedButton(
     //                     onPressed: () async{
     //               // sendNotification();

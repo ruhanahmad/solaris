@@ -11,12 +11,13 @@
     <!-- Add Bluetooth permission for Android 6.0 and higher -->
     <uses-permission-sdk-23 android:name="android.permission.BLUETOOTH" />
     <uses-permission-sdk-23 android:name="android.permission.BLUETOOTH_ADMIN" />
+    <uses-feature android:name="android.hardware.bluetooth_le" android:required="true" />
     <application
         android:requestLegacyExternalStorage="true"
         android:label="solaris"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
-        <uses-feature android:name="android.hardware.bluetooth_le" android:required="true" />
+        
         <activity
             android:name=".MainActivity"
             android:exported="true"

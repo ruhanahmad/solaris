@@ -152,6 +152,7 @@ EasyLoading.dismiss();
  
    
   }
+  
   Future<User?> createUserWithEmailAndPassword(
     String email,
     String password,

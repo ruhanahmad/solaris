@@ -3,6 +3,7 @@ import 'dart:io' as io;
 import 'dart:math';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart' as auth;
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/foundation.dart';
@@ -18,6 +19,7 @@ import 'package:flutter/material.dart';
 
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+import 'package:flutter_blue/flutter_blue.dart' as blue;
 class UserController extends GetxController {
 var referalName;
 var referalPhoneNumber;
@@ -28,6 +30,8 @@ var token;
 var complaintName;
 var complaint;
 var reviews;
+ blue.FlutterBlue flutterBlue = blue.FlutterBlue.instance;
+  List<blue.BluetoothDevice> devicesList = [];
 Future updateToken()async {
   final usersRef = await FirebaseFirestore.instance.collection('users');
  await usersRef.doc().update({'token': ""});
@@ -357,6 +361,45 @@ EasyLoading.dismiss();
     // await ref.getDownloadURL().then((value) => updataIdCard(value));
 
     return Future.value(uploadTask);
+  }
+
+
+var userEmailUid;
+final auth.FirebaseAuth _firebaseAuth = auth.FirebaseAuth.instance;
+  CollectionReference users = FirebaseFirestore.instance.collection('users');
+   Future createUserWithEmailAndPassword(
+    String email,
+    String password,
+    String name,
+    String role,
+    
+    BuildContext buildContext,
+  ) async {
+  
+    EasyLoading.show();
+    final credential = await _firebaseAuth.createUserWithEmailAndPassword(
+      email: email,
+      password: password,
+    );
+    final auth.User user = _firebaseAuth.currentUser!;
+     userEmailUid = credential.user!.uid;
+     update();
+    users.doc(user.uid).set({
+      'email': email,
+      'id': user.uid,
+      'name': name,
+      "role":role,
+      "token":"",
+      // role == "customer" ?"netMetering":false :null
+
+    });
+    user.updateDisplayName(name);
+
+    user.reload();
+    user.sendEmailVerification();
+EasyLoading.dismiss();
+    //  Get.to(()=>MyNavigationBar());
+    return true;
   }
 
 }

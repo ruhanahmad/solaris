@@ -55,7 +55,8 @@ dependencies:
   record_mp3: 
   just_audio: ^0.9.34
   sizer:
-  blue_thermal_printer: 
+  blue_thermal_printer:
+  flutter_blue: 
 
 
   # The following adds the Cupertino Icons font to your application.

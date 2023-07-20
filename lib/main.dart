@@ -11,6 +11,7 @@ import 'package:solaris/loginScreen.dart';
 import 'package:solaris/models/auth.dart';
 import 'package:solaris/screens/test.dart';
 import 'controllerRef.dart';
+import 'salesPerson/thermal.dart';
 // import 'chats_screen.dart';
 // import 'status_screen.dart';
 // import 'calls_screen.dart';
@@ -75,6 +76,7 @@ class MyApp extends StatelessWidget {
       // NotificationPage(),
       // NotificationOpenedHandler(),
       AuthPage(),
+      // ThermalPrinter(),
       // Record(),
       // LoginScreen(),
       builder: EasyLoading.init(),
