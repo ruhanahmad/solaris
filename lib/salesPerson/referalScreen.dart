@@ -11,90 +11,28 @@ import 'package:record_mp3/record_mp3.dart';
 import 'package:solaris/controllerRef.dart';
 import 'package:solaris/models/authentication_service.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:solaris/widgets/textFeild.dart';
 import '../models/user_model.dart';
 import 'package:flutter_sound/flutter_sound.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
-class ComplaintScreen extends StatefulWidget {
+class ReferalScreen extends StatefulWidget {
   @override
-  State<ComplaintScreen> createState() => _ComplaintScreenState();
+  State<ReferalScreen> createState() => _ReferalScreenState();
 }
 
-class _ComplaintScreenState extends State<ComplaintScreen> {
+class _ReferalScreenState extends State<ReferalScreen> {
  final TextEditingController _nameController = TextEditingController();
   final TextEditingController _complaintController = TextEditingController();
   
 AuthenticationService auths = Get.put(AuthenticationService());
 
 
-// FlutterSoundRecorder _soundRecorder = FlutterSoundRecorder();
-//   bool _isRecording = false;
-//   String? _recordingPath;
 
-  @override
-  void initState() {
-    super.initState();
-    // _soundRecorder.openRecorder();
-    // checkPermission();
-  }
+
+
+
  
-
-
-
-  @override
-  void dispose() {
-    // _soundRecorder.closeRecorder();
-    super.dispose();
-  }
-
-  // Future<void> _startRecording() async {
-  //   try {
-  //     await _soundRecorder.startRecorder(toFile: 'temp_recording.aac');
-  //     setState(() {
-  //       _isRecording = true;
-  //     });
-  //   } catch (e) {
-  //     print("Error starting recording: $e");
-  //   }
-  // }
-
-  // Future<void> _stopRecording() async {
-  //   try {
-  //     var recordingResult = await _soundRecorder.stopRecorder();
-  //     setState(() {
-  //       _isRecording = false;
-  //       _recordingPath = recordingResult;
-  //     });
-  //   } catch (e) {
-  //     print("Error stopping recording: $e");
-  //   }
-  // }
-
-  // void _uploadRecordingToFirebase() async {
-  //   if (_recordingPath == null) {
-  //     print("No recording to upload");
-  //     return;
-  //   }
-
-  //   final storageRef = firebase_storage.FirebaseStorage.instance
-  //       .ref()
-  //       .child('voice_recordings')
-  //       .child(DateTime.now().millisecondsSinceEpoch.toString() + '.aac');
-
-  //   try {
-  //     // await storageRef.putFile(File(_recordingPath));
-  //     final downloadUrl = await storageRef.getDownloadURL();
-
-  //     // Save the download URL in Firestore so other users can access it.
-  //     await FirebaseFirestore.instance.collection('recordings').add({
-  //       'url': downloadUrl,
-  //       'createdAt': FieldValue.serverTimestamp(),
-  //     });
-
-  //     print("Recording uploaded successfully!");
-  //   } catch (e) {
-  //     print("Error uploading recording: $e");
-  //   }
-  // }
+ 
 
   
     Future<void>? alerts(){
@@ -159,31 +97,34 @@ AuthenticationService auths = Get.put(AuthenticationService());
   }
 
 
-    void _submitComplaint(BuildContext context) {
+    void submitComplaint(BuildContext context) {
     
-    final String name = _nameController.text;
-    final String complaint = _complaintController.text;
 
-    if (name.isNotEmpty && complaint.isNotEmpty) {
+
+    // if (name.isNotEmpty && complaint.isNotEmpty) {
        EasyLoading.show();
 
-      FirebaseFirestore.instance.collection('complaints').add({
+      FirebaseFirestore.instance.collection('ReferalCustomers').add({
          "userid":auths.useri,
-        'name': _nameController.text,
-        'complaint': _complaintController.text,
+         "referedBy":userController.userName,
+        'CustomerName': userController.referalName,
+        'CustomerCity': userController.referalCity,
+        "CustomerPhone":userController.referalPhoneNumber,
+        "Description":userController.referalDescription,
+        "PickBy":"",
       }).then((_) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Complaint submitted successfully!')),
+          SnackBar(content: Text('Customer Added successfully!')),
         );
          EasyLoading.dismiss();
       }).catchError((error) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Failed to submit complaint. Please try again.')),
+          SnackBar(content: Text(' Please try again.')),
         );
           EasyLoading.dismiss();
       });
        EasyLoading.dismiss();
-    }
+    // }
   }
   @override
   Widget build(BuildContext context) {
@@ -219,7 +160,7 @@ AuthenticationService auths = Get.put(AuthenticationService());
               // ),
            
               Text(
-                'Complaint',
+                'Referal',
                 style: TextStyle(
                   color: Colors.green,
                   fontSize: 24.0,
@@ -227,84 +168,87 @@ AuthenticationService auths = Get.put(AuthenticationService());
                 ),
               ),
               SizedBox(height: halfHeight * 0.1),
-              // TextField(
-              //   onChanged: (value) {
-              //     userController.complaintName = value;
-              //   },
-              //   controller: _nameController,
-              //   decoration: InputDecoration(
-              //     filled: true,
-              //     fillColor: Colors.green.withOpacity(0.2),
-              //     hintText: 'Name',
-              //     hintStyle: TextStyle(color: Colors.green),
-              //     border: OutlineInputBorder(
-              //       borderRadius: BorderRadius.circular(8.0),
-              //       borderSide: BorderSide.none,
-              //     ),
-              //     prefixIcon: Icon(Icons.person, color: Colors.green),
-              //   ),
-              //   style: TextStyle(color: Colors.green),
-              // ),
-              SizedBox(height: 16.0),
-              TextField(
-                  onChanged: (value) {
-                  userController.complaint = value;
+                 TextField(
+                onChanged: (value) {
+                  userController.referalName = value;
                 },
-                controller: _complaintController ,
-                maxLines: 5,
+                // controller: _nameController,
                 decoration: InputDecoration(
                   filled: true,
                   fillColor: Colors.green.withOpacity(0.2),
-                  hintText: 'Complaint',
+                  hintText: "Name",
                   hintStyle: TextStyle(color: Colors.green),
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(8.0),
                     borderSide: BorderSide.none,
                   ),
-                  prefixIcon: Icon(Icons.message, color: Colors.green),
+                  // prefixIcon: Icon(Icons.person, color: Colors.green),
                 ),
                 style: TextStyle(color: Colors.green),
               ),
-                  SizedBox(height: 24.0),
-                   Center(child: GestureDetector(
-                onTap: ()async{
-                  await alerts();
+               SizedBox(height: halfHeight * 0.1),
+                 TextField(
+                onChanged: (value) {
+                  userController.referalCity = value;
                 },
-                 child: Container(height: 30,width: 30,child: IconButton(
-                  onPressed: ()async {
-                      await alerts();
-                  }, 
-                 icon: Icon(Icons.upload_file)),),
-               ),),
-                 if (_imageFile != null) ...[
-                            Image.file(
-                              width:200,
-                              height:200,
-                              File(
-                                
-                                _imageFile!.path)),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: <Widget>[
-                                // ElevatedButton(
-                                //   child: Icon(Icons.crop),
-                                //   onPressed: _cropImage,
-                                // ),
-                                ElevatedButton(
-                              style: ElevatedButton.styleFrom(primary: Color(0xFF9D0105),),
-                                  child: Icon(Icons.refresh,),
-                                  onPressed: _clear,
-                                ),
-                             
-          
-          
-                              ],
-                            ),
-            
-                            // Uploader(file: _imageFile)
-                          ],
+                // controller: _nameController,
+                decoration: InputDecoration(
+                  filled: true,
+                  fillColor: Colors.green.withOpacity(0.2),
+                  hintText: "City",
+                  hintStyle: TextStyle(color: Colors.green),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(8.0),
+                    borderSide: BorderSide.none,
+                  ),
+                  // prefixIcon: Icon(Icons.person, color: Colors.green),
+                ),
+                style: TextStyle(color: Colors.green),
+              ),
+               SizedBox(height: halfHeight * 0.1),
+                 TextField(
+                onChanged: (value) {
+                  userController.referalPhoneNumber = value;
+                },
+                // controller: _nameController,
+                decoration: InputDecoration(
+                  filled: true,
+                  fillColor: Colors.green.withOpacity(0.2),
+                  hintText: "Phone Number",
+                  hintStyle: TextStyle(color: Colors.green),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(8.0),
+                    borderSide: BorderSide.none,
+                  ),
+                  // prefixIcon: Icon(Icons.person, color: Colors.green),
+                ),
+                style: TextStyle(color: Colors.green),
+              ),
+               SizedBox(height: halfHeight * 0.1),
+                 TextField(
+                onChanged: (value) {
+                  userController.referalDescription = value;
+                },
+                // controller: _nameController,
+                decoration: InputDecoration(
+                  filled: true,
+                  fillColor: Colors.green.withOpacity(0.2),
+                  hintText: "Description",
+                  hintStyle: TextStyle(color: Colors.green),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(8.0),
+                    borderSide: BorderSide.none,
+                  ),
+                  // prefixIcon: Icon(Icons.person, color: Colors.green),
+                ),
+                style: TextStyle(color: Colors.green),
+              ),
+           
               
-              SizedBox(height: 24.0),
+        
+                  SizedBox(height: halfHeight * 0.1),
+               
+        
 
 
 
@@ -314,10 +258,10 @@ AuthenticationService auths = Get.put(AuthenticationService());
                 height: 48.0,
                 child: ElevatedButton(
                   onPressed: () async{
-                                  await       userController.uploadFilesPassport(_imageFile,context);
+                           submitComplaint(context);
                   },
                   child: Text(
-                    'Submit Complaint',
+                    'Refer Client',
                     style: TextStyle(fontSize: 16.0),
                   ),
                   style: ButtonStyle(

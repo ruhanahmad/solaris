@@ -9,6 +9,7 @@ import 'package:firebase_auth/firebase_auth.dart' as auth;
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:solaris/netMeteringOfficer/officerHomeScreen.dart';
+import 'package:solaris/salesPerson/salesPersonHome.dart';
 import 'package:solaris/siteEngineer/siteEnginner.dart';
 
 import '../electrician/electricianhomePage.dart';
@@ -126,11 +127,28 @@ EasyLoading.dismiss();
       }
 
 
+
+            else if (userController.role == "salesperson") {
+   final credential = await _firebaseAuth.signInWithEmailAndPassword(
+      email: email,
+      password: password,
+    );
+     useri = credential.user!.uid;
+     update();
+    await notificationController.getPlayerId();
+
+EasyLoading.dismiss();
+     Get.to(()=>SalesPerson());
+      return _userFromFirebase(credential.user);
+      }
+
+
       
 
-  // else {
-   
-  // }    
+  else {
+   Get.snackbar("User", "User not Exsist");
+   EasyLoading.dismiss();
+  }    
  
    
   }

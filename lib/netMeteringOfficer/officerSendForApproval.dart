@@ -125,6 +125,25 @@ List<bool> _checkBoxStates = [];
   });
   _controllers[index].text  = "";
   _textControllers[index].text  = "";
+
+    
+
+    final usersRefs = await FirebaseFirestore.instance.collection('reviews').add({
+  "name":fieldValue,
+
+  "officerName":userController.userName,
+ 
+  "customerName":name,
+  "userIdCustomer":id,
+  "sendApprovalDateTime":DateTime.now(),
+
+  });
+
+
+
+
+
+
   EasyLoading.dismiss();
   }catch(e){
       _controllers[index].text  = "";

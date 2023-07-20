@@ -19,7 +19,10 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 class UserController extends GetxController {
-
+var referalName;
+var referalPhoneNumber;
+var referalCity;
+var referalDescription;
 
 var token;
 var complaintName;
@@ -212,6 +215,14 @@ Future<void> sendNotificationToUser() async {
     
       }
        else if (documents.first["role"] == "finance") {
+        role = documents.first["role"];
+        userName = documents.first["name"];
+        
+       update();
+     
+    
+      }
+          else if (documents.first["role"] == "salesperson") {
         role = documents.first["role"];
         userName = documents.first["name"];
         

@@ -51,10 +51,11 @@ dependencies:
   pdf:
   path_provider:
   image:
-  # record_mp3: 
-  # audioplayers:
-  # path_provider:
-  # sizer:
+  flutter_sound: ^9.2.13
+  record_mp3: 
+  just_audio: ^0.9.34
+  sizer:
+  blue_thermal_printer: 
 
 
   # The following adds the Cupertino Icons font to your application.

@@ -1,5 +1,3 @@
-
-
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -8,21 +6,25 @@ import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
 import 'package:onesignal_flutter/onesignal_flutter.dart';
-import 'package:solaris/admin/detailAboutOfficer.dart';
 import 'package:solaris/controllerRef.dart';
 import 'package:solaris/models/authentication_service.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:solaris/screens/test.dart';
 import '../models/user_model.dart';
 
-class NetMeteringOfficersReviews extends StatefulWidget {
-   
+class ReferalClients extends StatefulWidget {
   @override
-  State<NetMeteringOfficersReviews> createState() => _NetMeteringOfficersReviewsState();
+  State<ReferalClients> createState() => _ReferalClientsState();
 }
 
-class _NetMeteringOfficersReviewsState extends State<NetMeteringOfficersReviews> {
+class _ReferalClientsState extends State<ReferalClients> {
+
+
  
+
+
+
+  var selectedValues;
   @override
   Widget build(BuildContext context) {
     final mediaQuery = MediaQuery.of(context);
@@ -30,7 +32,7 @@ class _NetMeteringOfficersReviewsState extends State<NetMeteringOfficersReviews>
      
     return Scaffold(
       appBar: AppBar(
-        title: Text('Performance'),
+        title: Text('Clients '),
         automaticallyImplyLeading: false,
       ),
       body: SingleChildScrollView(
@@ -38,7 +40,7 @@ class _NetMeteringOfficersReviewsState extends State<NetMeteringOfficersReviews>
           children: [
   SizedBox(height: halfHeight * 0.1),
                Text(
-                'Approval Received',
+                'Clients',
                 style: TextStyle(
                   color: Colors.green,
                   fontSize: 24.0,
@@ -50,17 +52,14 @@ class _NetMeteringOfficersReviewsState extends State<NetMeteringOfficersReviews>
   StreamBuilder<QuerySnapshot>(
                stream:  
                            FirebaseFirestore.instance
-                              .collection('users')
-                              .where("role",isEqualTo: "netMeteringOfficer")
+                              .collection('ReferalCustomers')
+                            
                               .snapshots(),
                
                builder: (context, snapshot) {
                  if (!snapshot.hasData) {
                    return CircularProgressIndicator();
                  }
-               else   if (snapshot.data!.docs.isEmpty) {
-      Text('Collection is empty');
-    } 
       
                  final documents = snapshot.data!.docs;
       
@@ -68,19 +67,23 @@ class _NetMeteringOfficersReviewsState extends State<NetMeteringOfficersReviews>
       
                  return
                  Container(
-                  height: MediaQuery.of(context).size.height,
+                  height: 400,
                   width: MediaQuery.of(context).size.width,
                    child: 
                    ListView.builder(
                     itemCount: snapshot.data!.docs.length,
                     itemBuilder: (context,index){
                         var ids = documents[index].id;
-                       var name = documents[index]['name'];
-              
+                       var cusName = documents[index]['CustomerName'];
+                var customerCity = documents[index]['CustomerCity'];
+                  var customerPhone = documents[index]['CustomerPhone'];
+                                var description = documents[index]["Description"];
+                                        var userId = documents[index]["userid"];
+                                        var PickBy = documents[index]["PickBy"];
+                                        var referedBy = documents[index]["referedBy"];
                                         // var token = documents[index]["token"];
                               
-                 return   
-                   Padding(
+                 return     Padding(
                       padding: const EdgeInsets.all(4.0),
                       child: Container(
                          decoration: BoxDecoration(
@@ -93,30 +96,25 @@ class _NetMeteringOfficersReviewsState extends State<NetMeteringOfficersReviews>
                          
                          
                             ListTile(
-                        
-                              title: Text("Net Metering officer Name ${name} " ), 
                              
-                               
+                              title: Text("This is Customer refered by ${referedBy}.Customer Name ${cusName}.Customer City ${customerCity}} .${PickBy == "" ?"NoOne":PickBy} pick that Customer " ), 
+                              // trailing: PickBy == "" ? Text("Add to List",style: TextStyle(color: Colors.green),) :  null,
+                              subtitle:Text("Customer from ${ids} " ), 
                             ),
                                         
                        
-                                        ElevatedButton(
-                        onPressed: () async{       
-     
-Get.to(()=> DetailAboutOfficer(name: name, ids: ids,));
-  
-      
-                        
+                                 PickBy == "" ?        ElevatedButton(
+                        onPressed: () async{
+                  // sendNotification();
+    await  salesPersonController.updateToken(ids,userController.userName!);
+                //  Get.to(()=>NotificationOpenedHandler()); 
+                          print('Button Pressed!');
                         },
-                        child: 
-                 
-                       
-                         Text('Open Record')
-                        ,
-                                        )
+                        child: Text('Add to leads'),
+                                        ): Text("${PickBy} pick that Customer ")
                                         
                                         
-                          ],
+                          ] ,
                         ),
                       ),
                     );

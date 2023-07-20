@@ -52,7 +52,16 @@ OneSignal.shared.promptUserForPushNotificationPermission().then((accepted) {
 
   
 }
+//  navigateToMarker(markerPosition.latitude, markerPosition.longitude);
 
+//   void navigateToMarker(double latitude, double longitude) async {
+//     final String googleMapsUrl = 'https://www.google.com/maps/dir/?api=1&destination=$latitude,$longitude';
+//     if (await canLaunch(googleMapsUrl)) {
+//       await launch(googleMapsUrl);
+//     } else {
+//       throw 'Could not launch $googleMapsUrl';
+//     }
+//   }
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -66,6 +75,7 @@ class MyApp extends StatelessWidget {
       // NotificationPage(),
       // NotificationOpenedHandler(),
       AuthPage(),
+      // Record(),
       // LoginScreen(),
       builder: EasyLoading.init(),
     );

@@ -1,5 +1,3 @@
-
-
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -8,20 +6,22 @@ import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
 import 'package:onesignal_flutter/onesignal_flutter.dart';
-import 'package:solaris/admin/detailAboutOfficer.dart';
 import 'package:solaris/controllerRef.dart';
 import 'package:solaris/models/authentication_service.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:solaris/screens/test.dart';
 import '../models/user_model.dart';
 
-class NetMeteringOfficersReviews extends StatefulWidget {
-   
+class DetailAboutOfficer extends StatefulWidget {
+String? name;
+String? ids;
+
+DetailAboutOfficer({required this.name,required this.ids});
   @override
-  State<NetMeteringOfficersReviews> createState() => _NetMeteringOfficersReviewsState();
+  State<DetailAboutOfficer> createState() => _DetailAboutOfficerState();
 }
 
-class _NetMeteringOfficersReviewsState extends State<NetMeteringOfficersReviews> {
+class _DetailAboutOfficerState extends State<DetailAboutOfficer> {
  
   @override
   Widget build(BuildContext context) {
@@ -38,7 +38,7 @@ class _NetMeteringOfficersReviewsState extends State<NetMeteringOfficersReviews>
           children: [
   SizedBox(height: halfHeight * 0.1),
                Text(
-                'Approval Received',
+                'Performance',
                 style: TextStyle(
                   color: Colors.green,
                   fontSize: 24.0,
@@ -50,8 +50,8 @@ class _NetMeteringOfficersReviewsState extends State<NetMeteringOfficersReviews>
   StreamBuilder<QuerySnapshot>(
                stream:  
                            FirebaseFirestore.instance
-                              .collection('users')
-                              .where("role",isEqualTo: "netMeteringOfficer")
+                              .collection('reviews')
+                              .where("officerName",isEqualTo: widget.name)
                               .snapshots(),
                
                builder: (context, snapshot) {
@@ -76,7 +76,11 @@ class _NetMeteringOfficersReviewsState extends State<NetMeteringOfficersReviews>
                     itemBuilder: (context,index){
                         var ids = documents[index].id;
                        var name = documents[index]['name'];
-              
+                var officerName = documents[index]['officerName'];
+               
+                var userIdCustomer= documents[index]["userIdCustomer"];
+                var customerName = documents[index]["customerName"];
+                 var sendApprovalDateTime = documents[index]["sendApprovalDateTime"];
                                         // var token = documents[index]["token"];
                               
                  return   
@@ -94,24 +98,26 @@ class _NetMeteringOfficersReviewsState extends State<NetMeteringOfficersReviews>
                          
                             ListTile(
                         
-                              title: Text("Net Metering officer Name ${name} " ), 
+                              title: Text("${officerName} ---  choose  ${name}   " ), 
                              
-                               
+                              subtitle:Text(" " ), 
                             ),
                                         
                        
                                         ElevatedButton(
-                        onPressed: () async{       
+                        onPressed: () async{
+                    
+           ;       
      
-Get.to(()=> DetailAboutOfficer(name: name, ids: ids,));
+
   
       
                         
                         },
                         child: 
-                 
+                   
+                        Text('Approve')
                        
-                         Text('Open Record')
                         ,
                                         )
                                         

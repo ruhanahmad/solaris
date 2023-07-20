@@ -482,120 +482,352 @@ import 'package:onesignal_flutter/onesignal_flutter.dart';
 
 
 
-
-
-
-
-
-
-
-
+import 'dart:io';
+// import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'dart:async';
+import 'package:path_provider/path_provider.dart';
+import 'package:record_mp3/record_mp3.dart';
+import 'package:permission_handler/permission_handler.dart';
+import 'package:just_audio/just_audio.dart';
 
 
+class Record extends StatefulWidget {
+  @override
+  _RecordState createState() => _RecordState();
+}
 
-class HomeScreenss extends StatelessWidget {
-  final CollectionReference _dataCollection =
-      FirebaseFirestore.instance.collection('data');
+class _RecordState extends State<Record> {
+
+
+    final AudioPlayer audioPlayer = AudioPlayer();
+
+  void loadAudio() async {
+    try {
+      await audioPlayer.setAsset('assets/audio/sample_audio.mp3');
+    } catch (e) {
+      print("Error loading audio: $e");
+    }
+  }
+
+  void playAudio() {
+    audioPlayer.play();
+  }
+
+  void pauseAudio() {
+    audioPlayer.pause();
+  }
+
+  void stopAudio() {
+    audioPlayer.stop();
+  }
+
+  @override
+  void dispose() {
+    audioPlayer.dispose();
+    super.dispose();
+  }
+
+  String statusText = "";
+  bool isComplete = false;
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Data Fetching Example'),
-      ),
-      body: StreamBuilder<QuerySnapshot>(
-        stream:  FirebaseFirestore.instance
-        .collection('complaint').where("status",isEqualTo: "pending")
-        .snapshots(),
-        builder: (context, snapshot) {
-          if (!snapshot.hasData) {
-            return Center(
-              child: CircularProgressIndicator(),
-            );
-          }
-
-          final data = snapshot.data!.docs;
-
-          return ListView.builder(
-            itemCount: data.length,
-            itemBuilder: (context, index) {
-              final document = data[index];
-              final fieldValue = document['complaint'];
-
-              return Column(
-                children: [
-                  ListTile(
-                    title: Text(fieldValue),
+    return MaterialApp(
+      home: Scaffold(
+        appBar: AppBar(
+          title: const Text('Plugin example app'),
+        ),
+        body: Column(children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: <Widget>[
+              Expanded(
+                child: GestureDetector(
+                  child: Container(
+                    height: 48.0,
+                    decoration: BoxDecoration(color: Colors.red.shade300),
+                    child: Center(
+                      child: Text(
+                        'start',
+                        style: TextStyle(color: Colors.white),
+                      ),
+                    ),
                   ),
-                  StreamBuilder<QuerySnapshot>(
-                    stream:
-                 FirebaseFirestore.instance
-                              .collection('users')
-                              .where('role', isEqualTo:"electrician" )
-                              .snapshots(),
-                    builder: (context, snapshot) {
-                      if (!snapshot.hasData) {
-                        return SizedBox();
-                      }
-
-                      final dropdownData = snapshot.data!.docs;
-
-                      return ListView.builder(
-                        shrinkWrap: true,
-                        physics: NeverScrollableScrollPhysics(),
-                        itemCount: dropdownData.length,
-                        itemBuilder: (context, index) {
-                          final dropdownDocument = dropdownData[index];
-                          final dropdownValue =
-                              dropdownDocument['name'];
-                          bool isButtonVisible = false;
-
-                          return ListTile(
-                            title: DropdownButtonHideUnderline(
-                              child: DropdownButton<String>(
-                                value: dropdownValue,
-                                items: dropdownData
-                                    .map((dropdownDocument) =>
-                                        DropdownMenuItem<String>(
-                                          value:
-                                              dropdownDocument['dropdownValue'],
-                                          child: Text(
-                                              dropdownDocument['dropdownValue']),
-                                        ))
-                                    .toList(),
-                                onChanged: (value) {
-                                  if (value != dropdownValue) {
-                                    isButtonVisible = false;
-                                  } else {
-                                    isButtonVisible = true;
-                                  }
-                                },
-                              ),
-                            ),
-                            trailing: Visibility(
-                              visible: isButtonVisible,
-                              child: ElevatedButton(
-                                child: Text('Button'),
-                                onPressed: () {
-                                  // Handle button press here
-                                  print('Button pressed for $fieldValue');
-                                },
-                              ),
-                            ),
-                          );
-                        },
-                      );
-                    },
+                  onTap: () async {
+                    startRecord();
+                  },
+                ),
+              ),
+              Expanded(
+                child: GestureDetector(
+                  child: Container(
+                    height: 48.0,
+                    decoration: BoxDecoration(color: Colors.blue.shade300),
+                    child: Center(
+                      child: Text(
+                        RecordMp3.instance.status == RecordStatus.PAUSE
+                            ? 'resume'
+                            : 'pause',
+                        style: TextStyle(color: Colors.white),
+                      ),
+                    ),
                   ),
-                ],
-              );
+                  onTap: () {
+                    pauseRecord();
+                  },
+                ),
+              ),
+              Expanded(
+                child: GestureDetector(
+                  child: Container(
+                    height: 48.0,
+                    decoration: BoxDecoration(color: Colors.green.shade300),
+                    child: Center(
+                      child: Text(
+                        'stop',
+                        style: TextStyle(color: Colors.white),
+                      ),
+                    ),
+                  ),
+                  onTap: () {
+                    stopRecord();
+                  },
+                ),
+              ),
+            ],
+          ),
+          Padding(
+            padding: const EdgeInsets.only(top: 20.0),
+            child: Text(
+              statusText,
+              style: TextStyle(color: Colors.red, fontSize: 20),
+            ),
+          ),
+          GestureDetector(
+            behavior: HitTestBehavior.opaque,
+            onTap: () {
+             playAudio();
             },
-          );
-        },
+            child: Container(
+              margin: EdgeInsets.only(top: 30),
+              alignment: AlignmentDirectional.center,
+              width: 100,
+              height: 50,
+              child: isComplete && recordFilePath != null
+                  ? Text(
+                      "play",
+                      style: TextStyle(color: Colors.red, fontSize: 20),
+                    )
+                  : Container(),
+            ),
+          ),
+        ]),
       ),
     );
   }
+
+  Future<bool> checkPermission() async {
+    if (!await Permission.microphone.isGranted) {
+      PermissionStatus status = await Permission.microphone.request();
+      if (status != PermissionStatus.granted) {
+        return false;
+      }
+    }
+    return true;
+  }
+
+  void startRecord() async {
+    bool hasPermission = await checkPermission();
+    if (hasPermission) {
+      statusText = "Recording...";
+      recordFilePath = await getFilePath();
+      isComplete = false;
+      RecordMp3.instance.start(recordFilePath!, (type) {
+        statusText = "Record error--->$type";
+        setState(() {});
+      });
+    } else {
+      statusText = "No microphone permission";
+    }
+    setState(() {});
+  }
+
+  void pauseRecord() {
+    if (RecordMp3.instance.status == RecordStatus.PAUSE) {
+      bool s = RecordMp3.instance.resume();
+      if (s) {
+        statusText = "Recording...";
+        setState(() {});
+      }
+    } else {
+      bool s = RecordMp3.instance.pause();
+      if (s) {
+        statusText = "Recording pause...";
+        setState(() {});
+      }
+    }
+  }
+
+  void stopRecord() {
+    bool s = RecordMp3.instance.stop();
+    if (s) {
+      statusText = "Record complete";
+      isComplete = true;
+      setState(() {});
+    }
+  }
+
+  void resumeRecord() {
+    bool s = RecordMp3.instance.resume();
+    if (s) {
+      statusText = "Recording...";
+      setState(() {});
+    }
+  }
+
+  String? recordFilePath;
+  void loadAudios() async {
+    try {
+
+      await audioPlayer.setAsset(recordFilePath!, );
+      playAudio();
+    } catch (e) {
+      print("Error loading audio: $e");
+    }
+  }
+  // void play() {
+  //   if (recordFilePath != null && File(recordFilePath!).existsSync()) {
+  //     AudioPlayer audioPlayer = AudioPlayer();
+  //     audioPlayer.play(recordFilePath!, isLocal: true);
+  //   }
+  // }
+
+  int i = 0;
+
+  Future<String> getFilePath() async {
+    Directory storageDirectory = await getApplicationDocumentsDirectory();
+    String sdPath = storageDirectory.path + "/record";
+    var d = Directory(sdPath);
+    if (!d.existsSync()) {
+      d.createSync(recursive: true);
+    }
+    return sdPath + "/test_${i++}.mp3";
+  }
 }
+
+
+
+
+
+
+
+// import 'package:flutter/material.dart';
+// import 'package:cloud_firestore/cloud_firestore.dart';
+
+
+
+// class HomeScreenss extends StatelessWidget {
+//   final CollectionReference _dataCollection =
+//       FirebaseFirestore.instance.collection('data');
+
+//   @override
+//   Widget build(BuildContext context) {
+//     return Scaffold(
+//       appBar: AppBar(
+//         title: Text('Data Fetching Example'),
+//       ),
+//       body: StreamBuilder<QuerySnapshot>(
+//         stream:  FirebaseFirestore.instance
+//         .collection('complaint').where("status",isEqualTo: "pending")
+//         .snapshots(),
+//         builder: (context, snapshot) {
+//           if (!snapshot.hasData) {
+//             return Center(
+//               child: CircularProgressIndicator(),
+//             );
+//           }
+
+//           final data = snapshot.data!.docs;
+
+//           return ListView.builder(
+//             itemCount: data.length,
+//             itemBuilder: (context, index) {
+//               final document = data[index];
+//               final fieldValue = document['complaint'];
+
+//               return Column(
+//                 children: [
+//                   ListTile(
+//                     title: Text(fieldValue),
+//                   ),
+//                   StreamBuilder<QuerySnapshot>(
+//                     stream:
+//                  FirebaseFirestore.instance
+//                               .collection('users')
+//                               .where('role', isEqualTo:"electrician" )
+//                               .snapshots(),
+//                     builder: (context, snapshot) {
+//                       if (!snapshot.hasData) {
+//                         return SizedBox();
+//                       }
+
+//                       final dropdownData = snapshot.data!.docs;
+
+//                       return ListView.builder(
+//                         shrinkWrap: true,
+//                         physics: NeverScrollableScrollPhysics(),
+//                         itemCount: dropdownData.length,
+//                         itemBuilder: (context, index) {
+//                           final dropdownDocument = dropdownData[index];
+//                           final dropdownValue =
+//                               dropdownDocument['name'];
+//                           bool isButtonVisible = false;
+
+//                           return ListTile(
+//                             title: DropdownButtonHideUnderline(
+//                               child: DropdownButton<String>(
+//                                 value: dropdownValue,
+//                                 items: dropdownData
+//                                     .map((dropdownDocument) =>
+//                                         DropdownMenuItem<String>(
+//                                           value:
+//                                               dropdownDocument['dropdownValue'],
+//                                           child: Text(
+//                                               dropdownDocument['dropdownValue']),
+//                                         ))
+//                                     .toList(),
+//                                 onChanged: (value) {
+//                                   if (value != dropdownValue) {
+//                                     isButtonVisible = false;
+//                                   } else {
+//                                     isButtonVisible = true;
+//                                   }
+//                                 },
+//                               ),
+//                             ),
+//                             trailing: Visibility(
+//                               visible: isButtonVisible,
+//                               child: ElevatedButton(
+//                                 child: Text('Button'),
+//                                 onPressed: () {
+//                                   // Handle button press here
+//                                   print('Button pressed for $fieldValue');
+//                                 },
+//                               ),
+//                             ),
+//                           );
+//                         },
+//                       );
+//                     },
+//                   ),
+//                 ],
+//               );
+//             },
+//           );
+//         },
+//       ),
+//     );
+//   }
+// }
 

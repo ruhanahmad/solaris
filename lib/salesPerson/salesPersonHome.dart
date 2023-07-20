@@ -1,13 +1,11 @@
 
 import 'package:flutter/material.dart';
-import 'package:solaris/admin/NetMeteringCustomers.dart';
-import 'package:solaris/admin/addSteps.dart';
-import 'package:solaris/admin/netMeteringOfficersReviews.dart';
-import 'package:solaris/admin/stepsAndMaps.dart';
 import 'package:solaris/controllerRef.dart';
 import 'package:solaris/electrician/electricianDoComplaints.dart';
 import 'package:solaris/electrician/receivedComplaints.dart';
 import 'package:solaris/links.dart';
+import 'package:solaris/salesPerson/referalClients.dart';
+import 'package:solaris/salesPerson/referalScreen.dart';
 import 'package:solaris/screens/aboutus.dart';
 import 'package:solaris/screens/complaint.dart';
 import 'package:solaris/screens/profile.dart';
@@ -18,14 +16,14 @@ import 'package:solaris/siteEngineer/complaintSiteEngineer.dart';
 
   
   
-class AdminHomeScreen extends StatefulWidget {  
-  AdminHomeScreen ({Key? key}) : super(key: key);  
+class SalesPerson extends StatefulWidget {  
+  SalesPerson ({Key? key}) : super(key: key);  
   
   @override  
-  _AdminHomeScreenState createState() => _AdminHomeScreenState();  
+  _SalesPersonState createState() => _SalesPersonState();  
 }  
   
-class _AdminHomeScreenState extends State<AdminHomeScreen > {  
+class _SalesPersonState extends State<SalesPerson > {  
 
   @override
   void initState() {
@@ -37,13 +35,10 @@ class _AdminHomeScreenState extends State<AdminHomeScreen > {
    List<Widget> _widgetOptions = <Widget>[  
 
    Links(),
-  StepsAndMaps(),
-  NetMeteringCustomers(),
+  ReferalScreen(),
+ ReferalClients(),
    AboutUsScreen(),
- Profile(),
-   NetMeteringOfficersReviews(),
-  
-
+   Profile(),
   ];  
   
   void _onItemTapped(int index) {  
@@ -76,7 +71,7 @@ class _AdminHomeScreenState extends State<AdminHomeScreen > {
           ),  
           BottomNavigationBarItem(  
             icon: Icon(Icons.comment),  
-         label: "Add",  
+         label: "Complaint",  
             backgroundColor: Colors.white, 
           ),  
           BottomNavigationBarItem(  
@@ -88,18 +83,12 @@ class _AdminHomeScreenState extends State<AdminHomeScreen > {
             icon: Icon(Icons.info),  
              label: "About us",   
             backgroundColor: Colors.white,  
-          ),
-                     BottomNavigationBarItem(  
-            icon: Icon(Icons.verified_user),  
-             label: "Performance",   
-            backgroundColor: Colors.white,  
-          ),   
+          ),  
            BottomNavigationBarItem(  
             icon: Icon(Icons.verified_user),  
              label: "Profile",   
             backgroundColor: Colors.white,  
           ),  
- 
         ],  
         // type: BottomNavigationBarType.shifting,  
         currentIndex: _selectedIndex,  
