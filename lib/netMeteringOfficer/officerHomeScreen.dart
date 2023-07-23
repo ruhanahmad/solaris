@@ -38,7 +38,8 @@ class _OfficerHomeScreenState extends State<OfficerHomeScreen > {
 
    Links(),
   OfficerSendForApproval(),
-  NetMeteringCustomers(),
+   AboutUsScreen(),
+  // NetMeteringCustomers(),
    AboutUsScreen(),
    Profile(),
   ];  

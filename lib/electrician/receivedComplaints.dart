@@ -130,7 +130,7 @@ AuthenticationService auths = Get.put(AuthenticationService());
       
                  return
                  Container(
-                  height: 400,
+                  height:MediaQuery.of(context).size.height -300,
                   width: MediaQuery.of(context).size.width,
                    child: 
                    ListView.builder(

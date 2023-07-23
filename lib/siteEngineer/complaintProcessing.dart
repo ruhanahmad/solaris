@@ -223,7 +223,7 @@ void sendNotification() async {
       
                  return
                  Container(
-                  height:580,
+                  height:MediaQuery.of(context).size.height -300,
                   width: MediaQuery.of(context).size.width,
                    child: 
                    ListView.builder(

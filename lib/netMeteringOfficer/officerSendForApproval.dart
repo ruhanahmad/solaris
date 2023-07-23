@@ -242,7 +242,7 @@ List<bool> _checkBoxStates = [];
       
                  return
                  Container(
-                  height:MediaQuery.of(context).size.height,
+                  height:MediaQuery.of(context).size.height -300,
                   width: MediaQuery.of(context).size.width,
                    child: 
                    ListView.builder(

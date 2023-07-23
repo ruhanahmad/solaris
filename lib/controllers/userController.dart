@@ -415,6 +415,7 @@ final auth.FirebaseAuth _firebaseAuth = auth.FirebaseAuth.instance;
       "token":"",
       "customerId":customerId,
       "password":passwords,
+      "netMetering":false,
      
       // role == "customer" ?"netMetering":false :null
 
