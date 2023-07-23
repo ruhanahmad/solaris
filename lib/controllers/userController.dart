@@ -415,7 +415,7 @@ final auth.FirebaseAuth _firebaseAuth = auth.FirebaseAuth.instance;
       "token":"",
       "customerId":customerId,
       "password":passwords,
-      "notedByFinance":false,
+     
       // role == "customer" ?"netMetering":false :null
 
     });

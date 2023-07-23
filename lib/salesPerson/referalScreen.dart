@@ -50,6 +50,7 @@ var scene  =   await userController.tenNumberGenerated();
         "PickBy":"",
         "customerId":scene,
         "sendForApproval":false,
+        "notedByFinance":false,
         
       }).then((_) {
         ScaffoldMessenger.of(context).showSnackBar(
