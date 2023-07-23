@@ -18,9 +18,85 @@ class PersonalClients extends StatefulWidget {
 }
 
 class _PersonalClientsState extends State<PersonalClients> {
+  
+  TextEditingController _textEditingController = TextEditingController();
+    TextEditingController _textEditingControllerTwo = TextEditingController();
+     TextEditingController _textEditingControllerXAxis = TextEditingController();
+      TextEditingController _textEditingControllerYAxis = TextEditingController();
+  bool _isErrorVisible = false;
+  Future validateAndSubmit(String customerId,String customerName,String id) async{
 
-
+     EasyLoading.show();
+     try{
+      var emailGenerated = await userController.emailNumberGenerated();
+   
+   userController.update();
+  await   userController.createUserWithEmailAndPassword("${customerName}${emailGenerated}@solaris.com",customerName,customerId,context);
  
+
+           EasyLoading.dismiss();
+     }catch(e){
+EasyLoading.dismiss();
+
+     }
+          
+     EasyLoading.dismiss();
+   
+    // }
+  }
+    @override
+  void dispose() {
+    _textEditingController.dispose();
+    _textEditingControllerXAxis.dispose();
+    _textEditingControllerYAxis.dispose();
+    super.dispose();
+  }
+     Future<void>? alerts(String customerId,String customerName,String id){
+    showDialog(context: context, builder: (context){
+      return     AlertDialog(
+        content: new
+        Column(
+          mainAxisSize: MainAxisSize.min,
+          children: <Widget>[
+          Text("Add Customer"),
+            SizedBox(height: 20,),
+            TextFormField(
+              controller: _textEditingController,
+              decoration: InputDecoration(
+                labelText: 'Enter some text',
+                errorText: _isErrorVisible ? 'Text cannot be empty' : null,
+              ),
+            ),
+             TextFormField(
+              controller: _textEditingControllerXAxis,
+              decoration: InputDecoration(
+                labelText: 'City',
+                errorText: _isErrorVisible ? 'Text cannot be empty' : null,
+              ),
+            ),
+            TextFormField(
+              controller: _textEditingControllerYAxis,
+              decoration: InputDecoration(
+                
+                labelText: 'Phone number',
+                errorText: _isErrorVisible ? 'Text cannot be empty' : null,
+              ),
+              keyboardType: TextInputType.number, // Specify the keyboard type as numeric
+
+            ),
+            SizedBox(height: 16.0),
+            ElevatedButton(
+              onPressed: (){
+                 validateAndSubmit(customerId,customerName,id);
+              },
+              child: Text('Submit'),
+            ),
+      
+          ],
+        ),
+      );
+    });
+  }
 
 
 
@@ -52,22 +128,17 @@ class _PersonalClientsState extends State<PersonalClients> {
   StreamBuilder<QuerySnapshot>(
                stream:  
                            FirebaseFirestore.instance
-                              .collection('ReferalCustomers').where("PickBy",isEqualTo: userController.userName)
-                            
-                              .snapshots(),
+                              .collection('ReferalCustomers').where("PickBy",isEqualTo: userController.userName).snapshots(),
                
                builder: (context, snapshot) {
                  if (!snapshot.hasData) {
                    return CircularProgressIndicator();
                  }
       
-                 final documents = snapshot.data!.docs;
-      
-               
-      
+                 final documents = snapshot.data!.docs;          
                  return
                  Container(
-                  height: 400,
+                  height: MediaQuery.of(context).size.height - 300,
                   width: MediaQuery.of(context).size.width,
                    child: 
                    ListView.builder(
@@ -81,6 +152,8 @@ class _PersonalClientsState extends State<PersonalClients> {
                                         var userId = documents[index]["userid"];
                                         var PickBy = documents[index]["PickBy"];
                                         var referedBy = documents[index]["referedBy"];
+                                        var customerId = documents[index]["customerId"];
+                                        var sendForApproval = documents[index]["sendForApproval"];
                                         // var token = documents[index]["token"];
                               
                  return     Padding(
@@ -99,21 +172,27 @@ class _PersonalClientsState extends State<PersonalClients> {
                              
                               title: Text("This is Customer refered by ${referedBy}.Customer Name ${cusName}.Customer City ${customerCity}} .${PickBy == "" ?"NoOne":PickBy} pick that Customer " ), 
                               // trailing: PickBy == "" ? Text("Add to List",style: TextStyle(color: Colors.green),) :  null,
-                              subtitle:Text("Customer from ${ids} " ), 
+                              subtitle:sendForApproval ==  false ? Text("Customer from ${ids} " ) :Text("This ${cusName}  send for approval to finance"),
                             ),
                                         
                        
-                                
+                                sendForApproval == false ?
                                    ElevatedButton(
                         onPressed: () async{
                   // sendNotification();
-    await  salesPersonController.updateToken(ids,userController.userName!);
+                  // await alerts(customerId,cusName,ids);
+                   await  await   salesPersonController.updateCustomer(ids);
+                  // await    validateAndSubmit(customerId,cusName,ids);
+    // await  salesPersonController.updateToken(ids,userController.userName!);
                 //  Get.to(()=>NotificationOpenedHandler()); 
                           print('Button Pressed!');
                         },
-                        child: Text('Add to Customer'),
+                        child: Text('Sent For Approval'),
                                         )
-                                        
+                                        : 
+                                       
+     Text("Sent to finance Department"),
+
     //                                                            ElevatedButton(
     //                     onPressed: () async{
     //               // sendNotification();
@@ -123,7 +202,7 @@ class _PersonalClientsState extends State<PersonalClients> {
     //                     },
     //                     child: Text('Add to Customer'),
     //                                     )
-                                        Text("${PickBy} pick that Customer ")
+                                      
                                         
                                         
                           ] ,

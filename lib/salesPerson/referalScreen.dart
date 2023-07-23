@@ -29,80 +29,16 @@ AuthenticationService auths = Get.put(AuthenticationService());
 
 
 
-
-
- 
- 
-
   
-    Future<void>? alerts(){
-    showDialog(context: context, builder: (context){
-      return     AlertDialog(
-        content: new
-        Column(
-          mainAxisSize: MainAxisSize.min,
-          children: <Widget>[
-          
-            SizedBox(height: 30,),
-            GestureDetector(
-              onTap:(){
-                // _pickImage(ImageSource.gallery);
-                selectImages();
-                Navigator.pop(context);
-                print("object");
-              } ,
-              child: Row(
-                children: [
-                   Icon(Icons.browse_gallery),
-       
-                            //                Container(
-                            // height: 40,
-                            // width: 70,
-                            // decoration: BoxDecoration(
-                            //     color: Colors.black,
-                            //     image: DecorationImage(image: AssetImage("assets/3.png"),fit: BoxFit.cover)),),
-                  SizedBox(width: 5),
-                  Text('Choose from Gallery '),
-                ],
-              ),
-            ),
-          ],
-        ),
-      );
-    });
-  }
-
-  Future<void>? _clear() {
-    setState(() => _imageFile = null,
-
-    );
-  }
-   XFile? _imageFile;
-    final ImagePicker _picker = ImagePicker();
-    var imageFile;
-    void  selectImages()async {
-    final XFile? images = await _picker.pickImage(source: ImageSource.gallery);
-
-    setState(() {
-
-   _imageFile =  images!;
-
-    });
-    
-    // if (images !=null) {
-    //     userController.imageFile = images.path == null ? "" :images.path;
-    // userController.update();
-    // }
-  
-  }
 
 
-    void submitComplaint(BuildContext context) {
+    void submitComplaint(BuildContext context)async {
     
 
 
     // if (name.isNotEmpty && complaint.isNotEmpty) {
        EasyLoading.show();
+var scene  =   await userController.tenNumberGenerated();
 
       FirebaseFirestore.instance.collection('ReferalCustomers').add({
          "userid":auths.useri,
@@ -112,6 +48,9 @@ AuthenticationService auths = Get.put(AuthenticationService());
         "CustomerPhone":userController.referalPhoneNumber,
         "Description":userController.referalDescription,
         "PickBy":"",
+        "customerId":scene,
+        "sendForApproval":false,
+        
       }).then((_) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text('Customer Added successfully!')),

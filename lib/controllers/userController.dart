@@ -249,10 +249,30 @@ EasyLoading.dismiss();
   }
 
 
+ String passwordNumberGenerated(){
+  var rndnumber="";
+  var rnd= new Random();
+  for (var i = 0; i < 7; i++) {
+  rndnumber = rndnumber + rnd.nextInt(9).toString();
+  }
+  print(rndnumber);
+  return rndnumber;
+}
 
 
 
 
+
+
+ String emailNumberGenerated(){
+  var rndnumber="";
+  var rnd= new Random();
+  for (var i = 0; i < 4; i++) {
+  rndnumber = rndnumber + rnd.nextInt(9).toString();
+  }
+  print(rndnumber);
+  return rndnumber;
+}
 
 
 
@@ -369,34 +389,40 @@ final auth.FirebaseAuth _firebaseAuth = auth.FirebaseAuth.instance;
   CollectionReference users = FirebaseFirestore.instance.collection('users');
    Future createUserWithEmailAndPassword(
     String email,
-    String password,
     String name,
-    String role,
+    String customerId,
+ 
     
     BuildContext buildContext,
   ) async {
   
     EasyLoading.show();
+
+     var passwords = await userController.passwordNumberGenerated();
+     update();
     final credential = await _firebaseAuth.createUserWithEmailAndPassword(
-      email: email,
-      password: password,
+      email: email ,
+      password: passwords,
     );
     final auth.User user = _firebaseAuth.currentUser!;
      userEmailUid = credential.user!.uid;
      update();
     users.doc(user.uid).set({
-      'email': email,
-      'id': user.uid,
+      'email':email  ,
+      'id': userEmailUid,
       'name': name,
-      "role":role,
+      "role":"customer",
       "token":"",
+      "customerId":customerId,
+      "password":passwords,
+      "notedByFinance":false,
       // role == "customer" ?"netMetering":false :null
 
     });
     user.updateDisplayName(name);
 
     user.reload();
-    user.sendEmailVerification();
+    // user.sendEmailVerification();
 EasyLoading.dismiss();
     //  Get.to(()=>MyNavigationBar());
     return true;

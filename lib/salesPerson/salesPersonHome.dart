@@ -6,6 +6,7 @@ import 'package:solaris/electrician/receivedComplaints.dart';
 import 'package:solaris/links.dart';
 import 'package:solaris/salesPerson/referalClients.dart';
 import 'package:solaris/salesPerson/referalScreen.dart';
+import 'package:solaris/salesPerson/tabbarss.dart';
 import 'package:solaris/screens/aboutus.dart';
 import 'package:solaris/screens/complaint.dart';
 import 'package:solaris/screens/profile.dart';
@@ -36,7 +37,8 @@ class _SalesPersonState extends State<SalesPerson > {
 
    Links(),
   ReferalScreen(),
- ReferalClients(),
+tabbs(),
+
    AboutUsScreen(),
    Profile(),
   ];  

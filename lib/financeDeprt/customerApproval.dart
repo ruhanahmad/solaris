@@ -12,19 +12,38 @@ import 'package:image_picker/image_picker.dart';
 import 'package:solaris/screens/test.dart';
 import '../models/user_model.dart';
 
-class ReferalClients extends StatefulWidget {
+class CustomerApproval extends StatefulWidget {
   @override
-  State<ReferalClients> createState() => _ReferalClientsState();
+  State<CustomerApproval> createState() => _CustomerApprovalState();
 }
 
-class _ReferalClientsState extends State<ReferalClients> {
+class _CustomerApprovalState extends State<CustomerApproval> {
+  Future validateAndSubmit(String customerId,String customerName,String id) async{
 
+     EasyLoading.show();
+     try{
+      var emailGenerated = await userController.emailNumberGenerated();
+   
+   userController.update();
+  await   userController.createUserWithEmailAndPassword("${customerName}${emailGenerated}@solaris.com",customerName,customerId,context);
+   await   salesPersonController.notedFinance(id);
+ 
 
+           EasyLoading.dismiss();
+     }catch(e){
+EasyLoading.dismiss();
+
+     }
+          
+     EasyLoading.dismiss();
+   
+    // }
+  }
+ 
  
 
 
 
-  var selectedValues;
   @override
   Widget build(BuildContext context) {
     final mediaQuery = MediaQuery.of(context);
@@ -32,7 +51,7 @@ class _ReferalClientsState extends State<ReferalClients> {
      
     return Scaffold(
       appBar: AppBar(
-        title: Text('Clients '),
+        title: Text('Customer Approval'),
         automaticallyImplyLeading: false,
       ),
       body: SingleChildScrollView(
@@ -40,7 +59,7 @@ class _ReferalClientsState extends State<ReferalClients> {
           children: [
   SizedBox(height: halfHeight * 0.1),
                Text(
-                'Clients',
+                'Customer Approval',
                 style: TextStyle(
                   color: Colors.green,
                   fontSize: 24.0,
@@ -52,19 +71,15 @@ class _ReferalClientsState extends State<ReferalClients> {
   StreamBuilder<QuerySnapshot>(
                stream:  
                            FirebaseFirestore.instance
-                              .collection('ReferalCustomers')
-                            
-                              .snapshots(),
+                              .collection('ReferalCustomers').
+                              where("sendForApproval",isEqualTo:true).snapshots(),
                
                builder: (context, snapshot) {
                  if (!snapshot.hasData) {
                    return CircularProgressIndicator();
                  }
       
-                 final documents = snapshot.data!.docs;
-      
-               
-      
+                 final documents = snapshot.data!.docs;          
                  return
                  Container(
                   height: MediaQuery.of(context).size.height - 300,
@@ -81,7 +96,9 @@ class _ReferalClientsState extends State<ReferalClients> {
                                         var userId = documents[index]["userid"];
                                         var PickBy = documents[index]["PickBy"];
                                         var referedBy = documents[index]["referedBy"];
-                                        // var token = documents[index]["token"];
+                                        var customerId = documents[index]["customerId"];
+                                        var sendForApproval = documents[index]["sendForApproval"];
+                                        var notedByFinance = documents[index]["notedByFinance"];
                               
                  return     Padding(
                       padding: const EdgeInsets.all(4.0),
@@ -99,22 +116,27 @@ class _ReferalClientsState extends State<ReferalClients> {
                              
                               title: Text("This is Customer refered by ${referedBy}.Customer Name ${cusName}.Customer City ${customerCity}} .${PickBy == "" ?"NoOne":PickBy} pick that Customer " ), 
                               // trailing: PickBy == "" ? Text("Add to List",style: TextStyle(color: Colors.green),) :  null,
-                              subtitle:Text("Customer from ${ids} " ), 
+                              subtitle:notedByFinance ==  false ? Text("Customer from ${ids} " ) :Text("Customer is approved"),
                             ),
                                         
                        
-                                 PickBy == "" ?      
+                                notedByFinance == false ?
                                    ElevatedButton(
                         onPressed: () async{
                   // sendNotification();
-    await  salesPersonController.updateToken(ids,userController.userName!);
-    
+                  // await alerts(customerId,cusName,ids);
+                    
+                  await    validateAndSubmit(customerId,cusName,ids);
+    // await  salesPersonController.updateToken(ids,userController.userName!);
                 //  Get.to(()=>NotificationOpenedHandler()); 
                           print('Button Pressed!');
                         },
-                        child: Text('Add to leads'),
+                        child: Text('Create Customer'),
                                         )
                                         : 
+                                       
+     Text("Created Successfully"),
+
     //                                                            ElevatedButton(
     //                     onPressed: () async{
     //               // sendNotification();
@@ -124,7 +146,7 @@ class _ReferalClientsState extends State<ReferalClients> {
     //                     },
     //                     child: Text('Add to Customer'),
     //                                     )
-                                        Text("${PickBy} pick that Customer ")
+                                      
                                         
                                         
                           ] ,
