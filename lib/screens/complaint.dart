@@ -314,7 +314,12 @@ AuthenticationService auths = Get.put(AuthenticationService());
                 height: 48.0,
                 child: ElevatedButton(
                   onPressed: () async{
+             bool? scene =  await  userController.checkIfCustomerExsistFromCustomerPanel();
+              scene ==  true ?
+
+              Get.snackbar("Complaint", "Complaint already registered."):
                                   await       userController.uploadFilesPassport(_imageFile,context);
+                                  // await       userController.uploadFilesPassport(_imageFile,context);
                   },
                   child: Text(
                     'Submit Complaint',

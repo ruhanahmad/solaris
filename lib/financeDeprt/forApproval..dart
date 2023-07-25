@@ -62,7 +62,7 @@ class ForApproal extends StatelessWidget {
                             ),
                                         
                        
-                                        ElevatedButton(
+     ElevatedButton(
                         onPressed: () async{
                          
        try{
@@ -72,7 +72,9 @@ class ForApproal extends StatelessWidget {
  await usersRef.doc(ids).update({'noted':true,"approvalDateTimeFinance":DateTime.now()});
 
  EasyLoading.dismiss();
-  }catch(e){
+  }
+  catch(e)
+  {
  Get.snackbar("Error", "Issue in updating ${e}");
  EasyLoading.dismiss();
   }
@@ -83,7 +85,7 @@ class ForApproal extends StatelessWidget {
                         
                         },
                         child: Text('Noted'),
-                                        )
+                                        ),
                                         
                                         
                           ],

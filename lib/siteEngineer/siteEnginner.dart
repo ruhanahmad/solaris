@@ -9,6 +9,7 @@ import 'package:solaris/screens/test.dart';
 import 'package:solaris/siteEngineer/complaintProcessing.dart';
 
 import 'package:solaris/siteEngineer/complaintSiteEngineer.dart';
+import 'package:solaris/siteEngineer/siteEngineerTab.dart';
 
 
   
@@ -33,7 +34,7 @@ class _SiteEngineerState extends State<SiteEngineer > {
 
    Links(),
   ComplaintScreenSiteEngineer(),
-   ComplaintScreenProcessing(),
+   tabBarSiteEngineer(),
    AboutUsScreen(),
    Profile(),
   ];  

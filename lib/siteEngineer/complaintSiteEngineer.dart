@@ -335,7 +335,8 @@ AuthenticationService auths = Get.put(AuthenticationService());
                 height: 48.0,
                 child: ElevatedButton(
                   onPressed: () async{
-                    
+
+                                  await 
                                   await       userController.uploadFilesPassport(_imageFile,context);
                   },
                   child: Text(

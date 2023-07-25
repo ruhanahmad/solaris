@@ -146,6 +146,7 @@ Future<void> sendNotificationToUser() async {
     List news = [];
     String? role;
     String? userName;
+    String? customerId;
   Future<dynamic> prepaid(String email) async {
     news.clear();
     documents.clear();
@@ -166,6 +167,8 @@ Future<void> sendNotificationToUser() async {
         var ids = documents.first.id;
         role = documents.first["role"];
         userName = documents.first["name"];
+        customerId = documents.first["customerId"];
+
        update();
      
         
@@ -292,6 +295,7 @@ EasyLoading.dismiss();
 
       String? selectedUserId ;
  String? selectedName;
+ String? selectedCustomerId;
      Future<UploadTask?> uploadFilesPassport(XFile? files,context) async {
   
     
@@ -314,6 +318,7 @@ EasyLoading.dismiss();
                 "ticketId":rand,
                 "dateTimeCompleted":"",
                 "customerReviews":0,
+                "customerId":role == "customer" ?customerId:selectedCustomerId
 
                 
                
@@ -428,5 +433,104 @@ EasyLoading.dismiss();
     //  Get.to(()=>MyNavigationBar());
     return true;
   }
+
+
+
+
+
+
+
+  List<DocumentSnapshot> checkingCustomerDocuments = [];
+    List cus = [];
+    
+  Future<bool?> checkIfCustomerExsist() async {
+    cus.clear();
+    checkingCustomerDocuments.clear();
+    final QuerySnapshot result = await FirebaseFirestore.instance
+        .collection('complaint')
+        .where('customerName', isEqualTo:selectedName ).where('customerId', isEqualTo:selectedCustomerId ).where("status",isEqualTo: "pending")
+        .get();
+    checkingCustomerDocuments = result.docs;
+    update();
+    print(checkingCustomerDocuments.length);
+    if (checkingCustomerDocuments.length > 0) {
+      cus.add(result.docs);
+      print(cus);
+
+        return true;
+        
+  
+
+  }
+
+else {
+
+
+  
+  return false;
+
+
+
+}
+}
+
+
+
+List<DocumentSnapshot> checkingCustomerDocumentsExsists = [];
+    List cusExsists = [];
+
+ Future<bool?> checkIfCustomerExsistFromCustomerPanel() async {
+    cusExsists.clear();
+    checkingCustomerDocumentsExsists.clear();
+    final QuerySnapshot result = await FirebaseFirestore.instance
+        .collection('complaint')
+        .where('customerName', isEqualTo:userName).where('customerId', isEqualTo:customerId).where("status",isEqualTo: "pending")
+        .get();
+    print(userName);
+    print(customerId);
+    checkingCustomerDocumentsExsists = result.docs;
+    update();
+    print(checkingCustomerDocumentsExsists.length);
+    if (checkingCustomerDocumentsExsists.length > 0) {
+      cusExsists.add(result.docs);
+      print(cusExsists);
+
+        return true;
+        
+  
+
+  }
+
+else {
+
+
+  
+  return false;
+
+
+
+}
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 }

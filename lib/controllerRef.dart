@@ -5,6 +5,7 @@ import 'package:solaris/controllers/electricianController.dart';
 import 'package:solaris/controllers/netMeteringOfficerController.dart';
 import 'package:solaris/controllers/notificationController.dart';
 import 'package:solaris/controllers/salesPersonController.dart';
+import 'package:solaris/controllers/siteEnginerrController.dart';
 import 'package:solaris/controllers/userController.dart';
 
 import 'models/authentication_service.dart';
@@ -17,3 +18,4 @@ ElectricianController electricianController = Get.put(ElectricianController());
 AdminController adminController = Get.put(AdminController());
 NetMeteringOfficerController netMeteringController = Get.put(NetMeteringOfficerController());
 SalesPersonController salesPersonController = Get.put(SalesPersonController());
+SiteEngineerController siteEngineerController = Get.put(SiteEngineerController());

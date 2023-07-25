@@ -13,13 +13,13 @@ import 'package:solaris/screens/test.dart';
 import 'package:solaris/widgets/alertPicture.dart';
 import '../models/user_model.dart';
 
-class ReceivedComplaintElectrician extends StatefulWidget {
+class ResolvedByElectrician extends StatefulWidget {
   @override
-  State<ReceivedComplaintElectrician> createState() => _ReceivedComplaintElectricianState();
+  State<ResolvedByElectrician> createState() => _ResolvedByElectricianState();
 }
 
-class _ReceivedComplaintElectricianState extends State<ReceivedComplaintElectrician> {
-
+class _ResolvedByElectricianState extends State<ResolvedByElectrician> {
+ 
   @override
   Widget build(BuildContext context) {
     final mediaQuery = MediaQuery.of(context);
@@ -27,7 +27,7 @@ class _ReceivedComplaintElectricianState extends State<ReceivedComplaintElectric
      
     return Scaffold(
       appBar: AppBar(
-        title: Text('Complaint Recieved'),
+        title: Text('Resolve'),
         automaticallyImplyLeading: false,
       ),
       body: SingleChildScrollView(
@@ -35,7 +35,7 @@ class _ReceivedComplaintElectricianState extends State<ReceivedComplaintElectric
           children: [
   SizedBox(height: halfHeight * 0.1),
                Text(
-                'Complaints Received',
+                'Resolve',
                 style: TextStyle(
                   color: Colors.green,
                   fontSize: 24.0,
@@ -48,7 +48,7 @@ class _ReceivedComplaintElectricianState extends State<ReceivedComplaintElectric
                stream:  
                            FirebaseFirestore.instance
                               .collection('complaint')
-                              .where('assignedTo', isEqualTo:userController.userName ).where('status', isEqualTo:"pending" )
+                             .where('status', isEqualTo:"completed" )
                               .snapshots(),
                
                builder: (context, snapshot) {
@@ -74,6 +74,7 @@ class _ReceivedComplaintElectricianState extends State<ReceivedComplaintElectric
                   var status = documents[index]['status'];
                                 var image = documents[index]["complaintImage"];
                                         var userId = documents[index]["userid"];
+                                        var assignedTo = documents[index]["assignedTo"];
                                         // var token = documents[index]["token"];
                               
                  return     Padding(
@@ -100,19 +101,19 @@ class _ReceivedComplaintElectricianState extends State<ReceivedComplaintElectric
                               ),
                               title: Text("Complaint received from ${cusName}.Description : ${complaintDescription} " ), 
                               trailing:Text("${status}",style: TextStyle(color: Colors.green),) ,
-                              subtitle:Text("Complaint received from ${ids} " ), 
+                              subtitle:Text("Complaint resolved by  ${assignedTo} " ), 
                             ),
                                         
                        
-                                        ElevatedButton(
-                        onPressed: () async{
-                  // sendNotification();
-    await  electricianController.updateToken(ids);
-                //  Get.to(()=>NotificationOpenedHandler()); 
-                          print('Button Pressed!');
-                        },
-                        child: Text('Noted'),
-                                        )
+    //                                     ElevatedButton(
+    //                     onPressed: () async{
+    //               // sendNotification();
+    // await  electricianController.updateToken(ids);
+    //             //  Get.to(()=>NotificationOpenedHandler()); 
+    //                       print('Button Pressed!');
+    //                     },
+    //                     child: Text('Resolve'),
+    //                                     )
                                         
                                         
                           ],

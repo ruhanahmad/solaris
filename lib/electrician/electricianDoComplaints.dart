@@ -119,6 +119,10 @@ AuthenticationService auths = Get.put(AuthenticationService());
                              userController.selectedName = selectedDoc['name'] as String;
                                print(userController.selectedName);
                                     userController.update();
+
+                                      userController.selectedCustomerId = selectedDoc['customerId'] as String;
+                               print(userController.selectedCustomerId);
+                                    userController.update();
                      
                            }
 
@@ -171,7 +175,7 @@ AuthenticationService auths = Get.put(AuthenticationService());
                  }
       
                  List<DocumentSnapshot> documents = snapshot.data!.docs;
-      
+                
                  List<String> names = documents.map((doc) => doc['name'] as String ).toList() ;
         String fieldData = documents.first['name'];
                  return Column(
@@ -335,7 +339,10 @@ AuthenticationService auths = Get.put(AuthenticationService());
                 height: 48.0,
                 child: ElevatedButton(
                   onPressed: () async{
-                    
+              bool? scene =  await  userController.checkIfCustomerExsist();
+              scene ==  true ?
+
+              Get.snackbar("Complaint", "Complaint already registered."):
                                   await       userController.uploadFilesPassport(_imageFile,context);
                   },
                   child: Text(

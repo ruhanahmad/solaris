@@ -13,13 +13,13 @@ import 'package:solaris/screens/test.dart';
 import 'package:solaris/widgets/alertPicture.dart';
 import '../models/user_model.dart';
 
-class ReceivedComplaintElectrician extends StatefulWidget {
+class ResolvedComplaint extends StatefulWidget {
   @override
-  State<ReceivedComplaintElectrician> createState() => _ReceivedComplaintElectricianState();
+  State<ResolvedComplaint> createState() => _ResolvedComplaintState();
 }
 
-class _ReceivedComplaintElectricianState extends State<ReceivedComplaintElectrician> {
-
+class _ResolvedComplaintState extends State<ResolvedComplaint> {
+ 
   @override
   Widget build(BuildContext context) {
     final mediaQuery = MediaQuery.of(context);
@@ -48,7 +48,7 @@ class _ReceivedComplaintElectricianState extends State<ReceivedComplaintElectric
                stream:  
                            FirebaseFirestore.instance
                               .collection('complaint')
-                              .where('assignedTo', isEqualTo:userController.userName ).where('status', isEqualTo:"pending" )
+                              .where('assignedTo', isEqualTo:userController.userName ).where('status', isEqualTo:"completed" )
                               .snapshots(),
                
                builder: (context, snapshot) {
@@ -104,15 +104,15 @@ class _ReceivedComplaintElectricianState extends State<ReceivedComplaintElectric
                             ),
                                         
                        
-                                        ElevatedButton(
-                        onPressed: () async{
-                  // sendNotification();
-    await  electricianController.updateToken(ids);
-                //  Get.to(()=>NotificationOpenedHandler()); 
-                          print('Button Pressed!');
-                        },
-                        child: Text('Noted'),
-                                        )
+    //                                     ElevatedButton(
+    //                     onPressed: () async{
+    //               // sendNotification();
+    // await  electricianController.updateToken(ids);
+    //             //  Get.to(()=>NotificationOpenedHandler()); 
+    //                       print('Button Pressed!');
+    //                     },
+    //                     child: Text('Resolve'),
+    //                                     )
                                         
                                         
                           ],
