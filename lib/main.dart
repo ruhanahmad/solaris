@@ -10,6 +10,7 @@ import 'package:solaris/controllers/userController.dart';
 import 'package:solaris/loginScreen.dart';
 import 'package:solaris/models/auth.dart';
 import 'package:solaris/screens/test.dart';
+import 'package:solaris/screens/tests.dart';
 import 'controllerRef.dart';
 import 'salesPerson/thermal.dart';
 // import 'chats_screen.dart';
@@ -76,6 +77,7 @@ class MyApp extends StatelessWidget {
       // NotificationPage(),
       // NotificationOpenedHandler(),
       AuthPage(),
+      // FirestoreDataWidget(),
       // ThermalPrinter(),
       // Record(),
       // LoginScreen(),

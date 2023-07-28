@@ -1,8 +1,10 @@
 
 import 'package:flutter/material.dart';
+import 'package:solaris/admin/FilesPending.dart';
 import 'package:solaris/admin/NetMeteringCustomers.dart';
 import 'package:solaris/admin/addSteps.dart';
 import 'package:solaris/admin/netMeteringOfficersReviews.dart';
+import 'package:solaris/admin/netMeteringtabs.dart';
 import 'package:solaris/admin/stepsAndMaps.dart';
 import 'package:solaris/controllerRef.dart';
 import 'package:solaris/electrician/electricianDoComplaints.dart';
@@ -42,7 +44,8 @@ class _AdminHomeScreenState extends State<AdminHomeScreen > {
    AboutUsScreen(),
  Profile(),
    NetMeteringOfficersReviews(),
-  
+   netMeteringTabs(),
+   FilesPending(),
 
   ];  
   
@@ -97,6 +100,16 @@ class _AdminHomeScreenState extends State<AdminHomeScreen > {
            BottomNavigationBarItem(  
             icon: Icon(Icons.verified_user),  
              label: "Profile",   
+            backgroundColor: Colors.white,  
+          ),  
+            BottomNavigationBarItem(  
+            icon: Icon(Icons.verified_user),  
+             label: "Check",   
+            backgroundColor: Colors.white,  
+          ),  
+            BottomNavigationBarItem(  
+            icon: Icon(Icons.verified_user),  
+             label: "Files",   
             backgroundColor: Colors.white,  
           ),  
  
