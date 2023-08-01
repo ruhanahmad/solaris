@@ -6,7 +6,76 @@ import 'package:solaris/admin/filePendingDetail.dart';
 import 'package:solaris/controllerRef.dart';
 import 'package:solaris/models/user_model.dart';
 
-class FilePendingPayment extends StatelessWidget {
+class FilePendingPayment extends StatefulWidget {
+  @override
+  State<FilePendingPayment> createState() => _FilePendingPaymentState();
+}
+
+class _FilePendingPaymentState extends State<FilePendingPayment> {
+
+
+    Future<void>? alerts(String customerName,String officerName,String payment,String description,String userIdCustomer,String ids){
+    showDialog(context: context, builder: (context){
+      return     AlertDialog(
+        content: Container(
+          height: 400,
+          child: new
+               Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              
+          
+              SizedBox(height: 10),
+              Column(
+                children: [
+                  Text(
+                    'Customer Name: ${customerName}',
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                  ),
+                  Text(
+                    'Officer Name: ${officerName}',
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                  ),
+                     Text(
+                    'Payment: ${payment}',
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                  ),
+                ],
+              ),
+                                            ElevatedButton(
+                          onPressed: () async{
+                         
+            
+              await     adminController.generateAndUploadPdf(officerName,description,payment,customerName,userIdCustomer,ids);
+              Navigator.pop(context);
+                  
+             
+        //  try{
+        
+        //  final usersRef = await FirebaseFirestore.instance.collection('users');
+        //  await usersRef.doc(widget.id).collection("netMeteringProcedure").doc(ids).update({'approved':true,});
+        //   }catch(e){
+        //  Get.snackbar("Error", "Issue in updating ${e}");
+        //   }
+          
+              
+                          
+                          },
+                          child: 
+                      // payment == "" ?
+                          // Text('Approve'):
+                           Text('Sending for approval to finance')
+                          ,
+                                          )
+                                        // widget.assignedTo == ""?
+                                        //    Text("Select Electrican First"):
+                                        //    Text("Selected electrician is ${widget.assignedTo}"),  
+            ],
+          ),
+        ),
+      );
+    });
+  }
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<QuerySnapshot>(
@@ -16,6 +85,7 @@ class FilePendingPayment extends StatelessWidget {
       builder: (context, snapshot) {
         if (snapshot.hasData) {
           final usersDocs = snapshot.data!.docs;
+          print(usersDocs);
           return ListView.builder(
             itemCount: usersDocs.length,
             itemBuilder: (context, index) {
@@ -52,7 +122,7 @@ class FilePendingPayment extends StatelessWidget {
                         // ...
 
                         return 
-                         subDocs.length == 1 ?
+                    
                                 Padding(
                       padding: const EdgeInsets.all(4.0),
                       child: Container(
@@ -67,7 +137,8 @@ class FilePendingPayment extends StatelessWidget {
                         
                             ListTile(
                               onTap: () {
-                                Get.to(()=> BigImagePayment(customername: customerName,officerName: officerName,payment: payment,description:description,userIdCustomer:userIdCustomer,id:ids));
+                                alerts( customerName, officerName,payment,description,userIdCustomer,ids);
+                                // Get.to(()=> BigImagePayment(customername: customerName,officerName: officerName,payment: payment,description:description,userIdCustomer:userIdCustomer,id:ids));
                               },
                               title: Text(" ${names} " ), 
                              
@@ -88,7 +159,7 @@ class FilePendingPayment extends StatelessWidget {
                           ],
                         ),
                       ),
-                    ):Container();
+                    );
                       },
                     );
                   } else if (subSnapshot.hasError) {

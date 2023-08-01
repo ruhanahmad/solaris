@@ -293,7 +293,7 @@ EasyLoading.dismiss();
      FirebaseFirestore firebaseRef =  FirebaseFirestore.instance;
 
 
-      String? selectedUserId ;
+      String selectedUserId = "";
  String? selectedName;
  String? selectedCustomerId;
      Future<UploadTask?> uploadFilesPassport(XFile? files,context) async {

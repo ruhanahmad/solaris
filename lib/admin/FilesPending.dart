@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:solaris/admin/FilesPendingNonPayments.dart';
+import 'package:solaris/admin/filePFinished.dart';
 import 'package:solaris/admin/filePendingPayment.dart';
 import 'package:solaris/admin/inProcess.dart';
 import 'package:solaris/admin/newFiles.dart';
@@ -21,36 +22,7 @@ class FilesPending extends StatefulWidget {
 class _FilesPendingState extends State<FilesPending> {
 
 
-    StreamController<List<String>> _documentsStreamController =
-      StreamController<List<String>>();
-  StreamSubscription<List<String>>? _streamSubscription;
-
-
-
-
-
-
-  @override
-  void initState() {
-    super.initState();
-    // Fetch initial data when the widget is first created
-    fetchData();
-
-    // Set up a stream subscription to listen for changes
-    _streamSubscription = _documentsStreamController.stream.listen((data) {
-      // Handle the updated data here if needed
-      // For example, update the UI with the new data
-    });
-  }
-
-  @override
-  void dispose() {
-    _streamSubscription?.cancel();
-    _documentsStreamController.close();
-    super.dispose();
-  }
-
-
+  
    
 
 
@@ -121,7 +93,7 @@ List<String>? documents;
             FilePendingPayment(),
             // Contents of Tab 2
           FilesPendingNonPayment(),
-            FilesPendingNonPayment(),
+            FilesPFinished(),
             
           ],
         ),

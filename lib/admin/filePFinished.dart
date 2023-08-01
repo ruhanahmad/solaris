@@ -8,15 +8,15 @@ import 'package:solaris/admin/inProcess.dart';
 import 'package:solaris/controllerRef.dart';
 import 'package:solaris/models/user_model.dart';
 
-class FilesPendingNonPayment extends StatefulWidget {
+class FilesPFinished extends StatefulWidget {
   @override
-  State<FilesPendingNonPayment> createState() => _FilesPendingNonPaymentState();
+  State<FilesPFinished> createState() => _FilesPFinishedState();
 }
 
    
-class _FilesPendingNonPaymentState extends State<FilesPendingNonPayment> {
+class _FilesPFinishedState extends State<FilesPFinished> {
 
-  Future<void>? alerts(String customerName,String officerName,String payment,String description,String userIdCustomer,String ids,String docName,String docname){
+  Future<void>? alerts(String customerName,String officerName,String payment,String description,String userIdCustomer,String ids,String docname){
     showDialog(context: context, builder: (context){
       return     AlertDialog(
         content: Container(
@@ -40,10 +40,6 @@ class _FilesPendingNonPaymentState extends State<FilesPendingNonPayment> {
                   ),
                    Text(
                     'Description: ${description}',
-                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                  ),
-                   Text(
-                    'Document Name: ${docName}',
                     style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                   ),
                    
@@ -71,7 +67,7 @@ class _FilesPendingNonPaymentState extends State<FilesPendingNonPayment> {
                           child: 
                       // payment == "" ?
                           // Text('Approve'):
-                           Text('Approve')
+                           Text('Sending for Approval')
                           ,
                                           )
                                         // widget.assignedTo == ""?
@@ -98,13 +94,13 @@ class _FilesPendingNonPaymentState extends State<FilesPendingNonPayment> {
               final userDoc = usersDocs[index];
               final userId = userDoc.id;
               final names = userDoc["name"];
-              final inProcess = userDoc["inProcess"];
+              final InProcess = userDoc["inProcess"];
               return 
               StreamBuilder<QuerySnapshot>(
                 stream: 
               FirebaseFirestore.instance
                               .collection('users').doc(userId).collection('netMeteringProcedure')
-                              .where("approved",isEqualTo: false) .where("payment",isEqualTo: "")
+                              .where("approved",isEqualTo: true).where("sentForApproval",isEqualTo: true)
                               .snapshots(),
                 //   .where('payment', isNotEqualTo: 
                 // "").where("noted",isEqualTo: false)
@@ -126,8 +122,8 @@ class _FilesPendingNonPaymentState extends State<FilesPendingNonPayment> {
                         final sentForApproval = subDoc["sentForApproval"];
                         final description = subDoc["description"];
                         final userIdCustomer =subDoc["userIdCustomer"];
+                        final docName= subDoc["name"];
                         // ...
-                        final docName = subDoc["name"];
 
                         return 
                      
@@ -144,14 +140,11 @@ class _FilesPendingNonPaymentState extends State<FilesPendingNonPayment> {
                          
                         
                             ListTile(
-                              onTap: () {
-          alerts(customerName, officerName,payment,description,userIdCustomer,ids, docName,docName);
-
-                                // Get.to(()=> BigImageNonPayment(customername: customerName,officerName: officerName,payment: payment,description:description,userIdCustomer:userIdCustomer,id:ids));
-                              },
-                              title: Text(" ${names}  " ), 
+                              
+                              title: Text(" ${names} " ), 
                              
-                              // subtitle:Text("${description} ---- ${payment} " ), 
+                              subtitle:Text("${description}  " ), 
+                              trailing: Text("approved"),
                             ),
                             //   ListTile(
                         

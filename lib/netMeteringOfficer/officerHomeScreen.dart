@@ -6,6 +6,7 @@ import 'package:solaris/controllerRef.dart';
 import 'package:solaris/electrician/electricianDoComplaints.dart';
 import 'package:solaris/electrician/receivedComplaints.dart';
 import 'package:solaris/links.dart';
+import 'package:solaris/netMeteringOfficer/officertabbar.dart';
 import 'package:solaris/screens/aboutus.dart';
 import 'package:solaris/screens/complaint.dart';
 import 'package:solaris/screens/profile.dart';
@@ -37,7 +38,7 @@ class _OfficerHomeScreenState extends State<OfficerHomeScreen > {
    List<Widget> _widgetOptions = <Widget>[  
 
    Links(),
-  OfficerSendForApproval(),
+ NetMeteringOfficer(),
    AboutUsScreen(),
   // NetMeteringCustomers(),
    AboutUsScreen(),

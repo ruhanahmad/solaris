@@ -20,30 +20,9 @@ class InProcess extends StatelessWidget {
               final userDoc = usersDocs[index];
               final userId = userDoc.id;
               final names = userDoc["name"];
-              return StreamBuilder<QuerySnapshot>(
-                stream: FirebaseFirestore.instance.collection('users').doc(userId).collection('netMeteringProcedure')
-                //   .where('payment', isNotEqualTo: 
-                // "").where("noted",isEqualTo: false)
-                  .snapshots(),
-                builder: (context, subSnapshot) {
-                  if (subSnapshot.hasData) {
-                    final subDocs = subSnapshot.data!.docs;
-                    // Process and display data from the sub-collection
-                    return ListView.builder(
-                      shrinkWrap: true,
-                      physics: NeverScrollableScrollPhysics(),
-                      itemCount: subDocs.length,
-                      itemBuilder: (context, subIndex) {
-                        // final subDoc = subDocs[subIndex];
-                        // final officerName = subDoc['officerName'];
-                        // final payment= subDoc['payment'];
-                        // final customerName = subDoc["customerName"];
-                        // final ids = subDoc.id;
-
-                        // ...
-
-                        return 
-                         subDocs.length == 2 ?
+              final inProcess = userDoc["inProcess"];
+              return 
+                           inProcess == "inProcess"   ?
                                 Padding(
                       padding: const EdgeInsets.all(4.0),
                       child: Container(
@@ -103,15 +82,99 @@ class InProcess extends StatelessWidget {
                         ),
                       ),
                     ):Container();
-                      },
-                    );
-                  } else if (subSnapshot.hasError) {
-                    return Text('Error: ${subSnapshot.error}');
-                  } else {
-                    return CircularProgressIndicator();
-                  }
-                },
-              );
+              
+//               StreamBuilder<QuerySnapshot>(
+//                 stream: FirebaseFirestore.instance.collection('users').doc(userId).collection('netMeteringProcedure')
+//                 //   .where('payment', isNotEqualTo: 
+//                 // "").where("noted",isEqualTo: false)
+//                   .snapshots(),
+//                 builder: (context, subSnapshot) {
+//                   if (subSnapshot.hasData) {
+//                     final subDocs = subSnapshot.data!.docs;
+//                     // Process and display data from the sub-collection
+//                     return ListView.builder(
+//                       shrinkWrap: true,
+//                       physics: NeverScrollableScrollPhysics(),
+//                       itemCount: subDocs.length,
+//                       itemBuilder: (context, subIndex) {
+//                         // final subDoc = subDocs[subIndex];
+//                         // final officerName = subDoc['officerName'];
+//                         // final payment= subDoc['payment'];
+//                         // final customerName = subDoc["customerName"];
+//                         // final ids = subDoc.id;
+
+//                         // ...
+
+//                         return 
+//                         inProcess == "inProcess"   ?
+//                                 Padding(
+//                       padding: const EdgeInsets.all(4.0),
+//                       child: Container(
+//                          decoration: BoxDecoration(
+//                      borderRadius: BorderRadius.circular(10),
+//                      color: Colors.green.withOpacity(0.2),
+//                    ),
+//                         child: Column(
+//                           children: [
+             
+                         
+                        
+//                             ListTile(
+                        
+//                               title: Text(" ${names} NetMetering procedure File status is Pending.Wotrking on it" ), 
+//                              onTap: () {
+//                                 Get.to(()=> StepsCompleted(id:userId,name:names),);
+//                              },
+//                               // subtitle:Text("${description} ---- ${payment} " ), 
+//                             )
+//                             //   ListTile(
+                        
+//                             //   title: Text(" ${officerName} apply for payment clearance to approved thePayment: ${payment}. for the Customer -- ${customerName} " ), 
+                             
+//                             //   // subtitle:Text("${description} ---- ${payment} " ), 
+//                             // )
+//                             // ,
+                                        
+                       
+// //      ElevatedButton(
+// //                         onPressed: () async{
+                         
+// //        try{
+// //         EasyLoading.show();
+// //  final usersRef = await FirebaseFirestore.instance.collection('users').doc(userId).collection('netMeteringProcedure');
+               
+// //  await usersRef.doc(ids).update({'noted':true,"approvalDateTimeFinance":DateTime.now()});
+
+// //  EasyLoading.dismiss();
+// //   }
+// //   catch(e)
+// //   {
+// //  Get.snackbar("Error", "Issue in updating ${e}");
+// //  EasyLoading.dismiss();
+// //   }
+ 
+
+  
+      
+                        
+// //                         },
+// //                         child: Text('Noted'),
+// //                                         ),
+                                        
+                                        
+//                           ],
+//                         ),
+//                       ),
+//                     ):Container();
+//                       },
+//                     );
+//                   } else if (subSnapshot.hasError) {
+//                     return Text('Error: ${subSnapshot.error}');
+//                   } else {
+//                     return CircularProgressIndicator();
+//                   }
+//                 },
+//               );
             },
           );
         } else if (snapshot.hasError) {

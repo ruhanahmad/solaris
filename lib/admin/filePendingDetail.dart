@@ -26,7 +26,8 @@ class _BigImagePaymentState extends State<BigImagePayment> {
         title: Text('Description'),
       ),
       body: Center(
-        child: Column(
+        child: 
+        Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             

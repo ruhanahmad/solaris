@@ -4,6 +4,7 @@ import 'dart:typed_data';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:onesignal_flutter/onesignal_flutter.dart';
+import 'package:solaris/admin/FilesPending.dart';
 import 'package:solaris/admin/filePendingPayment.dart';
 import 'package:solaris/controllerRef.dart';
 import 'package:solaris/controllers/userController.dart';
@@ -99,7 +100,8 @@ final output = await File('${appDocumentsDir.path}/$num.pdf').create();
   await firestore.collection('users').doc(userId).collection("netMeteringProcedure").doc(docId).update({
     'pdfUrl': downloadURL,"sentForApproval":true,"approved":true
   });
-//  Get.off();
+ 
+
   EasyLoading.dismiss();
 }
 
@@ -127,15 +129,19 @@ final output = await File('${appDocumentsDir.path}/$num.pdf').create();
 //   print('PDF downloaded successfully.');
 // }
 
-Future updateApproval(String id,String netId) async{
+Future updateApproval(String id,String netId,String docname) async{
 try{
 
  final usersRef = await FirebaseFirestore.instance.collection('users');
- await usersRef.doc(id).collection("netMeteringProcedure").doc(netId).update({'approved':true,});
+ await usersRef.doc(id).collection("netMeteringProcedure").doc(netId).update({'approved':true,'sentForApproval':true});
+ docname == "Net Metering Procedure Finished" ? await usersRef.doc(id).update({'inProcess':"Finished",}):await usersRef.doc(id).update({'inProcess':"inProcess",});
   }catch(e){
  Get.snackbar("Error", "Issue in updating ${e}");
   }
 }
+
+
+
 
 
 }

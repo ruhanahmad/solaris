@@ -77,6 +77,7 @@ class MyApp extends StatelessWidget {
       // NotificationPage(),
       // NotificationOpenedHandler(),
       AuthPage(),
+      // haha(),
       // FirestoreDataWidget(),
       // ThermalPrinter(),
       // Record(),

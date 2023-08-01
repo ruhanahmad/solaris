@@ -2,80 +2,182 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 
-class FirestoreDataWidget extends StatelessWidget {
-  // Future<QuerySnapshot> fetchDataWithQuery(String collection, dynamic query) async {
-  //   return FirebaseFirestore.instance.collection(collection).where(query[0], isEqualTo: query[1]).get();
-  // }
 
-  @override
-  Widget build(BuildContext context) {
-    return StreamBuilder<QuerySnapshot>(
-      stream:   FirebaseFirestore.instance.collection('users')
-        .where('netMetering', isEqualTo: true)
-        .get().asStream(),
-      builder: (context, snapshot) {
-        if (snapshot.hasData) {
-          // Extract document IDs from the fetched data
-          List<String> documentIds = [];
-          snapshot.data!.docs.forEach((doc) {
-            documentIds.add(doc.id);
+import 'package:flutter/material.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
-                     StreamBuilder<QuerySnapshot>(
-            stream: 
-             FirebaseFirestore.instance.collection('users').doc(doc.id).collection('netMeteringProcedure').get().asStream() ,
-            builder: (context, subSnapshot) {
-              if (subSnapshot.hasData) {
-                // Get the length of documents in the sub-collection
-                int subCollectionLength = subSnapshot.data!.docs.length;
-                print(subCollectionLength);
 
-                // Use subCollectionLength and other data in your app's body
-                return YourAppBody(subCollectionLength: subCollectionLength);
-              } else {
-                return Center(child: CircularProgressIndicator());
-              }
-            },
-          );
-          });
 
-          // Use the documentIds to apply the second query
+class haha extends StatelessWidget {
+  void _onButtonPressed(BuildContext context) {
+    // When the button is pressed, run the function to compare the streams and show the bottom sheet
+    compareAndShowBottomSheet(context);
+  }
 
-        } else {
-          return Center(child: CircularProgressIndicator());
+  Stream<List<String>> getFirstCollectionData() {
+    // Replace 'firstCollection' with the name of your first collection in Firestore
+    CollectionReference collectionRef =
+        FirebaseFirestore.instance.collection('netMeteringSteps');
+
+    return collectionRef.snapshots().map((querySnapshot) {
+      return querySnapshot.docs.map((doc) => doc['name'] as String).toList();
+    });
+  }
+
+  Stream<List<String>> getSecondCollectionData(String documentId) {
+    // Replace 'secondCollection' and 'subCollection' with the names of your second collection and subcollection in Firestore
+    CollectionReference collectionRef = FirebaseFirestore.instance
+        .collection('users')
+        .doc(documentId)
+        .collection('netMeteringProcedure');
+
+    return collectionRef.snapshots().map((querySnapshot) {
+      return querySnapshot.docs.map((doc) => doc['name'] as String).toList();
+    });
+  }
+
+  void compareAndShowBottomSheet(BuildContext context) {
+    Stream<List<String>> firstStream = getFirstCollectionData();
+
+    firstStream.listen((firstNames) {
+      // Replace 'documentId' with the ID of the document you want to retrieve from the second collection
+      Stream<List<String>> secondStream =
+          getSecondCollectionData('18kMPyOYrzV2V9fJNyk3Dqz0Ju82');
+
+      secondStream.listen((secondNames) {
+        List<String> namesNotPresent = [];
+
+        for (var name in firstNames) {
+          if (!secondNames.contains(name)) {
+            namesNotPresent.add(name);
+          }
         }
-        return YourAppBodys();
+
+        if (namesNotPresent.isNotEmpty) {
+          // Show the bottom sheet with the names not present in the second stream
+          _showBottomSheet(context, namesNotPresent);
+        }
+      });
+    });
+  }
+
+  void _showBottomSheet(BuildContext context, List<String> names) {
+    showModalBottomSheet(
+      context: context,
+      builder: (BuildContext context) {
+        return Container(
+          height: 200,
+          child: Center(
+            child: ListView.builder(
+              itemCount: names.length,
+              itemBuilder: (context, index) {
+                return ListTile(
+                  title: Text(names[index]),
+                );
+              },
+            ),
+          ),
+        );
       },
     );
   }
-}
-
-class YourAppBody extends StatelessWidget {
-  final int subCollectionLength;
-
-  // Add other data you want to use in the body here
-
-  YourAppBody({required this.subCollectionLength});
 
   @override
   Widget build(BuildContext context) {
-    // Use subCollectionLength and other data here to build your app's UI
-    return Center(
-      child: Text('Sub-collection Length: $subCollectionLength'),
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Flutter Firestore Example'),
+      ),
+      body: 
+      Center(
+        child: ElevatedButton(
+          onPressed: () {
+            _onButtonPressed(context);
+          },
+          child: Text('Show Names Not Present'),
+        ),
+      ),
     );
   }
 }
 
-class YourAppBodys extends StatelessWidget {
 
 
-  @override
-  Widget build(BuildContext context) {
-    // Use subCollectionLength and other data here to build your app's UI
-    return Center(
-      child: Text("Sub-collection Length"),
-    );
-  }
-}
+
+// class FirestoreDataWidget extends StatelessWidget {
+//   // Future<QuerySnapshot> fetchDataWithQuery(String collection, dynamic query) async {
+//   //   return FirebaseFirestore.instance.collection(collection).where(query[0], isEqualTo: query[1]).get();
+//   // }
+
+//   @override
+//   Widget build(BuildContext context) {
+//     return StreamBuilder<QuerySnapshot>(
+//       stream:   FirebaseFirestore.instance.collection('users')
+//         .where('netMetering', isEqualTo: true)
+//         .get().asStream(),
+//       builder: (context, snapshot) {
+//         if (snapshot.hasData) {
+//           // Extract document IDs from the fetched data
+//           List<String> documentIds = [];
+//           snapshot.data!.docs.forEach((doc) {
+//             documentIds.add(doc.id);
+
+//                      StreamBuilder<QuerySnapshot>(
+//             stream: 
+//              FirebaseFirestore.instance.collection('users').doc(doc.id).collection('netMeteringProcedure').get().asStream() ,
+//             builder: (context, subSnapshot) {
+//               if (subSnapshot.hasData) {
+//                 // Get the length of documents in the sub-collection
+//                 int subCollectionLength = subSnapshot.data!.docs.length;
+//                 print(subCollectionLength);
+
+//                 // Use subCollectionLength and other data in your app's body
+//                 return YourAppBody(subCollectionLength: subCollectionLength);
+//               } else {
+//                 return Center(child: CircularProgressIndicator());
+//               }
+//             },
+//           );
+//           });
+
+//           // Use the documentIds to apply the second query
+
+//         } else {
+//           return Center(child: CircularProgressIndicator());
+//         }
+//         return YourAppBodys();
+//       },
+//     );
+//   }
+// }
+
+// class YourAppBody extends StatelessWidget {
+//   final int subCollectionLength;
+
+//   // Add other data you want to use in the body here
+
+//   YourAppBody({required this.subCollectionLength});
+
+//   @override
+//   Widget build(BuildContext context) {
+//     // Use subCollectionLength and other data here to build your app's UI
+//     return Center(
+//       child: Text('Sub-collection Length: $subCollectionLength'),
+//     );
+//   }
+// }
+
+// class YourAppBodys extends StatelessWidget {
+
+
+//   @override
+//   Widget build(BuildContext context) {
+//     // Use subCollectionLength and other data here to build your app's UI
+//     return Center(
+//       child: Text("Sub-collection Length"),
+//     );
+//   }
+// }
 
 
 

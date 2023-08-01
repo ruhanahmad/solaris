@@ -106,11 +106,11 @@ class _ApprovalScreenState extends State<ApprovalScreen> {
                        
                                         ElevatedButton(
                         onPressed: () async{
-                          payment == "" ?
-           await      adminController.updateApproval(widget.id!,ids)
-           :
-            await   sentForApproval == false ?   adminController.generateAndUploadPdf(netMeteringOfficerName,description,payment,customerName,widget.id!,ids):Get.snackbar("Sent", "Already sent ")
-           ;       
+                          // payment == "" ?
+          //  await      adminController.updateApproval(widget.id!,ids)
+          //  :
+          //   await   sentForApproval == false ?   adminController.generateAndUploadPdf(netMeteringOfficerName,description,payment,customerName,widget.id!,ids):Get.snackbar("Sent", "Already sent ")
+          //  ;       
      
 //  try{
 
