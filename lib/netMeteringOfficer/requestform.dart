@@ -58,7 +58,7 @@ class _RequestFormNetMeteringState extends State<RequestFormNetMetering> {
 
 
  Get.snackbar("Procedure Submitted", "Submitted.");
-
+  _selectedValue == "";
 
 
   EasyLoading.dismiss();

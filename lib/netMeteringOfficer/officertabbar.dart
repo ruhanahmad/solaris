@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:solaris/admin/approvalScreen.dart';
 import 'package:solaris/admin/approvalScreenPayment.dart';
 import 'package:solaris/admin/stepsCompleted.dart';
+import 'package:solaris/netMeteringOfficer/officerApprovedFiles.dart';
+import 'package:solaris/netMeteringOfficer/officerPendingFiles.dart';
 import 'package:solaris/netMeteringOfficer/officerSendForApproval.dart';
 import 'package:solaris/netMeteringOfficer/requestform.dart';
 import 'package:solaris/screens/complaint.dart';
@@ -41,8 +43,8 @@ class _NetMeteringOfficerState extends State<NetMeteringOfficer> {
          RequestFormNetMetering(),
             // Contents of Tab 2
             // ApprovalScreenPayment(id:widget.id,name:widget.name),
-         OfficerSendForApproval(),
-          OfficerSendForApproval(),
+         OfficerPendingFiles(),
+          OfficerApprovedFiles(),
           
           ],
         ),
