@@ -3,6 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
 import 'package:solaris/controllerRef.dart';
+import 'package:solaris/netMeteringOfficer/customerProcedure.dart';
 
 class OfficerPendingFiles extends StatelessWidget {
   @override
@@ -39,6 +40,7 @@ class OfficerPendingFiles extends StatelessWidget {
                         final payment= subDoc['payment'];
                         final customerName = subDoc["customerName"];
                         final ids = subDoc.id;
+                        final name = subDoc["name"];
 
                         // ...
 
@@ -56,10 +58,16 @@ class OfficerPendingFiles extends StatelessWidget {
                          
                          
                             ListTile(
+                              onTap: () {
+                              Get.to(CustomerProcedure(id: userId,name:name ,))  ;
+                              },
                         
-                              title: Text(" ${officerName} apply for payment clearance to approved thePayment: ${payment}. for the Customer -- ${customerName} " ), 
+                              title:
+                              //  Text(" ${officerName} apply for payment clearance to approved thePayment: ${payment}. for the Customer -- ${customerName} " ), 
+                               Text("${customerName} " ), 
                              
-                              // subtitle:Text("${description} ---- ${payment} " ), 
+                              subtitle:Text("${name} ---- ${payment ??""} " ), 
+                              trailing: Text("Pending",style: TextStyle(color: Colors.green),),
                             ),
                                         
                        

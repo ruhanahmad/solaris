@@ -6,6 +6,7 @@ import 'package:solaris/controllerRef.dart';
 import 'package:solaris/electrician/electricianDoComplaints.dart';
 import 'package:solaris/electrician/receivedComplaints.dart';
 import 'package:solaris/links.dart';
+import 'package:solaris/netMeteringOfficer/CustomersList.dart';
 import 'package:solaris/netMeteringOfficer/officertabbar.dart';
 import 'package:solaris/screens/aboutus.dart';
 import 'package:solaris/screens/complaint.dart';
@@ -39,7 +40,7 @@ class _OfficerHomeScreenState extends State<OfficerHomeScreen > {
 
    Links(),
  NetMeteringOfficer(),
-   AboutUsScreen(),
+   CustomerList(),
   // NetMeteringCustomers(),
    AboutUsScreen(),
    Profile(),

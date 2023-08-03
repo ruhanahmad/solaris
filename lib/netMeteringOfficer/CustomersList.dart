@@ -5,7 +5,7 @@ import 'package:get/get.dart';
 import 'package:solaris/controllerRef.dart';
 import 'package:solaris/netMeteringOfficer/customerProcedure.dart';
 
-class OfficerApprovedFiles extends StatelessWidget {
+class CustomerList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<QuerySnapshot>(
@@ -20,32 +20,13 @@ class OfficerApprovedFiles extends StatelessWidget {
             itemBuilder: (context, index) {
               final userDoc = usersDocs[index];
               final userId = userDoc.id;
+              final city = userDoc["city"];
+              final phone = userDoc["phone"];
+              final address = userDoc["address"];
+              final name =userDoc["name"];
 
-              return StreamBuilder<QuerySnapshot>(
-                stream: FirebaseFirestore.instance.collection('users').doc(userId).collection('netMeteringProcedure')
-                  .where('officerName', isEqualTo: 
-                userController.userName).where("approved",isEqualTo: true).where("sentForApproval",isEqualTo: true)
-                  .snapshots(),
-                builder: (context, subSnapshot) {
-                  if (subSnapshot.hasData) {
-                    final subDocs = subSnapshot.data!.docs;
-                    // Process and display data from the sub-collection
-                    return ListView.builder(
-                      shrinkWrap: true,
-                      physics: NeverScrollableScrollPhysics(),
-                      itemCount: subDocs.length,
-                      itemBuilder: (context, subIndex) {
-                        final subDoc = subDocs[subIndex];
-                        final officerName = subDoc['officerName'];
-                        final payment= subDoc['payment'];
-                        final customerName = subDoc["customerName"];
-                        final ids = subDoc.id;
-                        final name = subDoc["name"];
-
-                        // ...
-
-                        return 
-                                Padding(
+              return 
+                                        Padding(
                       padding: const EdgeInsets.all(4.0),
                       child: Container(
                          decoration: BoxDecoration(
@@ -58,18 +39,18 @@ class OfficerApprovedFiles extends StatelessWidget {
                          
                          
                             ListTile(
-                              onTap: () {
-                              Get.to(CustomerProcedure(id: userId,name:name ,))  ;
-                              },
+                              // onTap: () {
+                              // Get.to(CustomerProcedure(id: userId,name:name ,))  ;
+                              // },
                         
                               title:
                               //  Text(" ${officerName} apply for payment clearance to approved thePayment: ${payment}. for the Customer -- ${customerName} " ), 
-                               Text("${customerName} " ), 
+                               Text("Customer Name :${name}, \n City: ${city} \n Phone: ${phone}  " ), 
                              
-                              subtitle:Text("${name} ---- ${payment ??""} " ), 
-                              trailing: Text("Approved",style: TextStyle(color: Colors.green),),
+                              subtitle:Text("Address: ${address} " ), 
+                              // trailing: Text("Pending",style: TextStyle(color: Colors.green),),
                             ),
-                                         
+                                        
                        
 //      ElevatedButton(
 //                         onPressed: () async{
@@ -101,15 +82,6 @@ class OfficerApprovedFiles extends StatelessWidget {
                         ),
                       ),
                     );
-                      },
-                    );
-                  } else if (subSnapshot.hasError) {
-                    return Text('Error: ${subSnapshot.error}');
-                  } else {
-                    return CircularProgressIndicator();
-                  }
-                },
-              );
             },
           );
         } else if (snapshot.hasError) {
