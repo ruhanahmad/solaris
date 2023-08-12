@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
+import 'package:solaris/admin/netMeteringProcedure.dart';
+import 'package:solaris/admin/stepsCompleted.dart';
 
 class NewFiles extends StatelessWidget {
   @override
@@ -57,7 +59,9 @@ class NewFiles extends StatelessWidget {
                          
                         
                             ListTile(
-                        
+                               onTap: () {
+                             Get.to( StepsCompleted(id:userId,name:names));    
+                               },
                               title: Text(" ${names} " ), 
                              
                               // subtitle:Text("${description} ---- ${payment} " ), 

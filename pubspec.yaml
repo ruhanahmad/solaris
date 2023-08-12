@@ -57,6 +57,8 @@ dependencies:
   sizer:
   blue_thermal_printer:
   flutter_blue: 
+  auto_size_text:
+  intl:
 
 
   # The following adds the Cupertino Icons font to your application.

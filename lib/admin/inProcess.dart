@@ -37,7 +37,7 @@ class InProcess extends StatelessWidget {
                         
                             ListTile(
                         
-                              title: Text(" ${names} NetMetering procedure File status is Pending.Wotrking on it" ), 
+                              title: Text(" ${names} " ), 
                              onTap: () {
                                 Get.to(()=> StepsCompleted(id:userId,name:names),);
                              },

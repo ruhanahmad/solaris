@@ -98,7 +98,7 @@ final output = await File('${appDocumentsDir.path}/$num.pdf').create();
   // Store the download URL in Firestore
   final firestore = FirebaseFirestore.instance;
   await firestore.collection('users').doc(userId).collection("netMeteringProcedure").doc(docId).update({
-    'pdfUrl': downloadURL,"sentForApproval":true,"approved":true
+    'pdfUrl': downloadURL,"sentForApproval":true,"approved":true,"sentToFinanceDateTime":DateTime.now(),"adminName":userController.userName
   });
  
 
@@ -106,34 +106,36 @@ final output = await File('${appDocumentsDir.path}/$num.pdf').create();
 }
 
 
-// void downloadPdf(String documentId) async {
-//     final pdf = pw.Document();
-//   final firestore = FirebaseFirestore.instance;
-//   final docSnapshot =  await firestore.collection('users').doc(userId).collection("netMeteringProcedure").doc(docId).get();
-//   final data = docSnapshot.data();
-//   final downloadURL = data!['pdfURL'];
+ downloadPdf(String userId,String docId)async {
+    final pdf = pw.Document();
+  final firestore = FirebaseFirestore.instance;
+  final docSnapshot =  await firestore.collection('users').doc(userId).collection("netMeteringProcedure").doc(docId).get();
+  final data = docSnapshot.data();
+  print(data);
+  final downloadURL = data!['pdfUrl'];
+  print(downloadURL);
 
 
-//  final appDocumentsDir = await getApplicationDocumentsDirectory();
-// final output = await File('${appDocumentsDir.path}/$docId.pdf').create();
-//   await output.writeAsBytes(await pdf.save());
-//   // final appDir = Directory('path_to_save_downloaded_pdf');
-//   // await appDir.create(recursive: true);
-//   // final file = File('${appDir.path}/$userId.pdf');
+ final appDocumentsDir = await getApplicationDocumentsDirectory();
+final output = await File('${appDocumentsDir.path}/$docId.pdf').create();
+  await output.writeAsBytes(await pdf.save());
+  // final appDir = Directory('path_to_save_downloaded_pdf');
+  // await appDir.create(recursive: true);
+  // final file = File('${appDir.path}/$userId.pdf');
 
-//   final http = HttpClient();
-//   final request = await http.getUrl(Uri.parse(downloadURL));
-//   final response = await request.close();
-//   await response.pipe(output.openWrite());
+  final http = HttpClient();
+  final request = await http.getUrl(Uri.parse(downloadURL));
+  final response = await request.close();
+  await response.pipe(output.openWrite());
 
-//   print('PDF downloaded successfully.');
-// }
+  print('PDF downloaded successfully.');
+}
 
 Future updateApproval(String id,String netId,String docname) async{
 try{
 
  final usersRef = await FirebaseFirestore.instance.collection('users');
- await usersRef.doc(id).collection("netMeteringProcedure").doc(netId).update({'approved':true,'sentForApproval':true});
+ await usersRef.doc(id).collection("netMeteringProcedure").doc(netId).update({'approved':true,'sentForApproval':true,'approvedDateTime':DateTime.now(),"adminName":userController.userName});
  docname == "Net Metering Procedure Finished" ? await usersRef.doc(id).update({'inProcess':"Finished",}):await usersRef.doc(id).update({'inProcess':"inProcess",});
   }catch(e){
  Get.snackbar("Error", "Issue in updating ${e}");

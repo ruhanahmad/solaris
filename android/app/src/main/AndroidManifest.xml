@@ -11,6 +11,8 @@
     <!-- Add Bluetooth permission for Android 6.0 and higher -->
     <uses-permission-sdk-23 android:name="android.permission.BLUETOOTH" />
     <uses-permission-sdk-23 android:name="android.permission.BLUETOOTH_ADMIN" />
+     <uses-permission android:name="android.permission.INTERNET"/>
+
     <uses-feature android:name="android.hardware.bluetooth_le" android:required="true" />
     <application
         android:requestLegacyExternalStorage="true"

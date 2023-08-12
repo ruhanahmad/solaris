@@ -33,17 +33,13 @@ class _RequestFormNetMeteringState extends State<RequestFormNetMetering> {
   "officerName":userController.userName,
   "description":_descriptionController.text ??"",
   "payment":_priceController.text ?? "",
-  "customerName":userController.selectedName,
+  "customerName":_selectedValue,
   "pdfUrl":"",
   "userIdCustomer":userController.selectedUserId,
   "sendApprovalDateTime":DateTime.now(),
   "noted":false,
   "approvalDateTimeFinance":"",
   "sentForApproval":false,
-  "approvedDateTime":"",
-  "sentToFinanceDateTime":"",
-  "adminName":"",
-
   });
   _descriptionController.text  = "";
   _priceController.text  = "";
@@ -63,8 +59,8 @@ class _RequestFormNetMeteringState extends State<RequestFormNetMetering> {
 
 
  Get.snackbar("Procedure Submitted", "Submitted.");
-  // _selectedValue == "";
-userController.selectedName = "";
+  _selectedValue == "";
+
 
   EasyLoading.dismiss();
   }catch(e){
@@ -136,7 +132,7 @@ var selectedNetMeteringStep = "";
       context: context,
       builder: (BuildContext context) {
         return Container(
-          height: 500,
+          height: 200,
           child: Center(
             child: ListView.builder(
               itemCount: names.length,
@@ -289,7 +285,7 @@ var selectedNetMeteringStep = "";
   ElevatedButton(
                   onPressed: () {
                     // Open the bottom sheet passing the field data
-                controller.selectedName == ""? null:     _onButtonPressed(context,controller.selectedUserId);
+                controller.selectedName == ""? null:     _onButtonPressed(context,controller.selectedUserId!);
                   },
                   child: Text('Net Metering Steps'),
                 ),
@@ -446,7 +442,7 @@ class _SearchBottomSheetState extends State<SearchBottomSheet> {
   }
 
   Future<void> fetchInitialData() async {
-    final snapshot = await usersCollection.where('role', isEqualTo: 'customer').where("netMetering",isEqualTo: true).get();
+    final snapshot = await usersCollection.where('role', isEqualTo: 'customer').get();
     setState(() {
       _initialData = snapshot.docs;
       _filteredData = _initialData;

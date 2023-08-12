@@ -150,8 +150,9 @@ class _FilesPendingNonPaymentState extends State<FilesPendingNonPayment> {
                                 // Get.to(()=> BigImageNonPayment(customername: customerName,officerName: officerName,payment: payment,description:description,userIdCustomer:userIdCustomer,id:ids));
                               },
                               title: Text(" ${names}  " ), 
+
                              
-                              // subtitle:Text("${description} ---- ${payment} " ), 
+                              subtitle:Text("${docName} " ), 
                             ),
                             //   ListTile(
                         

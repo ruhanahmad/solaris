@@ -131,29 +131,29 @@ class _NetMeteringCustomersState extends State<NetMeteringCustomers> {
                                     ),
                                   ):
 
-   SizedBox(
-                                    width: 190.0,
-                                    height: 40.0,
-                                    child: ElevatedButton(
-                                      onPressed: () async{
-                                  Get.to(()=>netMeteringProcedure(id:userid,name:name));
+  //  SizedBox(
+  //                                   width: 190.0,
+  //                                   height: 40.0,
+  //                                   child: ElevatedButton(
+  //                                     onPressed: () async{
+  //                                 Get.to(()=>netMeteringProcedure(id:userid,name:name));
                                   
-                                      },
-                                      child: Text(
-                                        'See The procedure',
-                                        style: TextStyle(fontSize: 16.0),
-                                      ),
-                                      style: ButtonStyle(
-                                        backgroundColor: MaterialStateProperty.all<Color>(Colors.green),
-                                        shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                      RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(24.0),
-                      ),
-                                        ),
-                                      ),
-                                    ),
-                                  )
-                                     
+  //                                     },
+  //                                     child: Text(
+  //                                       'See The procedure',
+  //                                       style: TextStyle(fontSize: 16.0),
+  //                                     ),
+  //                                     style: ButtonStyle(
+  //                                       backgroundColor: MaterialStateProperty.all<Color>(Colors.green),
+  //                                       shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+  //                     RoundedRectangleBorder(
+  //                       borderRadius: BorderRadius.circular(24.0),
+  //                     ),
+  //                                       ),
+  //                                     ),
+  //                                   ),
+  //                                 )
+                                     Text("Added")
                                         
                                         
                           ],

@@ -14,7 +14,7 @@ class FilePendingPayment extends StatefulWidget {
 class _FilePendingPaymentState extends State<FilePendingPayment> {
 
 
-    Future<void>? alerts(String customerName,String officerName,String payment,String description,String userIdCustomer,String ids){
+    Future<void>? alerts(String customerName,String officerName,String payment,String description,String userIdCustomer,String ids,String StepName){
     showDialog(context: context, builder: (context){
       return     AlertDialog(
         content: Container(
@@ -38,6 +38,10 @@ class _FilePendingPaymentState extends State<FilePendingPayment> {
                   ),
                      Text(
                     'Payment: ${payment}',
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                  ),
+                    Text(
+                    'Step: ${StepName}',
                     style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                   ),
                 ],
@@ -119,6 +123,7 @@ class _FilePendingPaymentState extends State<FilePendingPayment> {
                         final sentForApproval = subDoc["sentForApproval"];
                         final description = subDoc["description"];
                         final userIdCustomer =subDoc["userIdCustomer"];
+                      final StepName = subDoc["name"];
                         // ...
 
                         return 
@@ -137,11 +142,12 @@ class _FilePendingPaymentState extends State<FilePendingPayment> {
                         
                             ListTile(
                               onTap: () {
-                                alerts( customerName, officerName,payment,description,userIdCustomer,ids);
+                                alerts( customerName, officerName,payment,description,userIdCustomer,ids,StepName);
                                 // Get.to(()=> BigImagePayment(customername: customerName,officerName: officerName,payment: payment,description:description,userIdCustomer:userIdCustomer,id:ids));
                               },
                               title: Text(" ${names} " ), 
-                             
+                              
+                             subtitle: Text("${StepName}"),
                               // subtitle:Text("${description} ---- ${payment} " ), 
                             ),
                             //   ListTile(

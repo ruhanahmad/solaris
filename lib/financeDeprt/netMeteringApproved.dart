@@ -1,88 +1,175 @@
-import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
-import 'package:intl/intl.dart';
 import 'package:solaris/controllerRef.dart';
+import 'package:intl/intl.dart';
 
-class ForApproal extends StatelessWidget {
-  
- var startDate;
- var endDate;
- ForApproal({this.startDate,this.endDate});
-
-
-
-  Future<void>? alerts(String customerName,String officerName,String payment,String userIdCustomer,String ids,BuildContext context,String stepName,bool noted){
+class NetMeteringApproved extends StatefulWidget {
+  @override
+  State<NetMeteringApproved> createState() => _NetMeteringApprovedState();
+}
+  Future<void>? alerts(String customerName,String officerName,String payment,String userIdCustomer,String ids,BuildContext context,String stepName,bool noted,String customerId,String formattedDate,String formattedTime,String adminName,String formattedDateTwo,String formattedTimeTwo,String description){
     showDialog(context: context, builder: (context){
       return     AlertDialog(
         content: Container(
           height: 400,
+          width: 700,
           child: new
                Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              
+                  Center(
+        child: 
+        Table(
+          border: TableBorder.all(),
+          children: [
+            TableRow(
+              children: [
+                TableCell(
+                  child: Center(child: Text('Header 1')),
+                ),
+                TableCell(
+                  child: Center(child: Text('Header 2')),
+                ),
+                TableCell(
+                  child: Center(child: Text('Header 3')),
+                ),
+              ],
+            ),
+            TableRow(
+              children: [
+                TableCell(
+                  child: Center(child: Text('C.id')),
+                ),
+                TableCell(
+                  child: Center(child: Text('${customerId}')),
+                ),
+                TableCell(
+                  child: Center(child: Text('')),
+                ),
+              ],
+            ),
+            TableRow(
+              children: [
+                TableCell(
+                  child: Center(child: Text('Step Name')),
+                ),
+                TableCell(
+                  child: Center(child: Text('${stepName}')),
+                ),
+                TableCell(
+                  child: Center(child: Text('')),
+                ),
+              ],
+            ),
+             TableRow(
+              children: [
+                TableCell(
+                  child: Center(child: Text('Requested By')),
+                ),
+                TableCell(
+                  child: Center(child: Text('${officerName}')),
+                ),
+                TableCell(
+                  child: Center(child: Text('${formattedDate}- ${formattedTime}')),
+                ),
+              ],
+            ),
+             TableRow(
+              children: [
+                TableCell(
+                  child: Center(child: Text('Approved By')),
+                ),
+                TableCell(
+                  child: Center(child: Text('${adminName}')),
+                ),
+                TableCell(
+                  child: Center(child: Text('${formattedDateTwo}- ${formattedTimeTwo}')),
+                ),
+              ],
+            ),
+
+              TableRow(
+              children: [
+                TableCell(
+                  child: Center(child: Text('Noticed By')),
+                ),
+                TableCell(
+                  child: Center(child: Text('${userController.userName}')),
+                ),
+                TableCell(
+                  child: Center(child: Text('${formattedDateTwo}- ${formattedTimeTwo}')),
+                ),
+              ],
+            ),
+
+              TableRow(
+              children: [
+                TableCell(
+                  child: Center(child: Text('Amount Requested')),
+                ),
+                TableCell(
+                  child: Center(child: Text('${payment}')),
+                ),
+                TableCell(
+                  child: Center(child: Text('')),
+                ),
+              ],
+            ),
+             TableRow(
+              children: [
+                TableCell(
+                  child: Center(child: Text('Description')),
+                ),
+                TableCell(
+                  child: Center(child: Text('${description}')),
+                ),
+                TableCell(
+                  child: Center(child: Text('')),
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
           
-              SizedBox(height: 10),
-              Column(
-                children: [
-                  Text(
-                    'Customer Name: ${customerName}',
-                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                  ),
-                  Text(
-                    'Officer Name: ${officerName}',
-                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                  ),
-                     Text(
-                    'Payment: ${payment}',
-                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                  ),
-                    Text(
-                    'Step: ${stepName}',
-                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                  ),
-                ],
-              ),
+              // SizedBox(height: 10),
+              // Column(
+              //   children: [
+              //     Text(
+              //       'Customer Name: ${customerName}',
+              //       style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              //     ),
+              //     Text(
+              //       'Officer Name: ${officerName}',
+              //       style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              //     ),
+              //        Text(
+              //       'Payment: ${payment}',
+              //       style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              //     ),
+              //       Text(
+              //       'Step: ${stepName}',
+              //       style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              //     ),
+              //   ],
+              // ),
                           //                   ElevatedButton(
                           // onPressed: () async{
                          
             
-                noted ==false ?
-     ElevatedButton(
-                        onPressed: () async{
-                           
-       try{
-        EasyLoading.show();
- final usersRef = await FirebaseFirestore.instance.collection('users').doc(userIdCustomer).collection('netMeteringProcedure');
-               
- await usersRef.doc(ids).update({'noted':true,"approvalDateTimeFinance":DateTime.now()});
 
- EasyLoading.dismiss();
-  }
-  catch(e)
-  {
- Get.snackbar("Error", "Issue in updating ${e}");
- EasyLoading.dismiss();
-  }
- 
-Navigator.pop(context);
-  
-      
-                        
-                        },
-                        child: Text('Noted'),
-                                        )
-                                        :
+                                        
                                     ElevatedButton(
                         onPressed: () async{
-                         adminController.downloadPdf(userIdCustomer,ids);
-       
+                        
+          await  adminController.downloadPdf(userIdCustomer, ids);
+              Navigator.pop(context);
                         },
-                        child: Text('Noted'),        
-                                    )
+                        child: Text('Download'),        
+                                    ),
+                                   
             
                   
              
@@ -112,7 +199,7 @@ Navigator.pop(context);
       );
     });
   }
-
+class _NetMeteringApprovedState extends State<NetMeteringApproved> {
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<QuerySnapshot>(
@@ -127,24 +214,12 @@ Navigator.pop(context);
             itemBuilder: (context, index) {
               final userDoc = usersDocs[index];
               final userId = userDoc.id;
+              final customerId = userDoc["customerId"];
 
-              return 
-              
-              StreamBuilder<QuerySnapshot>(
-                stream:
-                // startDate == null || endDate == null ? 
-                FirebaseFirestore.instance.collection('users').doc(userId).collection('netMeteringProcedure')
-                  .where('payment', isNotEqualTo: 
-                "").where("noted",isEqualTo: false)
-                  .snapshots()
-                  // :
-        //           FirebaseFirestore.instance.collection('users').doc(userId).collection('netMeteringProcedure')
-        //           // .where('payment', isNotEqualTo: "")
-        //         .where("noted",isEqualTo: false)
-        //         .where('sentToFinanceDateTime', isGreaterThanOrEqualTo: startDate)
-        // .where('sentToFinanceDateTime', isLessThanOrEqualTo: endDate)
-        //           .snapshots()
-                  ,
+              return StreamBuilder<QuerySnapshot>(
+                stream: FirebaseFirestore.instance.collection('users').doc(userId).collection('netMeteringProcedure')
+                 .where("noted",isEqualTo: true)
+                  .snapshots(),
                 builder: (context, subSnapshot) {
                   if (subSnapshot.hasData) {
                     final subDocs = subSnapshot.data!.docs;
@@ -159,23 +234,33 @@ Navigator.pop(context);
                         final payment= subDoc['payment'];
                         final customerName = subDoc["customerName"];
                         final ids = subDoc.id;
-                        final name = subDoc["name"];
+                         final name = subDoc["name"];
                         final noted = subDoc["noted"];
                         final sentToFinanceDateTime = subDoc["sentToFinanceDateTime"];
- final Timestamp timestamp = sentToFinanceDateTime;
+                        final sendApprovalDateTime = subDoc["sendApprovalDateTime"];
+                        final adminName = subDoc["adminName"];
+                         final description = subDoc["description"];
+                         final userIdCustomer = subDoc["userIdCustomer"];
+                         
+                        final Timestamp timestamp = sendApprovalDateTime;
  DateTime dateTime = timestamp.toDate();
     String formattedDate = DateFormat('MMM d, yyyy').format(dateTime);
     String formattedTime = DateFormat('h:mm a').format(dateTime);
+     final Timestamp timestampTwo = sentToFinanceDateTime;
+ DateTime dateTimeTwo = timestampTwo.toDate();
+    String formattedDateTwo = DateFormat('MMM d, yyyy').format(dateTimeTwo);
+    String formattedTimeTwo = DateFormat('h:mm a').format(dateTimeTwo);
+
                         // ...
-                        
 
                         return 
-                                Padding(
+
+                              Padding(
                       padding: const EdgeInsets.all(4.0),
                       child: GestureDetector(
                         onTap: () {
                           
-                          alerts( customerName, officerName,payment,userId,ids,context,name,noted);
+                          alerts( customerName, officerName,payment,userIdCustomer,ids,context,name,noted,customerId,formattedDate,formattedTime,adminName,formattedDateTwo,formattedTimeTwo,description);
                         },
                         child: Container(
                            decoration: BoxDecoration(
@@ -205,7 +290,7 @@ Navigator.pop(context);
                                  
                                   children: [
                                     
-                                                         Text(" ${formattedDate} " ),
+                                                        //  Text(" ${sentToFinanceDateTime} " ),
                                 
                                 ],),
                                 
@@ -253,6 +338,33 @@ Navigator.pop(context);
                         ),
                       ),
                     );
+                  //               Padding(
+                  //     padding: const EdgeInsets.all(4.0),
+                  //     child: Container(
+                  //        decoration: BoxDecoration(
+                  //    borderRadius: BorderRadius.circular(10),
+                  //    color: Colors.green.withOpacity(0.2),
+                  //  ),
+                  //       child: Column(
+                  //         children: [
+             
+                         
+                         
+                  //           ListTile(
+                        
+                  //             title: Text(" ${officerName} apply for payment clearance to approved thePayment: ${payment}. for the Customer -- ${customerName} " ), 
+                             
+                  //             // subtitle:Text("${description} ---- ${payment} " ), 
+                  //           ),
+                                        
+                       
+
+                                        
+                                        
+                  //         ],
+                  //       ),
+                  //     ),
+                  //   );
                       },
                     );
                   } else if (subSnapshot.hasError) {

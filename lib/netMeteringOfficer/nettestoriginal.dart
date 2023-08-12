@@ -6,7 +6,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
 import 'package:solaris/controllerRef.dart';
-import 'package:solaris/controllers/userController.dart';
 import 'package:solaris/models/authentication_service.dart';
 import 'package:image_picker/image_picker.dart';
 import '../models/user_model.dart';
@@ -33,17 +32,13 @@ class _RequestFormNetMeteringState extends State<RequestFormNetMetering> {
   "officerName":userController.userName,
   "description":_descriptionController.text ??"",
   "payment":_priceController.text ?? "",
-  "customerName":userController.selectedName,
+  "customerName":_selectedValue,
   "pdfUrl":"",
   "userIdCustomer":userController.selectedUserId,
   "sendApprovalDateTime":DateTime.now(),
   "noted":false,
   "approvalDateTimeFinance":"",
   "sentForApproval":false,
-  "approvedDateTime":"",
-  "sentToFinanceDateTime":"",
-  "adminName":"",
-
   });
   _descriptionController.text  = "";
   _priceController.text  = "";
@@ -63,8 +58,8 @@ class _RequestFormNetMeteringState extends State<RequestFormNetMetering> {
 
 
  Get.snackbar("Procedure Submitted", "Submitted.");
-  // _selectedValue == "";
-userController.selectedName = "";
+  _selectedValue == "";
+
 
   EasyLoading.dismiss();
   }catch(e){
@@ -136,7 +131,7 @@ var selectedNetMeteringStep = "";
       context: context,
       builder: (BuildContext context) {
         return Container(
-          height: 500,
+          height: 200,
           child: Center(
             child: ListView.builder(
               itemCount: names.length,
@@ -249,10 +244,7 @@ var selectedNetMeteringStep = "";
       ),
       body: SingleChildScrollView(
         child: Center(
-          child:
-          
-          GetBuilder<UserController>(builder: (controller){
-            return  Column(
+          child: Column(
             children: [
           SizedBox(height: halfHeight * 0.1),
                
@@ -275,21 +267,15 @@ var selectedNetMeteringStep = "";
                      children: [
                      ElevatedButton(
                   onPressed: () {
-                    showModalBottomSheet(
-              context: context,
-              builder: (BuildContext context) {
-                return SearchBottomSheet();
-              },
-            );
-                    // // Open the bottom sheet passing the field data
-                    //  openBottomSheet(context);
+                    // Open the bottom sheet passing the field data
+                     openBottomSheet(context);
                   },
                   child: Text('Select Customer'),
                 ),
   ElevatedButton(
                   onPressed: () {
                     // Open the bottom sheet passing the field data
-                controller.selectedName == ""? null:     _onButtonPressed(context,controller.selectedUserId);
+                _selectedValue == ""? null:     _onButtonPressed(context,userController.selectedUserId!);
                   },
                   child: Text('Net Metering Steps'),
                 ),
@@ -336,7 +322,7 @@ var selectedNetMeteringStep = "";
               ),
 
                 
-         controller.selectedName == "" ?     Text("Customer Name :No Customer Selected"):Text("Customer Name ${controller.selectedName}"),
+           _selectedValue == "" ?     Text("Customer Name :No Customer Selected"):Text("Customer Name ${_selectedValue}"),
                      
                      ],
                    );
@@ -358,7 +344,7 @@ var selectedNetMeteringStep = "";
                
         
         
-          controller.selectedName != "" && selectedNetMeteringStep != "" ?
+          _selectedValue != "" && selectedNetMeteringStep != "" ?
                 SizedBox(
                   width: double.infinity,
                   height: 48.0,
@@ -400,10 +386,7 @@ var selectedNetMeteringStep = "";
           ),
         
             ],
-          );
-          })
-          
-          
+          ),
         ),
       ),
     );
@@ -419,38 +402,15 @@ class SearchBottomSheet extends StatefulWidget {
 }
 
 class _SearchBottomSheetState extends State<SearchBottomSheet> {
-  String selectedCustomerName = '';
-  String selectedCustomerId = '';
-  String selectedCustomerCustomerId = '';
-
-  void _selectCustomer(QueryDocumentSnapshot customer) {
-    userController.selectedName = customer['name'];
-    userController.selectedUserId= customer.id;
-    userController.selectedCustomerId = customer['customerId'];
-    userController.update();
-
-   
-
-    Navigator.of(context).pop(); // Close the bottom sheet
-  }
   final CollectionReference usersCollection = FirebaseFirestore.instance.collection('users');
   final TextEditingController _searchController = TextEditingController();
-  late List<QueryDocumentSnapshot> _initialData;
-  List<QueryDocumentSnapshot> _filteredData = [];
+  late Stream<QuerySnapshot> _stream;
   String _searchQuery = '';
 
   @override
   void initState() {
     super.initState();
-    fetchInitialData();
-  }
-
-  Future<void> fetchInitialData() async {
-    final snapshot = await usersCollection.where('role', isEqualTo: 'customer').where("netMetering",isEqualTo: true).get();
-    setState(() {
-      _initialData = snapshot.docs;
-      _filteredData = _initialData;
-    });
+    _stream = usersCollection.snapshots();
   }
 
   @override
@@ -471,7 +431,7 @@ class _SearchBottomSheetState extends State<SearchBottomSheet> {
             onChanged: (value) {
               setState(() {
                 _searchQuery = value;
-                _filteredData = filterData(_searchQuery);
+                _stream = filteredStream(_searchQuery);
               });
             },
             decoration: InputDecoration(
@@ -480,31 +440,36 @@ class _SearchBottomSheetState extends State<SearchBottomSheet> {
           ),
           SizedBox(height: 16.0),
           Expanded(
-            child: _filteredData.isEmpty
-                ? Text('No data available.')
-                : ListView.builder(
-                    itemCount: _filteredData.length,
-                    itemBuilder: (context, index) {
-                      final document = _filteredData[index];
-                      return ListTile(
-                         onTap: () {
-                          _selectCustomer(document);
-                         },
-                        title: Text(document['name']),
-                        subtitle: Text(document['email']),
-                      );
-                    },
-                  ),
+            child: StreamBuilder<QuerySnapshot>(
+              stream: _stream,
+              builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return CircularProgressIndicator();
+                }
+
+                if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
+                  return Text('No data available.');
+                }
+
+                return ListView.builder(
+                  itemCount: snapshot.data!.docs.length,
+                  itemBuilder: (context, index) {
+                    final document = snapshot.data!.docs[index];
+                    return ListTile(
+                      title: Text(document['name']),
+                      subtitle: Text(document['email']),
+                    );
+                  },
+                );
+              },
+            ),
           ),
         ],
       ),
     );
   }
 
-  List<QueryDocumentSnapshot> filterData(String searchQuery) {
-    return _initialData
-        .where((document) =>
-            document['name'].toString().toLowerCase().contains(searchQuery.toLowerCase()))
-        .toList();
+  Stream<QuerySnapshot> filteredStream(String searchQuery) {
+    return usersCollection.where('name', isGreaterThanOrEqualTo: searchQuery).snapshots();
   }
 }

@@ -42,34 +42,38 @@ class _FilesPFinishedState extends State<FilesPFinished> {
                     'Description: ${description}',
                     style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                   ),
+                   Text(
+                    'Step: ${docname}',
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                  ),
                    
                 ],
               ),
-                                            ElevatedButton(
-                          onPressed: () async{
+        //                                     ElevatedButton(
+        //                   onPressed: () async{
                          
             
-               await      adminController.updateApproval(userIdCustomer,ids,docname);
-              Navigator.pop(context);
+        //        await      adminController.updateApproval(userIdCustomer,ids,docname);
+        //       Navigator.pop(context);
                   
              
-        //  try{
+        // //  try{
         
-        //  final usersRef = await FirebaseFirestore.instance.collection('users');
-        //  await usersRef.doc(widget.id).collection("netMeteringProcedure").doc(ids).update({'approved':true,});
-        //   }catch(e){
-        //  Get.snackbar("Error", "Issue in updating ${e}");
-        //   }
+        // //  final usersRef = await FirebaseFirestore.instance.collection('users');
+        // //  await usersRef.doc(widget.id).collection("netMeteringProcedure").doc(ids).update({'approved':true,});
+        // //   }catch(e){
+        // //  Get.snackbar("Error", "Issue in updating ${e}");
+        // //   }
           
               
                           
-                          },
-                          child: 
-                      // payment == "" ?
-                          // Text('Approve'):
-                           Text('Sending for Approval')
-                          ,
-                                          )
+        //                   },
+        //                   child: 
+        //               // payment == "" ?
+        //                   // Text('Approve'):
+        //                    Text('Sending for Approval')
+        //                   ,
+        //                                   )
                                         // widget.assignedTo == ""?
                                         //    Text("Select Electrican First"):
                                         //    Text("Selected electrician is ${widget.assignedTo}"),  
@@ -140,10 +144,12 @@ class _FilesPFinishedState extends State<FilesPFinished> {
                          
                         
                             ListTile(
-                              
+                              onTap: () {
+                                alerts(customerName, officerName,payment,description,userIdCustomer,ids, docName,);
+                              },
                               title: Text(" ${names} " ), 
                              
-                              subtitle:Text("${description}  " ), 
+                              subtitle:Text("${docName}  " ), 
                               trailing: Text("approved"),
                             ),
                             //   ListTile(
