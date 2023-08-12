@@ -5,6 +5,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 import 'package:onesignal_flutter/onesignal_flutter.dart';
 import 'package:solaris/controllerRef.dart';
 import 'package:solaris/models/authentication_service.dart';
@@ -76,43 +77,92 @@ class _StepsCompletedState extends State<StepsCompleted> {
                         var ids = documents[index].id;
                        var name = documents[index]['name'];
                 var approved = documents[index]['approved'];
+                var sendApprovalDateTime = documents[index]["sendApprovalDateTime"];
                 var netMeteringOfficerName  =documents[index]['officerName'];
-                              
-                 return     Padding(
-                      padding: const EdgeInsets.all(4.0),
-                      child: Container(
-                         decoration: BoxDecoration(
-                     borderRadius: BorderRadius.circular(10),
-                     color: Colors.green.withOpacity(0.2),
-                   ),
-                        child: Column(
-                          children: [
+                             final Timestamp timestamp = sendApprovalDateTime;
+ DateTime dateTime = timestamp.toDate();
+    String formattedDate = DateFormat('MMM d, yyyy').format(dateTime);
+    String formattedTime = DateFormat('h:mm a').format(dateTime); 
+                 return   
+
+
+                 Center(
+        child: 
+        Table(
+          border: TableBorder.all(),
+          children: [
+            TableRow(
+              children: [
+                TableCell(
+                  child: Center(child: Text('Step')),
+                ),
+                TableCell(
+                  child: Center(child: Text('File Created')),
+                ),
+                TableCell(
+                  child: Center(child: Text('DateTime')),
+                ),
+                 TableCell(
+                  child: Center(child: Text('Requested By')),
+                ),
+              ],
+            ),
+            TableRow(
+              children: [
+                TableCell(
+                  child: Center(child: Text('Step ${index}')),
+                ),
+                TableCell(
+                  child: Center(child: Text('${name}')),
+                ),
+                TableCell(
+                  child: Center(child: Text('${formattedDate} - ${formattedTime}')),
+                ),
+                 TableCell(
+                  child: Center(child: Text('${netMeteringOfficerName}')),
+                ),
+              ],
+            ),
+            
+          ],
+        ),
+      );
+                 
+    //                Padding(
+    //                   padding: const EdgeInsets.all(4.0),
+    //                   child: Container(
+    //                      decoration: BoxDecoration(
+    //                  borderRadius: BorderRadius.circular(10),
+    //                  color: Colors.green.withOpacity(0.2),
+    //                ),
+    //                     child: Column(
+    //                       children: [
              
                          
-                         Text("Step ${index} \n | \n | \n | \n | "),
-                            ListTile(
+    //                      Text("Step ${index} \n | \n | \n | \n | "),
+    //                         ListTile(
                               
-                              title: Text("${name} : Completed by ${netMeteringOfficerName} " ), 
-                              // trailing:Text("${status}",style: TextStyle(color: Colors.green),) ,
-                              // subtitle:Text("Complaint received from ${ids} " ), 
-                            ),
+    //                           title: Text("${name} : Completed by ${netMeteringOfficerName} " ), 
+    //                           // trailing:Text("${status}",style: TextStyle(color: Colors.green),) ,
+    //                           // subtitle:Text("Complaint received from ${ids} " ), 
+    //                         ),
                                         
                        
-    //                                     ElevatedButton(
-    //                     onPressed: () async{
-    //               // sendNotification();
-    // // await  electricianController.updateToken(ids);
-    //             //  Get.to(()=>NotificationOpenedHandler()); 
-    //                       print('Button Pressed!');
-    //                     },
-    //                     child: Text('Resolve'),
-    //                                     )
+    // //                                     ElevatedButton(
+    // //                     onPressed: () async{
+    // //               // sendNotification();
+    // // // await  electricianController.updateToken(ids);
+    // //             //  Get.to(()=>NotificationOpenedHandler()); 
+    // //                       print('Button Pressed!');
+    // //                     },
+    // //                     child: Text('Resolve'),
+    // //                                     )
                                         
                                         
-                          ],
-                        ),
-                      ),
-                    );
+    //                       ],
+    //                     ),
+    //                   ),
+    //                 );
                     }),
                  );
               

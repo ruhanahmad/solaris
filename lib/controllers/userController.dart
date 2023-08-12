@@ -421,6 +421,8 @@ final auth.FirebaseAuth _firebaseAuth = auth.FirebaseAuth.instance;
       "customerId":customerId,
       "password":passwords,
       "netMetering":false,
+      "FirstStepDateTime":DateTime.now(),
+
      
       // role == "customer" ?"netMetering":false :null
 

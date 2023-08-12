@@ -321,6 +321,7 @@ var selectedNetMeteringStep = "";
                 // },
                 controller: _priceController ,
                 // maxLines: 5,
+                keyboardType: TextInputType.number,
                 decoration: InputDecoration(
                   filled: true,
                   fillColor: Colors.green.withOpacity(0.2),
@@ -337,7 +338,10 @@ var selectedNetMeteringStep = "";
 
                 
          controller.selectedName == "" ?     Text("Customer Name :No Customer Selected"):Text("Customer Name ${controller.selectedName}"),
-                     
+
+                selectedNetMeteringStep == "" ?    Text("Net Metering Step :No step Selected"):Text("Step Name ${selectedNetMeteringStep}"),
+
+                
                      ],
                    );
                  },
