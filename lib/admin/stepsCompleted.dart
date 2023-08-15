@@ -16,8 +16,8 @@ import '../models/user_model.dart';
 class StepsCompleted extends StatefulWidget {
 
   String? id;
-  String? name;
-  StepsCompleted({required this.id,required this.name});
+  // String? name;
+  StepsCompleted({required this.id,});
   @override
   State<StepsCompleted> createState() => _StepsCompletedState();
 }

@@ -39,7 +39,7 @@ class InProcess extends StatelessWidget {
                         
                               title: Text(" ${names} " ), 
                              onTap: () {
-                                Get.to(()=> StepsCompleted(id:userId,name:names),);
+                                Get.to(()=> StepsCompleted(id:userId),);
                              },
                               // subtitle:Text("${description} ---- ${payment} " ), 
                             )

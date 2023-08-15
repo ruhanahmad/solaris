@@ -40,7 +40,7 @@ class _netMeteringProcedureState extends State<netMeteringProcedure> {
            ApprovalScreen(id:widget.id,name:widget.name),
             // Contents of Tab 2
             // ApprovalScreenPayment(id:widget.id,name:widget.name),
-           StepsCompleted(id:widget.id,name:widget.name),
+           StepsCompleted(id:widget.id,),
           
           ],
         ),

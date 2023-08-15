@@ -115,7 +115,8 @@ Navigator.pop(context);
 
   @override
   Widget build(BuildContext context) {
-    return StreamBuilder<QuerySnapshot>(
+    return
+     StreamBuilder<QuerySnapshot>(
       stream: FirebaseFirestore.instance.collection('users')
         .where('netMetering', isEqualTo: true)
         .snapshots(),
@@ -135,7 +136,7 @@ Navigator.pop(context);
                 // startDate == null || endDate == null ? 
                 FirebaseFirestore.instance.collection('users').doc(userId).collection('netMeteringProcedure')
                   .where('payment', isNotEqualTo: 
-                "").where("noted",isEqualTo: false)
+                "").where("noted",isEqualTo: false).where("sentForApproval",isEqualTo: true)
                   .snapshots()
                   // :
         //           FirebaseFirestore.instance.collection('users').doc(userId).collection('netMeteringProcedure')
@@ -162,10 +163,18 @@ Navigator.pop(context);
                         final name = subDoc["name"];
                         final noted = subDoc["noted"];
                         final sentToFinanceDateTime = subDoc["sentToFinanceDateTime"];
- final Timestamp timestamp = sentToFinanceDateTime;
+String formattedDate="";
+String formattedTime="";
+ if(sentToFinanceDateTime != "") {
+  final Timestamp timestamp = sentToFinanceDateTime;
  DateTime dateTime = timestamp.toDate();
-    String formattedDate = DateFormat('MMM d, yyyy').format(dateTime);
-    String formattedTime = DateFormat('h:mm a').format(dateTime);
+     formattedDate = DateFormat('MMM d, yyyy').format(dateTime);
+     formattedTime = DateFormat('h:mm a').format(dateTime);
+ }
+//  final Timestamp timestamp = sentToFinanceDateTime;
+//  DateTime dateTime = timestamp.toDate();
+//     String formattedDate = DateFormat('MMM d, yyyy').format(dateTime);
+//     String formattedTime = DateFormat('h:mm a').format(dateTime);
                         // ...
                         
 
@@ -205,7 +214,7 @@ Navigator.pop(context);
                                  
                                   children: [
                                     
-                                                         Text(" ${formattedDate} " ),
+                                                         Text( formattedDate  ),
                                 
                                 ],),
                                 

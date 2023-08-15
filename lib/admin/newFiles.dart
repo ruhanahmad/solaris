@@ -60,8 +60,9 @@ class NewFiles extends StatelessWidget {
                         
                             ListTile(
                                onTap: () {
-                             Get.to( StepsCompleted(id:userId,name:names));    
+                             Get.to( StepsCompleted(id:userId,));    
                                },
+                               
                               title: Text(" ${names} " ), 
                              
                               // subtitle:Text("${description} ---- ${payment} " ), 

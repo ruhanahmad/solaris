@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
+import 'package:solaris/admin/stepsCompleted.dart';
 import 'package:solaris/controllerRef.dart';
 import 'package:solaris/netMeteringOfficer/customerProcedure.dart';
 
@@ -59,7 +60,7 @@ class OfficerPendingFiles extends StatelessWidget {
                          
                             ListTile(
                               onTap: () {
-                              Get.to(CustomerProcedure(id: userId,name:name ,))  ;
+                              Get.to(StepsCompleted(id: userId,))  ;
                               },
                         
                               title:

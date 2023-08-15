@@ -43,8 +43,10 @@ class _RequestFormNetMeteringState extends State<RequestFormNetMetering> {
   "approvedDateTime":"",
   "sentToFinanceDateTime":"",
   "adminName":"",
+  
 
   });
+ await usersRef.doc(userController.selectedUserId).update({"Step":FieldValue.increment(1),"inProcess":"inProcess"});
   _descriptionController.text  = "";
   _priceController.text  = "";
 
