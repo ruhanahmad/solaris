@@ -5,17 +5,41 @@ import 'package:get/get.dart';
 import 'package:solaris/admin/netMeteringProcedure.dart';
 import 'package:solaris/admin/stepsCompleted.dart';
 
-class NewFiles extends StatelessWidget {
+class NewFiles extends StatefulWidget {
+  @override
+  State<NewFiles> createState() => _NewFilesState();
+}
+Future<void> _deleteDocument(String userId,String documentId) async {
+    try {
+      await 
+      FirebaseFirestore.instance.collection('users')
+      .doc(userId).collection('netMeteringProcedure').doc(documentId).delete();
+
+
+      
+      // FirebaseFirestore.instance
+      //     .collection('netMeteringSteps')
+      //     .doc(documentId)
+      //     .delete();
+      print('Document deleted successfully');
+    } catch (error) {
+      print('Error deleting document: $error');
+    }
+  }
+class _NewFilesState extends State<NewFiles> {
   @override
   Widget build(BuildContext context) {
-    return StreamBuilder<QuerySnapshot>(
-      stream: FirebaseFirestore.instance.collection('users')
+    return 
+    StreamBuilder<QuerySnapshot>(
+      stream: 
+      FirebaseFirestore.instance.collection('users')
         .where('netMetering', isEqualTo: true)
         .snapshots(),
       builder: (context, snapshot) {
         if (snapshot.hasData) {
           final usersDocs = snapshot.data!.docs;
-          return ListView.builder(
+          return 
+          ListView.builder(
             itemCount: usersDocs.length,
             itemBuilder: (context, index) {
               final userDoc = usersDocs[index];
@@ -36,11 +60,11 @@ class NewFiles extends StatelessWidget {
                       physics: NeverScrollableScrollPhysics(),
                       itemCount: subDocs.length,
                       itemBuilder: (context, subIndex) {
-                        // final subDoc = subDocs[subIndex];
+                        final subDoc = subDocs[subIndex];
                         // final officerName = subDoc['officerName'];
                         // final payment= subDoc['payment'];
                         // final customerName = subDoc["customerName"];
-                        // final ids = subDoc.id;
+                        final ids = subDoc.id;
 
                         // ...
 
@@ -64,6 +88,13 @@ class NewFiles extends StatelessWidget {
                                },
                                
                               title: Text(" ${names} " ), 
+
+                               trailing: IconButton(
+                    icon: Icon(Icons.delete),
+                    onPressed: () {
+                      _deleteDocument(userId,ids);
+                    },
+                  ),
                              
                               // subtitle:Text("${description} ---- ${payment} " ), 
                             )

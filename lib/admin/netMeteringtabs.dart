@@ -106,7 +106,7 @@ List<String>? documents;
         automaticallyImplyLeading: false,
           bottom: TabBar(
             tabs: [
-              Tab(text: 'New Files'),
+             _buildTabWithCounts(context, 'New Files'),
               Tab(text: 'In Process'),
                Tab(text: 'Finished'),
              
@@ -115,6 +115,8 @@ List<String>? documents;
         ),
         body: TabBarView(
           children: [
+
+
             // Contents of Tab 1
              NewFiles(),
             // Contents of Tab 2
@@ -126,4 +128,164 @@ List<String>? documents;
       ),
     );
   }
-}
+
+
+Widget _buildTabWithCounts(BuildContext context, String title, ) {
+    return StreamBuilder<QuerySnapshot>(
+      stream:  FirebaseFirestore.instance.collection('users')
+        .where('netMetering', isEqualTo: true)
+        .snapshots(),
+      builder: (context, snapshot) {
+        if (!snapshot.hasData) {
+          return Tab(text: title);
+        }
+
+        List<String> userIds = snapshot.data!.docs.map((doc) => doc.id).toList();
+        
+        int totalRecordCount = 0;
+
+        return
+        StreamBuilder<List<int>>(
+          stream: _getUserDocumentCounts(userIds),
+          builder: (context, innerSnapshot) {
+            if (!innerSnapshot.hasData) {
+              return Tab(text: title);
+            }
+
+            int totalRecordCount = innerSnapshot.data!.fold(0, (sum, count) => sum + count);
+
+            return Tab(text: '$title ($totalRecordCount)');
+          },
+        );
+      },
+    );
+        //  FutureBuilder<List<int>>(
+        //   future: _getUserDocumentCounts(userIds),
+        //   builder: (context, innerSnapshot) {
+        //     if (!innerSnapshot.hasData) {
+        //       return Tab(text: title);
+        //     }
+
+        //     innerSnapshot.data!.forEach((count) {
+        //       totalRecordCount += count;
+        //     });
+
+        //     return Tab(text: '$title ($totalRecordCount)');
+        //   },
+        // );
+      }
+ 
+  }
+
+ Stream<List<int>> _getUserDocumentCounts(List<String> userIds) {
+    StreamController<List<int>> controller = StreamController();
+
+    List<int> counts = [];
+
+    int completed = 0;
+
+    for (String userId in userIds) {
+      FirebaseFirestore.instance.collection('users').doc(userId).collection('netMeteringProcedure')
+                   .where('payment', isNotEqualTo: 
+                 "").where("noted",isEqualTo: false)
+                  .snapshots().listen((userSnapshot) {
+        int userRecordCount = userSnapshot.size;
+        counts.add(userRecordCount);
+        completed++;
+        if (completed == userIds.length) {
+          controller.add(counts);
+        }
+      });
+    }
+
+    return controller.stream;
+  }
+
+  Widget _buildTabWithCountss(BuildContext context, String title,) {
+    return 
+    StreamBuilder<QuerySnapshot>(
+      stream: 
+      FirebaseFirestore.instance.collection('users')
+        .where('netMetering', isEqualTo: true)
+        .snapshots(),
+      builder: (context, snapshot) {
+             if (!snapshot.hasData) {
+          return Tab(text: title);
+        }
+        if (snapshot.hasData) {
+          final usersDocs = snapshot.data!.docs;
+         
+                       int recordCount = usersDocs.length;
+        return
+        
+
+         Tab(text: '$title ($recordCount)');
+          //  return Tab(text: title);
+        //   ListView.builder(
+        //     itemCount: usersDocs.length,
+        //     itemBuilder: (context, index) {
+        //       final userDoc = usersDocs[index];
+        //       final userId = userDoc.id;
+        //       final names = userDoc["name"];
+        //       return 
+        //       StreamBuilder<QuerySnapshot>(
+        //         stream: 
+        // FirebaseFirestore.instance.collection('users').doc(userId).collection('netMeteringProcedure')
+        //         //   .where('payment', isNotEqualTo: 
+        //         // "").where("noted",isEqualTo: false)
+        //           .snapshots(),
+        //         builder: (context, subSnapshot) {
+        //           if (subSnapshot.hasData) {
+        //             final subDocs = subSnapshot.data!.docs;
+        //             // Process and display data from the sub-collection
+        //             return ListView.builder(
+        //               shrinkWrap: true,
+        //               physics: NeverScrollableScrollPhysics(),
+        //               itemCount: subDocs.length,
+        //               itemBuilder: (context, subIndex) {
+        //                 final subDoc = subDocs[subIndex];
+        //                 // final officerName = subDoc['officerName'];
+        //                 // final payment= subDoc['payment'];
+        //                 // final customerName = subDoc["customerName"];
+        //                 final ids = subDoc.id;
+
+        //                 // ...
+
+                        
+        //                      int recordCount = subDocs.length;
+        // return Tab(text: '$title ($recordCount)');
+        //               },
+        //             );
+        //           } else if (subSnapshot.hasError) {
+        //             return Text('Error: ${subSnapshot.error}');
+                    
+        //           } 
+        //           else{
+        //             return CircularProgressIndicator();
+        //           }
+                 
+        //         },
+        //       );
+        //     },
+        //   );
+        } else if (snapshot.hasError) {
+          return Text('Error: ${snapshot.error}');
+        } else {
+          return CircularProgressIndicator();
+        }
+      },
+    );
+    // StreamBuilder<QuerySnapshot>(
+    //   stream:  FirebaseFirestore.instance.collection('users')
+    //     .where('netMetering', isEqualTo: true)
+    //     .snapshots(),
+    //   builder: (context, snapshot) {
+    //     if (!snapshot.hasData) {
+    //       return Tab(text: title);
+    //     }
+    //     int recordCount = snapshot.data!.docs.length;
+    //     return Tab(text: '$title ($recordCount)');
+    //   },
+    // );
+  }
+
