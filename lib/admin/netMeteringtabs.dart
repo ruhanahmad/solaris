@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:solaris/admin/finished.dart';
 import 'package:solaris/admin/inProcess.dart';
 import 'package:solaris/admin/newFiles.dart';
 import 'package:solaris/salesPerson/personalClients.dart';
@@ -106,9 +107,76 @@ List<String>? documents;
         automaticallyImplyLeading: false,
           bottom: TabBar(
             tabs: [
-             _buildTabWithCounts(context, 'New Files'),
-              Tab(text: 'In Process'),
-               Tab(text: 'Finished'),
+            
+
+                StreamBuilder<QuerySnapshot>(
+                stream: 
+               FirebaseFirestore.instance.collection('users')
+                  .where("netMetering",isEqualTo: true).where("inProcess",isEqualTo: "notStarted")
+                  .snapshots(),
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return Tab(text: 'New Files');
+                  }
+
+                  if (snapshot.hasError) {
+                    return Tab(text: 'New Files');
+                  }
+
+                  if (snapshot.hasData) {
+                    int recordCount = snapshot.data!.docs.length;
+                    return Tab(text: 'New Files($recordCount)');
+                  }
+
+                  return Tab(text: 'New Files');
+                },
+              ),
+              //  _buildTabWithCounts(context, 'New Files'),
+                StreamBuilder<QuerySnapshot>(
+                stream: 
+               FirebaseFirestore.instance.collection('users')
+                  .where("netMetering",isEqualTo: true).where("inProcess",isEqualTo: "inProcess")
+                  .snapshots(),
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return Tab(text: 'Process');
+                  }
+
+                  if (snapshot.hasError) {
+                    return Tab(text: 'Process');
+                  }
+
+                  if (snapshot.hasData) {
+                    int recordCount = snapshot.data!.docs.length;
+                    return Tab(text: 'Process($recordCount)');
+                  }
+
+                  return Tab(text: 'Process');
+                },
+              ),
+              StreamBuilder<QuerySnapshot>(
+                stream: 
+               FirebaseFirestore.instance.collection('users')
+                  .where("netMetering",isEqualTo: true).where("inProcess",isEqualTo: "Finished")
+                  .snapshots(),
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return Tab(text: 'Finished');
+                  }
+
+                  if (snapshot.hasError) {
+                    return Tab(text: 'Finished');
+                  }
+
+                  if (snapshot.hasData) {
+                    int recordCount = snapshot.data!.docs.length;
+                    return Tab(text: 'Finished($recordCount)');
+                  }
+
+                  return Tab(text: 'Finished');
+                },
+              ),
+              
              
             ],
           ),
@@ -121,7 +189,7 @@ List<String>? documents;
              NewFiles(),
             // Contents of Tab 2
           InProcess(),
-           NewFiles(),
+           Finished(),
             
           ],
         ),
@@ -132,7 +200,8 @@ List<String>? documents;
 
 Widget _buildTabWithCounts(BuildContext context, String title, ) {
     return StreamBuilder<QuerySnapshot>(
-      stream:  FirebaseFirestore.instance.collection('users')
+      stream: 
+       FirebaseFirestore.instance.collection('users')
         .where('netMetering', isEqualTo: true)
         .snapshots(),
       builder: (context, snapshot) {
@@ -185,16 +254,22 @@ Widget _buildTabWithCounts(BuildContext context, String title, ) {
     int completed = 0;
 
     for (String userId in userIds) {
-      FirebaseFirestore.instance.collection('users').doc(userId).collection('netMeteringProcedure')
-                   .where('payment', isNotEqualTo: 
-                 "").where("noted",isEqualTo: false)
-                  .snapshots().listen((userSnapshot) {
-        int userRecordCount = userSnapshot.size;
+      FirebaseFirestore.instance.collection('users')
+                  .where("netMetering",isEqualTo: true).where("inProcess",isEqualTo: "notStarted")
+                  .snapshots().listen((userSnapshot ) {
+
+                   
+ int userRecordCount = userSnapshot.size;
         counts.add(userRecordCount);
         completed++;
         if (completed == userIds.length) {
           controller.add(counts);
         }
+                   
+                  
+
+                    
+       
       });
     }
 

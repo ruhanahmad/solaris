@@ -100,6 +100,9 @@ final output = await File('${appDocumentsDir.path}/$num.pdf').create();
   await firestore.collection('users').doc(userId).collection("netMeteringProcedure").doc(docId).update({
     'pdfUrl': downloadURL,"sentForApproval":true,"approved":true,"sentToFinanceDateTime":DateTime.now(),"adminName":userController.userName
   });
+  await firestore.collection('users').doc(userId).update({
+    "Step":FieldValue.increment(1)
+  });
  
 
   EasyLoading.dismiss();
@@ -137,9 +140,12 @@ try{
  final usersRef = await FirebaseFirestore.instance.collection('users');
  await usersRef.doc(id).collection("netMeteringProcedure").doc(netId).update({'approved':true,'sentForApproval':true,'approvedDateTime':DateTime.now(),"adminName":userController.userName});
  docname == "Net Metering Procedure Finished" ? await usersRef.doc(id).update({'inProcess':"Finished",}):await usersRef.doc(id).update({'inProcess':"inProcess",});
+
+ usersRef.doc(id).update({"Step":FieldValue.increment(1)});
   }catch(e){
  Get.snackbar("Error", "Issue in updating ${e}");
   }
+
 }
 
 

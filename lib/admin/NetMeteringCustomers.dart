@@ -110,9 +110,9 @@ class _NetMeteringCustomersState extends State<NetMeteringCustomers> {
                                           // var n=0;
 
                        final usersRef = await FirebaseFirestore.instance.collection('users');
-                       await usersRef.doc(userid).update({'netMetering':true,"FirstStepDateTime":DateTime.now(),});
+                       await usersRef.doc(userid).update({'netMetering':true,"FirstStepDateTime":DateTime.now(),"inProcess":"notStarted"});
                       //  await usersRef.doc(ids).collection("netMeteringProcedure").add({"name":"","approved":false,"netMeteringOfficerName":""});
-                       await usersRef.doc(userid).collection("netMeteringProcedure").add({"name":"net Metering"});
+                       await usersRef.doc(userid).collection("netMeteringProcedure").add({"name":"net Metering",});
                       }catch(e){
                        Get.snackbar("Error", "Issue in updating ${e}");
                       }

@@ -46,7 +46,7 @@ class _RequestFormNetMeteringState extends State<RequestFormNetMetering> {
   
 
   });
- await usersRef.doc(userController.selectedUserId).update({"Step":FieldValue.increment(1),"inProcess":"inProcess"});
+ await usersRef.doc(userController.selectedUserId).update({"inProcess":"inProcess"});
   _descriptionController.text  = "";
   _priceController.text  = "";
 
