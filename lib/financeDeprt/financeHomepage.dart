@@ -2,6 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:solaris/admin/NetMeteringCustomers.dart';
 import 'package:solaris/admin/addSteps.dart';
+import 'package:solaris/admin/netMeteringtabs.dart';
 import 'package:solaris/controllerRef.dart';
 import 'package:solaris/electrician/electricianDoComplaints.dart';
 import 'package:solaris/electrician/receivedComplaints.dart';
@@ -39,6 +40,7 @@ class _FinanceHomeScreenState extends State<FinanceHomeScreen > {
   
    CustomerApproval(),
   // NetMeteringCustomers(),
+  netMeteringTabs(),
    AboutUsScreen(),
    Profile(),
   ];  
@@ -80,7 +82,12 @@ class _FinanceHomeScreenState extends State<FinanceHomeScreen > {
             icon: Icon(Icons.task_sharp),  
              label: "Tasks",   
             backgroundColor: Colors.white,  
-          ),  
+          ), 
+                      BottomNavigationBarItem(  
+            icon: Icon(Icons.info),  
+             label: "Files",   
+            backgroundColor: Colors.white,  
+          ),   
             BottomNavigationBarItem(  
             icon: Icon(Icons.info),  
              label: "About us",   

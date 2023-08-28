@@ -45,6 +45,13 @@ class _NewFilesState extends State<NewFiles> {
               final userDoc = usersDocs[index];
               final userId = userDoc.id;
               final names = userDoc["name"];
+              final FirstStepDateTime = userDoc["FirstStepDateTime"];
+              final step = userDoc['Step'];
+               final Timestamp firstStep = FirstStepDateTime;
+ DateTime dateTimeFirstStep = firstStep.toDate();
+    DateTime currentDate = DateTime.now();
+Duration difference = currentDate.difference(dateTimeFirstStep);
+int daysDifference = difference.inDays;
               return 
               StreamBuilder<QuerySnapshot>(
                 stream: FirebaseFirestore.instance.collection('users').doc(userId).collection('netMeteringProcedure')
@@ -80,24 +87,149 @@ class _NewFilesState extends State<NewFiles> {
                         child: Column(
                           children: [
              
-                         
-                        
-                            ListTile(
-                               onTap: () {
-                             Get.to( StepsCompleted(id:userId,));    
-                               },
-                               
-                              title: Text(" ${names} " ), 
+                           Padding(
+                      padding: const EdgeInsets.all(4.0),
+                      child: GestureDetector(
+                        onTap: () {
+                          
+                          // alerts( customerName, officerName,payment,userId,ids,context,name,noted);
+                        },
+                        child: Container(
+                           decoration: BoxDecoration(
+                                           borderRadius: BorderRadius.circular(10),
+                                           color: Colors.green.withOpacity(0.2),
+                                         ),
+                          child: Column(
+                            children: [
+                                   
+                             Padding(
+                               padding: const EdgeInsets.all(20.0),
+                               child: Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                GestureDetector(
+                                  onTap: () {
+                                      Get.to( StepsCompleted(id:userId,));   
+                                  },
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                      border: Border.all(width: 2.0,color: Colors.black)
+                                    ),
+                                    child: Column(
+                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: [
+                                     Text(" ${names} " )
+                                    
+                                          // SizedBox(height: 5,),
+                                          //   Text(" ${payment} " ),
+                                    ],),
+                                  ),
+                                ),
+                                 GestureDetector(
+                                  onTap: () {
+                                   Get.to( StepsCompleted(id:userId,));    
+                                  },
+                                   child: Column(
+                                   
+                                    children: [
+                                      
+                                                           Container(
+                                                            height: 30,
+                                                            width: 30,
+                                                            decoration: BoxDecoration(
+                                                              border: Border.all(width: 2)
+                                                            ),
+                                                            child:
+                                                             Text(" ${step} " )
+                                                                // Text(" subDocs.length" )
+                                                             
+                                                             ),
+                                                                 
+                                                                 ],),
+                                 ),
+                                
+                                  Column(
+                                 
+                                  children: [
+                                    
+                                                         Row(
+                                                           children: [
+                                                             Text(" ${daysDifference} Days " ),
 
-                               trailing: IconButton(
+                                                              IconButton(
                     icon: Icon(Icons.delete),
                     onPressed: () {
                       _deleteDocument(userId,ids);
                     },
                   ),
+                                                           ],
+                                                         ),
+                                
+                                ],),
+                                
+                                
+                               ],),
+                             ),
                              
-                              // subtitle:Text("${description} ---- ${payment} " ), 
-                            )
+                           
+                              // ListTile(
+                          
+                              //   title: Text(" ${officerName} apply for payment clearance to approved thePayment: ${payment}. for the Customer -- ${customerName} " ), 
+                               
+                              //   // subtitle:Text("${description} ---- ${payment} " ), 
+                              // ),
+                                          
+                         
+                      //      ElevatedButton(
+                      //                         onPressed: () async{
+                           
+                      //        try{
+                      //         EasyLoading.show();
+                      //  final usersRef = await FirebaseFirestore.instance.collection('users').doc(userId).collection('netMeteringProcedure');
+                                     
+                      //  await usersRef.doc(ids).update({'noted':true,"approvalDateTimeFinance":DateTime.now()});
+                      
+                      //  EasyLoading.dismiss();
+                      //   }
+                      //   catch(e)
+                      //   {
+                      //  Get.snackbar("Error", "Issue in updating ${e}");
+                      //  EasyLoading.dismiss();
+                      //   }
+                       
+                      
+                        
+                            
+                          
+                      //                         },
+                      //                         child: Text('Noted'),
+                      //                                         ),
+                                          
+                                          
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                        
+                  //           ListTile(
+                  //              onTap: () {
+                  //            Get.to( StepsCompleted(id:userId,));    
+                  //              },
+                               
+                  //             title: Text(" ${names} " ), 
+
+                  //              trailing: 
+                  //              IconButton(
+                  //   icon: Icon(Icons.delete),
+                  //   onPressed: () {
+                  //     _deleteDocument(userId,ids);
+                  //   },
+                  // ),
+                             
+                  //             // subtitle:Text("${description} ---- ${payment} " ), 
+                  //           )
                             //   ListTile(
                         
                             //   title: Text(" ${officerName} apply for payment clearance to approved thePayment: ${payment}. for the Customer -- ${customerName} " ), 

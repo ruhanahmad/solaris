@@ -52,7 +52,7 @@ class _StepsCompletedState extends State<StepsCompleted> {
                stream:  
                            FirebaseFirestore.instance
                               .collection('users').doc(widget.id).collection('netMeteringProcedure')
-                              .where("approved",isEqualTo: true)
+                              .where("approved",isEqualTo: true).orderBy('sendApprovalDateTime', descending: false)
                               .snapshots(),
                
                builder: (context, snapshot) {
@@ -74,11 +74,26 @@ class _StepsCompletedState extends State<StepsCompleted> {
                    ListView.builder(
                     itemCount: snapshot.data!.docs.length,
                     itemBuilder: (context,index){
+                      // int totalPayment = 0;
                         var ids = documents[index].id;
                        var name = documents[index]['name'];
                 var approved = documents[index]['approved'];
                 var sendApprovalDateTime = documents[index]["sendApprovalDateTime"];
                 var netMeteringOfficerName  =documents[index]['officerName'];
+                var paymentss  =documents[index]['payment'];
+              // int payment  =    int.tryParse(documents[index]['payment'])??0 ;
+               // Calculate total payment by summing payment values
+ int totalPayment = snapshot.data!.docs
+              .map<int>((doc) => int.tryParse(doc["payment"] ?? '0') ?? 0)
+              .reduce((total, payment) => total + payment);
+
+          // for (var document in snapshot.data!.docs) {
+          //   var userData = document.data();
+          //   int payment = int.tryParse(userData['payment'] ?? '0') ?? 0;
+          //   totalPayment += payment;
+          // }
+
+              // totalPayment += payment;
                              final Timestamp timestamp = sendApprovalDateTime;
  DateTime dateTime = timestamp.toDate();
     String formattedDate = DateFormat('MMM d, yyyy').format(dateTime);
@@ -97,13 +112,19 @@ class _StepsCompletedState extends State<StepsCompleted> {
                   child: Center(child: Text('Step')),
                 ),
                 TableCell(
-                  child: Center(child: Text('File Created')),
+                  child: Center(child: Text('Name')),
                 ),
                 TableCell(
                   child: Center(child: Text('DateTime')),
                 ),
                  TableCell(
                   child: Center(child: Text('Requested By')),
+                ),
+                TableCell(
+                  child: Center(child: Text('Payment')),
+                ),
+                  TableCell(
+                  child: Center(child: Text('Total Payment')),
                 ),
               ],
             ),
@@ -120,6 +141,12 @@ class _StepsCompletedState extends State<StepsCompleted> {
                 ),
                  TableCell(
                   child: Center(child: Text('${netMeteringOfficerName}')),
+                ),
+                TableCell(
+                  child: Center(child: Text('${paymentss}')),
+                ),
+                 TableCell(
+                  child: Center(child: Text('${totalPayment}')),
                 ),
               ],
             ),

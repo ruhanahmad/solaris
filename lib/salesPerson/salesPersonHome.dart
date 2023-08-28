@@ -1,5 +1,6 @@
 
 import 'package:flutter/material.dart';
+import 'package:solaris/admin/netMeteringtabs.dart';
 import 'package:solaris/controllerRef.dart';
 import 'package:solaris/electrician/electricianDoComplaints.dart';
 import 'package:solaris/electrician/receivedComplaints.dart';
@@ -38,7 +39,7 @@ class _SalesPersonState extends State<SalesPerson > {
    Links(),
   ReferalScreen(),
 tabbs(),
-
+netMeteringTabs(),
    AboutUsScreen(),
    Profile(),
   ];  
@@ -80,12 +81,18 @@ tabbs(),
             icon: Icon(Icons.task_sharp),  
              label: "Tasks",   
             backgroundColor: Colors.white,  
-          ),  
+          ), 
+          BottomNavigationBarItem(  
+            icon: Icon(Icons.verified_user),  
+             label: "Files",   
+            backgroundColor: Colors.white,  
+          ),   
             BottomNavigationBarItem(  
             icon: Icon(Icons.info),  
              label: "About us",   
             backgroundColor: Colors.white,  
-          ),  
+          ), 
+           
            BottomNavigationBarItem(  
             icon: Icon(Icons.verified_user),  
              label: "Profile",   
