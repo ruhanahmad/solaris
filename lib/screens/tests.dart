@@ -1,105 +1,105 @@
-import 'package:flutter/material.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
+// import 'package:flutter/material.dart';
+// import 'package:cloud_firestore/cloud_firestore.dart';
 
 
 
-import 'package:flutter/material.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
+// import 'package:flutter/material.dart';
+// import 'package:cloud_firestore/cloud_firestore.dart';
 
 
 
-class haha extends StatelessWidget {
-  void _onButtonPressed(BuildContext context) {
-    // When the button is pressed, run the function to compare the streams and show the bottom sheet
-    compareAndShowBottomSheet(context);
-  }
+// class haha extends StatelessWidget {
+//   void _onButtonPressed(BuildContext context) {
+//     // When the button is pressed, run the function to compare the streams and show the bottom sheet
+//     compareAndShowBottomSheet(context);
+//   }
 
-  Stream<List<String>> getFirstCollectionData() {
-    // Replace 'firstCollection' with the name of your first collection in Firestore
-    CollectionReference collectionRef =
-        FirebaseFirestore.instance.collection('netMeteringSteps');
+//   Stream<List<String>> getFirstCollectionData() {
+//     // Replace 'firstCollection' with the name of your first collection in Firestore
+//     CollectionReference collectionRef =
+//         FirebaseFirestore.instance.collection('netMeteringSteps');
 
-    return collectionRef.snapshots().map((querySnapshot) {
-      return querySnapshot.docs.map((doc) => doc['name'] as String).toList();
-    });
-  }
+//     return collectionRef.snapshots().map((querySnapshot) {
+//       return querySnapshot.docs.map((doc) => doc['name'] as String).toList();
+//     });
+//   }
 
-  Stream<List<String>> getSecondCollectionData(String documentId) {
-    // Replace 'secondCollection' and 'subCollection' with the names of your second collection and subcollection in Firestore
-    CollectionReference collectionRef = FirebaseFirestore.instance
-        .collection('users')
-        .doc(documentId)
-        .collection('netMeteringProcedure');
+//   Stream<List<String>> getSecondCollectionData(String documentId) {
+//     // Replace 'secondCollection' and 'subCollection' with the names of your second collection and subcollection in Firestore
+//     CollectionReference collectionRef = FirebaseFirestore.instance
+//         .collection('users')
+//         .doc(documentId)
+//         .collection('netMeteringProcedure');
 
-    return collectionRef.snapshots().map((querySnapshot) {
-      return querySnapshot.docs.map((doc) => doc['name'] as String).toList();
-    });
-  }
+//     return collectionRef.snapshots().map((querySnapshot) {
+//       return querySnapshot.docs.map((doc) => doc['name'] as String).toList();
+//     });
+//   }
 
-  void compareAndShowBottomSheet(BuildContext context) {
-    Stream<List<String>> firstStream = getFirstCollectionData();
+//   void compareAndShowBottomSheet(BuildContext context) {
+//     Stream<List<String>> firstStream = getFirstCollectionData();
 
-    firstStream.listen((firstNames) {
-      // Replace 'documentId' with the ID of the document you want to retrieve from the second collection
-      Stream<List<String>> secondStream =
-          getSecondCollectionData('18kMPyOYrzV2V9fJNyk3Dqz0Ju82');
+//     firstStream.listen((firstNames) {
+//       // Replace 'documentId' with the ID of the document you want to retrieve from the second collection
+//       Stream<List<String>> secondStream =
+//           getSecondCollectionData('18kMPyOYrzV2V9fJNyk3Dqz0Ju82');
 
-      secondStream.listen((secondNames) {
-        List<String> namesNotPresent = [];
+//       secondStream.listen((secondNames) {
+//         List<String> namesNotPresent = [];
 
-        for (var name in firstNames) {
-          if (!secondNames.contains(name)) {
-            namesNotPresent.add(name);
-          }
-        }
+//         for (var name in firstNames) {
+//           if (!secondNames.contains(name)) {
+//             namesNotPresent.add(name);
+//           }
+//         }
 
-        if (namesNotPresent.isNotEmpty) {
-          // Show the bottom sheet with the names not present in the second stream
-          _showBottomSheet(context, namesNotPresent);
-        }
-      });
-    });
-  }
+//         if (namesNotPresent.isNotEmpty) {
+//           // Show the bottom sheet with the names not present in the second stream
+//           _showBottomSheet(context, namesNotPresent);
+//         }
+//       });
+//     });
+//   }
 
-  void _showBottomSheet(BuildContext context, List<String> names) {
-    showModalBottomSheet(
-      context: context,
-      builder: (BuildContext context) {
-        return Container(
-          height: 200,
-          child: Center(
-            child: ListView.builder(
-              itemCount: names.length,
-              itemBuilder: (context, index) {
-                return ListTile(
-                  title: Text(names[index]),
-                );
-              },
-            ),
-          ),
-        );
-      },
-    );
-  }
+//   void _showBottomSheet(BuildContext context, List<String> names) {
+//     showModalBottomSheet(
+//       context: context,
+//       builder: (BuildContext context) {
+//         return Container(
+//           height: 200,
+//           child: Center(
+//             child: ListView.builder(
+//               itemCount: names.length,
+//               itemBuilder: (context, index) {
+//                 return ListTile(
+//                   title: Text(names[index]),
+//                 );
+//               },
+//             ),
+//           ),
+//         );
+//       },
+//     );
+//   }
 
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Flutter Firestore Example'),
-      ),
-      body: 
-      Center(
-        child: ElevatedButton(
-          onPressed: () {
-            _onButtonPressed(context);
-          },
-          child: Text('Show Names Not Present'),
-        ),
-      ),
-    );
-  }
-}
+//   @override
+//   Widget build(BuildContext context) {
+//     return Scaffold(
+//       appBar: AppBar(
+//         title: Text('Flutter Firestore Example'),
+//       ),
+//       body: 
+//       Center(
+//         child: ElevatedButton(
+//           onPressed: () {
+//             _onButtonPressed(context);
+//           },
+//           child: Text('Show Names Not Present'),
+//         ),
+//       ),
+//     );
+//   }
+// }
 
 
 
@@ -357,3 +357,52 @@ class haha extends StatelessWidget {
 //     );
 //   }
 // }
+import 'package:flutter/material.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+
+class TabBarWithDynamicTabNames extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return DefaultTabController(
+      length: 2, // Number of tabs
+      child: Scaffold(
+        appBar: AppBar(
+          title: Text('TabBar with Dynamic Tab Names'),
+          bottom: TabBar(
+            tabs: [
+              // You can use StreamBuilder here to dynamically update tab names
+              StreamBuilder<QuerySnapshot>(
+                stream: FirebaseFirestore.instance.collection('your_collection').snapshots(),
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return Tab(text: 'Loading...');
+                  }
+
+                  if (snapshot.hasError) {
+                    return Tab(text: 'Error');
+                  }
+
+                  if (snapshot.hasData) {
+                    int recordCount = snapshot.data!.docs.length;
+                    return Tab(text: 'Tab 1 ($recordCount)');
+                  }
+
+                  return Tab(text: 'No Data');
+                },
+              ),
+              Tab(text: 'Tab 2'),
+            ],
+          ),
+        ),
+        body: TabBarView(
+          children: [
+            // Your tab content for Tab 1
+            Center(child: Text('Tab 1 Content')),
+            // Your tab content for Tab 2
+            Center(child: Text('Tab 2 Content')),
+          ],
+        ),
+      ),
+    );
+  }
+}
