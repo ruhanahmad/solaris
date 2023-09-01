@@ -6,6 +6,7 @@ import 'package:solaris/netMeteringOfficer/officerApprovedFiles.dart';
 import 'package:solaris/netMeteringOfficer/officerPendingFiles.dart';
 import 'package:solaris/netMeteringOfficer/officerSendForApproval.dart';
 import 'package:solaris/netMeteringOfficer/requestform.dart';
+import 'package:solaris/netMeteringOfficer/withdraw.dart';
 import 'package:solaris/screens/complaint.dart';
 import 'package:solaris/screens/completedComplaint.dart';
 import 'package:solaris/screens/previousComplaint.dart';
@@ -22,7 +23,7 @@ class _NetMeteringOfficerState extends State<NetMeteringOfficer> {
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
-      length: 3, // Number of tabs
+      length: 4, // Number of tabs
       child: Scaffold(
         
         appBar: AppBar(
@@ -30,6 +31,7 @@ class _NetMeteringOfficerState extends State<NetMeteringOfficer> {
           bottom: TabBar(
             tabs: [
               Tab(text: 'Request Form'),
+                Tab(text: 'Withdraw'),
               //  Tab(text: 'Approval Pending Payment '),
               Tab(text: 'Pending'),
                 Tab(text: 'Approval'),
@@ -41,6 +43,7 @@ class _NetMeteringOfficerState extends State<NetMeteringOfficer> {
           children: [
             // Contents of Tab 1
          RequestFormNetMetering(),
+         Withdraw(),
             // Contents of Tab 2
             // ApprovalScreenPayment(id:widget.id,name:widget.name),
          OfficerPendingFiles(),

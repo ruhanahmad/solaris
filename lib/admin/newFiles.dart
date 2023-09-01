@@ -9,6 +9,58 @@ class NewFiles extends StatefulWidget {
   @override
   State<NewFiles> createState() => _NewFilesState();
 }
+
+Future<void>? alerts(String customerName,String phone,String city,String address,String email,BuildContext context,String customerId){
+    showDialog(context: context, builder: (context){
+      return     AlertDialog(
+        content:
+         Container(
+          height: 400,
+          child: new
+               Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              
+          
+              SizedBox(height: 10),
+              Column(
+                children: [
+                  Text(
+                    'Customer Name: ${customerName}',
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                  ),
+                  Text(
+                    'phone: ${phone}',
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                  ),
+                     Text(
+                    'city: ${city}',
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                  ),
+                    Text(
+                    'address: ${address}',
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                  ),
+                     Text(
+                    'email: ${email}',
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                  ),
+                  Text(
+                    'customer id: ${customerId}',
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                  ),
+                ],
+              ),
+                                         
+                                        // widget.assignedTo == ""?
+                                        //    Text("Select Electrican First"):
+                                        //    Text("Selected electrician is ${widget.assignedTo}"),  
+            ],
+          ),
+        ),
+      );
+    });
+  }
 Future<void> _deleteDocument(String userId,String documentId) async {
     try {
       await 
@@ -43,10 +95,15 @@ class _NewFilesState extends State<NewFiles> {
             itemCount: usersDocs.length,
             itemBuilder: (context, index) {
               final userDoc = usersDocs[index];
-              final userId = userDoc.id;
-              final names = userDoc["name"];
-              final FirstStepDateTime = userDoc["FirstStepDateTime"];
-              final step = userDoc['Step'];
+               final userId = userDoc.id;
+              final phone = userDoc["phone"];
+              final namess = userDoc["name"];
+              final email = userDoc["email"];
+               final city = userDoc["city"]; 
+               final address = userDoc["address"];
+               final customerId = userDoc["customerId"];
+               final FirstStepDateTime = userDoc["FirstStepDateTime"];
+               final Step = userDoc["Step"];
                final Timestamp firstStep = FirstStepDateTime;
  DateTime dateTimeFirstStep = firstStep.toDate();
     DateTime currentDate = DateTime.now();
@@ -90,10 +147,13 @@ int daysDifference = difference.inDays;
                            Padding(
                       padding: const EdgeInsets.all(4.0),
                       child: GestureDetector(
-                        onTap: () {
+                         onTap: () {
+                                    //  alerts( namess, phone,city,address,email,context,customerId,);
+                                  },
+                        // onTap: () {
                           
-                          // alerts( customerName, officerName,payment,userId,ids,context,name,noted);
-                        },
+                        //   alerts( customerName, officerName,payment,userId,ids,context,name,noted);
+                        // },
                         child: Container(
                            decoration: BoxDecoration(
                                            borderRadius: BorderRadius.circular(10),
@@ -109,7 +169,7 @@ int daysDifference = difference.inDays;
                                 children: [
                                 GestureDetector(
                                   onTap: () {
-                                      Get.to( StepsCompleted(id:userId,));   
+                                  alerts( namess, phone,city,address,email,context,customerId,); 
                                   },
                                   child: Container(
                                     decoration: BoxDecoration(
@@ -119,7 +179,7 @@ int daysDifference = difference.inDays;
                                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                       crossAxisAlignment: CrossAxisAlignment.start,
                                       children: [
-                                     Text(" ${names} " )
+                                     Text(" ${namess} " )
                                     
                                           // SizedBox(height: 5,),
                                           //   Text(" ${payment} " ),
@@ -141,7 +201,7 @@ int daysDifference = difference.inDays;
                                                               border: Border.all(width: 2)
                                                             ),
                                                             child:
-                                                             Text(" ${step} " )
+                                                             Text(" ${Step} " )
                                                                 // Text(" subDocs.length" )
                                                              
                                                              ),
