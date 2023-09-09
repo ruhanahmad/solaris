@@ -12,7 +12,7 @@ class ForApproal extends StatelessWidget {
  var endDate;
  ForApproal({this.startDate,this.endDate});
 
-
+TextEditingController _descriptionController= TextEditingController();
 
   Future<void>? alerts(String customerName,String officerName,String payment,String userIdCustomer,String ids,BuildContext context,String stepName,bool noted){
     showDialog(context: context, builder: (context){
@@ -44,6 +44,25 @@ class ForApproal extends StatelessWidget {
                     'Step: ${stepName}',
                     style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                   ),
+                  TextFormField(
+                //   onChanged: (value) {
+                //   userController.complaint = value;
+                // },
+                controller: _descriptionController ,
+                // maxLines: 5,
+                decoration: InputDecoration(
+                  filled: true,
+                  fillColor: Colors.green.withOpacity(0.2),
+                  hintText: 'Description',
+                  hintStyle: TextStyle(color: Colors.green),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(8.0),
+                    borderSide: BorderSide.none,
+                  ),
+                  prefixIcon: Icon(Icons.message, color: Colors.green),
+                ),
+                style: TextStyle(color: Colors.green),
+              ),
                 ],
               ),
                           //                   ElevatedButton(
@@ -58,7 +77,7 @@ class ForApproal extends StatelessWidget {
         EasyLoading.show();
  final usersRef = await FirebaseFirestore.instance.collection('users').doc(userIdCustomer).collection('netMeteringProcedure');
                
- await usersRef.doc(ids).update({'noted':true,"approvalDateTimeFinance":DateTime.now()});
+ await usersRef.doc(ids).update({'noted':true,"approvalDateTimeFinance":DateTime.now(),"financeDescription":_descriptionController.text},);
 
  EasyLoading.dismiss();
   }
@@ -67,7 +86,7 @@ class ForApproal extends StatelessWidget {
  Get.snackbar("Error", "Issue in updating ${e}");
  EasyLoading.dismiss();
   }
- 
+  _descriptionController.text ="";
 Navigator.pop(context);
   
       
@@ -215,6 +234,8 @@ String formattedTime="";
                                   children: [
                                     
                                                          Text( formattedDate  ),
+                                                         SizedBox(height: 5,),
+                                                           Text( formattedTime  ),
                                 
                                 ],),
                                 

@@ -30,6 +30,7 @@ void main()async {
   await Firebase.initializeApp();
 // await FirebaseMessagingService().getToken();
    OneSignal.shared.setLogLevel(OSLogLevel.verbose, OSLogLevel.none);
+   
 
 OneSignal.shared.setAppId("cfc491ba-dd50-4822-90a3-814ca06bc214");
 OneSignal.shared.setNotificationWillShowInForegroundHandler((OSNotificationReceivedEvent event) {

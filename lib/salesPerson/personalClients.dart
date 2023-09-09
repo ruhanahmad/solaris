@@ -31,7 +31,7 @@ class _PersonalClientsState extends State<PersonalClients> {
       var emailGenerated = await userController.emailNumberGenerated();
    
    userController.update();
-  await   userController.createUserWithEmailAndPassword("${customerName}${emailGenerated}@solaris.com",customerName,customerId,context);
+  //await   userController.createUserWithEmailAndPassword("${customerName}${emailGenerated}@solaris.com",customerName,customerId,context);
  
 
            EasyLoading.dismiss();

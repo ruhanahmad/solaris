@@ -15,7 +15,7 @@ import 'package:solaris/screens/profile.dart';
 import 'package:solaris/screens/test.dart';
 import 'package:solaris/siteEngineer/complaintProcessing.dart';
 import 'package:solaris/siteEngineer/complaintSiteEngineer.dart';
-
+import 'package:solaris/salesPerson/referalScreen.dart';
 import 'officerSendForApproval.dart';
 
 
@@ -42,6 +42,7 @@ class _OfficerHomeScreenState extends State<OfficerHomeScreen > {
    Links(),
  NetMeteringOfficer(),
    CustomerList(),
+   ReferalScreen(),
   // NetMeteringCustomers(),
    netMeteringTabs(),
    AboutUsScreen(),
@@ -85,7 +86,12 @@ class _OfficerHomeScreenState extends State<OfficerHomeScreen > {
             icon: Icon(Icons.task_sharp),  
              label: "Tasks",   
             backgroundColor: Colors.white,  
-          ),  
+          ),
+           BottomNavigationBarItem(  
+            icon: Icon(Icons.task_sharp),  
+             label: "Referal Screen",   
+            backgroundColor: Colors.white,  
+          ),    
            BottomNavigationBarItem(  
             icon: Icon(Icons.task_sharp),  
              label: "Files",   

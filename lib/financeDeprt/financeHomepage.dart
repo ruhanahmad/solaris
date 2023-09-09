@@ -10,6 +10,7 @@ import 'package:solaris/financeDeprt/customerApproval.dart';
 import 'package:solaris/financeDeprt/financetabBar.dart';
 import 'package:solaris/financeDeprt/forApproval..dart';
 import 'package:solaris/links.dart';
+import 'package:solaris/salesPerson/referalScreen.dart';
 import 'package:solaris/screens/aboutus.dart';
 import 'package:solaris/screens/complaint.dart';
 import 'package:solaris/screens/profile.dart';
@@ -41,6 +42,7 @@ class _FinanceHomeScreenState extends State<FinanceHomeScreen > {
    CustomerApproval(),
   // NetMeteringCustomers(),
   netMeteringTabs(),
+  ReferalScreen(),
    AboutUsScreen(),
    Profile(),
   ];  
@@ -87,7 +89,12 @@ class _FinanceHomeScreenState extends State<FinanceHomeScreen > {
             icon: Icon(Icons.info),  
              label: "Files",   
             backgroundColor: Colors.white,  
-          ),   
+          ),
+             BottomNavigationBarItem(  
+            icon: Icon(Icons.info),  
+             label: "Referal",   
+            backgroundColor: Colors.white,  
+          ),     
             BottomNavigationBarItem(  
             icon: Icon(Icons.info),  
              label: "About us",   

@@ -21,11 +21,14 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:flutter_blue/flutter_blue.dart' as blue;
 class UserController extends GetxController {
-var referalName;
-var referalPhoneNumber;
-var referalCity;
-var referalDescription;
-
+var referalName = "";
+var referalPhoneNumber = "";
+var referalCity = "";
+var referalDescription = "";
+var customerIdss = "";
+var referalEmail = "";
+var googleLocation = "";
+var email = "";
 var token;
 var complaintName;
 var complaint;
@@ -255,8 +258,8 @@ EasyLoading.dismiss();
  String passwordNumberGenerated(){
   var rndnumber="";
   var rnd= new Random();
-  for (var i = 0; i < 7; i++) {
-  rndnumber = rndnumber + rnd.nextInt(9).toString();
+  for (var i = 0; i < 4; i++) {
+  rndnumber = rndnumber + rnd.nextInt(9).toString() +"abt";
   }
   print(rndnumber);
   return rndnumber;
@@ -396,6 +399,12 @@ final auth.FirebaseAuth _firebaseAuth = auth.FirebaseAuth.instance;
     String email,
     String name,
     String customerId,
+    String city,
+    String phoneNumber,
+    String description,
+    String googleLocation,
+    String selectedOption,
+
  
     
     BuildContext buildContext,
@@ -416,6 +425,11 @@ final auth.FirebaseAuth _firebaseAuth = auth.FirebaseAuth.instance;
       'email':email  ,
       'id': userEmailUid,
       'name': name,
+      "city":city,
+      "phoneNumer":phoneNumber,
+      "description":description,
+      "location":googleLocation,
+      "meteringRequired":selectedOption,
       "role":"customer",
       "token":"",
       "customerId":customerId,

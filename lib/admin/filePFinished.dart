@@ -127,6 +127,7 @@ class _FilesPFinishedState extends State<FilesPFinished> {
                         final description = subDoc["description"];
                         final userIdCustomer =subDoc["userIdCustomer"];
                         final docName= subDoc["name"];
+                        final noted= subDoc["noted"];
                         // ...
 
                         return 
@@ -150,7 +151,13 @@ class _FilesPFinishedState extends State<FilesPFinished> {
                               title: Text(" ${names} " ), 
                              
                               subtitle:Text("${docName}  " ), 
-                              trailing: Text("approved"),
+                              trailing: 
+                              
+                              noted == true?
+                              Text("paid")
+                              :
+                                Text("approved")
+                              ,
                             ),
                             //   ListTile(
                         

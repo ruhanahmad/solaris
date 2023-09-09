@@ -25,7 +25,8 @@ class _CustomerApprovalState extends State<CustomerApproval> {
       var emailGenerated = await userController.emailNumberGenerated();
    
    userController.update();
-  await   userController.createUserWithEmailAndPassword("${customerName}${emailGenerated}@solaris.com",customerName,customerId,context);
+   // await   userController.createUserWithEmailAndPassword(userController.referalEmail,userController.referalName,userController.customerIdss,userController.referalCity,userController.referalPhoneNumber,userController.referalDescription,userController.googleLocation,selectedOption,context);
+//  await   userController.createUserWithEmailAndPassword("${customerName}${emailGenerated}@solaris.com",customerName,customerId,context);
    await   salesPersonController.notedFinance(id);
  
 

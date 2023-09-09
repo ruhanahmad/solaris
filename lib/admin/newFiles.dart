@@ -217,12 +217,12 @@ int daysDifference = difference.inDays;
                                                            children: [
                                                              Text(" ${daysDifference} Days " ),
 
-                                                              IconButton(
-                    icon: Icon(Icons.delete),
-                    onPressed: () {
-                      _deleteDocument(userId,ids);
-                    },
-                  ),
+                  //                                             IconButton(
+                  //   icon: Icon(Icons.delete),
+                  //   onPressed: () {
+                  //     _deleteDocument(userId,ids);
+                  //   },
+                  // ),
                                                            ],
                                                          ),
                                 
