@@ -74,12 +74,12 @@ netMeteringTabs(),
           ),  
           BottomNavigationBarItem(  
             icon: Icon(Icons.comment),  
-         label: "Complaint",  
+         label: "Customer",  
             backgroundColor: Colors.white, 
           ),  
           BottomNavigationBarItem(  
             icon: Icon(Icons.task_sharp),  
-             label: "Tasks",   
+             label: "Clients",   
             backgroundColor: Colors.white,  
           ), 
           BottomNavigationBarItem(  
@@ -95,7 +95,7 @@ netMeteringTabs(),
            
            BottomNavigationBarItem(  
             icon: Icon(Icons.verified_user),  
-             label: "Profile",   
+             label: "Logout",   
             backgroundColor: Colors.white,  
           ),  
         ],  
@@ -106,7 +106,8 @@ netMeteringTabs(),
         
         iconSize: 40,  
         onTap: _onItemTapped,  
-        elevation: 5  
+        elevation: 5  ,
+        type: BottomNavigationBarType.fixed,
       ),  
     );  
   }  

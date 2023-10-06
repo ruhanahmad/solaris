@@ -20,6 +20,76 @@ class NetMeteringCustomers extends StatefulWidget {
 
 class _NetMeteringCustomersState extends State<NetMeteringCustomers> {
  
+Future<void>? _showAlertDialog(BuildContext context,bool net,String name,String userid) {
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return 
+
+      AlertDialog(
+        title: Text("Net Metering Customers "),
+        actions: [
+    net == false ? 
+    new SizedBox(
+                                      width: 190.0,
+                                      height: 40.0,
+                                      child: ElevatedButton(
+                                        onPressed: () async{
+                      
+                               
+                      
+                                 
+                                          // print("object ${ids}");
+                                           try{
+                                            // var n=0;
+                      
+                         final usersRef = await FirebaseFirestore.instance.collection('users');
+                         await usersRef.doc(userid).update({'netMetering':true,"FirstStepDateTime":DateTime.now(),"inProcess":"notStarted"});
+                        //  await usersRef.doc(ids).collection("netMeteringProcedure").add({"name":"","approved":false,"netMeteringOfficerName":""});
+                        //  await usersRef.doc(userid).collection("netMeteringProcedure").add({"name":"net Metering",});
+                         await usersRef.doc(userid).collection("netMeteringProcedure").add({
+                        "name":"File Created",
+                        "approved":true,
+                        "officerName":userController.userName,
+                        "description":"",
+                        "payment":"",
+                        "customerName":name,
+                        "pdfUrl":"",
+                        "userIdCustomer":userid,
+                        "sendApprovalDateTime":DateTime.now(),
+                        "noted":false,
+                        "approvalDateTimeFinance":"",
+                        "sentForApproval":true,
+                        });
+                        }
+                        catch(e){
+                         Get.snackbar("Error", "Issue in updating ${e}");
+                        }
+                                    
+                                        },
+                                        child: Text(
+                                          'Add to Net Metering',
+                                          style: TextStyle(fontSize: 16.0),
+                                        ),
+                                        style: ButtonStyle(
+                                          backgroundColor: MaterialStateProperty.all<Color>(Colors.green),
+                                          shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                        RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(24.0),
+                        ),
+                                          ),
+                                        ),
+                                      ),
+                                    )
+                                    
+                                    :Text("Added")
+                                    
+        ],
+      );
+  
+    },
+  );
+}
 
 
    
@@ -38,14 +108,14 @@ class _NetMeteringCustomersState extends State<NetMeteringCustomers> {
         child: Column(
           children: [
   SizedBox(height: halfHeight * 0.1),
-               Text(
-                'NetMetering Steps',
-                style: TextStyle(
-                  color: Colors.green,
-                  fontSize: 24.0,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
+              //  Text(
+              //   'NetMetering Steps',
+              //   style: TextStyle(
+              //     color: Colors.green,
+              //     fontSize: 24.0,
+              //     fontWeight: FontWeight.bold,
+              //   ),
+              // ),
               SizedBox(height: halfHeight * 0.1),
 
   StreamBuilder<QuerySnapshot>(
@@ -75,6 +145,7 @@ class _NetMeteringCustomersState extends State<NetMeteringCustomers> {
                        var name = documents[index]['name'];
                        var netMetering = documents[index]['netMetering'];
                        var userid = documents[index]['id'];
+                       var token = documents[index]["token"];
                       //  adminController.id = documents[index]['id'];
                       //  adminController.update();
                
@@ -83,97 +154,17 @@ class _NetMeteringCustomersState extends State<NetMeteringCustomers> {
                               
                  return     Padding(
                       padding: const EdgeInsets.all(4.0),
-                      child: Container(
-                         decoration: BoxDecoration(
-                                         borderRadius: BorderRadius.circular(10),
-                                         color: Colors.green.withOpacity(0.2),
-                                       ),
-                        child: Column(
-                          children: [
-                                 
-                         
-                         
-                            
-                              
-                               Text("Customer Name : ${name}",style: TextStyle(fontSize: 20), ), 
-                        
-                                           
-                                              
-                         netMetering == false ? 
-                          SizedBox(
-                                    width: 190.0,
-                                    height: 40.0,
-                                    child: ElevatedButton(
-                                      onPressed: () async{
-                                        print("object ${ids}");
-                                         try{
-                                          // var n=0;
-
-                       final usersRef = await FirebaseFirestore.instance.collection('users');
-                       await usersRef.doc(userid).update({'netMetering':true,"FirstStepDateTime":DateTime.now(),"inProcess":"notStarted"});
-                      //  await usersRef.doc(ids).collection("netMeteringProcedure").add({"name":"","approved":false,"netMeteringOfficerName":""});
-                      //  await usersRef.doc(userid).collection("netMeteringProcedure").add({"name":"net Metering",});
-                       await usersRef.doc(userid).collection("netMeteringProcedure").add({
-  "name":"File Created",
-  "approved":true,
-  "officerName":userController.userName,
-  "description":"",
-  "payment":"",
-  "customerName":name,
-  "pdfUrl":"",
-  "userIdCustomer":userid,
-  "sendApprovalDateTime":DateTime.now(),
-  "noted":false,
-  "approvalDateTimeFinance":"",
-  "sentForApproval":true,
-  });
-                      }
-                      catch(e){
-                       Get.snackbar("Error", "Issue in updating ${e}");
-                      }
-                                  
-                                      },
-                                      child: Text(
-                                        'Add to Net Metering',
-                                        style: TextStyle(fontSize: 16.0),
-                                      ),
-                                      style: ButtonStyle(
-                                        backgroundColor: MaterialStateProperty.all<Color>(Colors.green),
-                                        shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                      RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(24.0),
-                      ),
-                                        ),
-                                      ),
-                                    ),
-                                  ):
-
-  //  SizedBox(
-  //                                   width: 190.0,
-  //                                   height: 40.0,
-  //                                   child: ElevatedButton(
-  //                                     onPressed: () async{
-  //                                 Get.to(()=>netMeteringProcedure(id:userid,name:name));
-                                  
-  //                                     },
-  //                                     child: Text(
-  //                                       'See The procedure',
-  //                                       style: TextStyle(fontSize: 16.0),
-  //                                     ),
-  //                                     style: ButtonStyle(
-  //                                       backgroundColor: MaterialStateProperty.all<Color>(Colors.green),
-  //                                       shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-  //                     RoundedRectangleBorder(
-  //                       borderRadius: BorderRadius.circular(24.0),
-  //                     ),
-  //                                       ),
-  //                                     ),
-  //                                   ),
-  //                                 )
-                                     Text("Added")
-                                        
-                                        
-                          ],
+                      child: GestureDetector(
+                        onTap: () async{
+                        await   _showAlertDialog(context,netMetering,name,userid);
+                        },
+                        child: Container(
+                          height: 50,
+                           decoration: BoxDecoration(
+                                           borderRadius: BorderRadius.circular(10),
+                                           color: Colors.green.withOpacity(0.2),
+                                         ),
+                          child: Center(child: Text("Customer Name : ${name}",style: TextStyle(fontSize: 20), )),
                         ),
                       ),
                     );

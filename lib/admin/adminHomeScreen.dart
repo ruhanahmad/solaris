@@ -84,7 +84,7 @@ class _AdminHomeScreenState extends State<AdminHomeScreen > {
           ),  
           BottomNavigationBarItem(  
             icon: Icon(Icons.task_sharp),  
-             label: "Tasks",   
+             label: "Metering",   
             backgroundColor: Colors.white,  
           ),  
             BottomNavigationBarItem(  
@@ -94,22 +94,22 @@ class _AdminHomeScreenState extends State<AdminHomeScreen > {
           ),
                      BottomNavigationBarItem(  
             icon: Icon(Icons.verified_user),  
-             label: "Performance",   
+             label: "Logout",   
             backgroundColor: Colors.white,  
           ),   
            BottomNavigationBarItem(  
             icon: Icon(Icons.verified_user),  
-             label: "Profile",   
-            backgroundColor: Colors.white,  
-          ),  
-            BottomNavigationBarItem(  
-            icon: Icon(Icons.verified_user),  
-             label: "Check",   
+             label: "Approval",   
             backgroundColor: Colors.white,  
           ),  
             BottomNavigationBarItem(  
             icon: Icon(Icons.verified_user),  
              label: "Files",   
+            backgroundColor: Colors.white,  
+          ),  
+            BottomNavigationBarItem(  
+            icon: Icon(Icons.verified_user),  
+             label: "Record",   
             backgroundColor: Colors.white,  
           ),  
  
@@ -121,7 +121,8 @@ class _AdminHomeScreenState extends State<AdminHomeScreen > {
         
         iconSize: 40,  
         onTap: _onItemTapped,  
-        elevation: 5  
+        elevation: 5 ,
+        type: BottomNavigationBarType.fixed, 
       ),  
     );  
   }  

@@ -77,12 +77,12 @@ class _FinanceHomeScreenState extends State<FinanceHomeScreen > {
           ),  
           BottomNavigationBarItem(  
             icon: Icon(Icons.comment),  
-         label: "For Approval",  
+         label: "Approval",  
             backgroundColor: Colors.white, 
           ),  
           BottomNavigationBarItem(  
             icon: Icon(Icons.task_sharp),  
-             label: "Tasks",   
+             label: "Customer",   
             backgroundColor: Colors.white,  
           ), 
                       BottomNavigationBarItem(  
@@ -113,7 +113,8 @@ class _FinanceHomeScreenState extends State<FinanceHomeScreen > {
         
         iconSize: 40,  
         onTap: _onItemTapped,  
-        elevation: 5  
+        elevation: 5  ,
+        type: BottomNavigationBarType.fixed,
       ),  
     );  
   }  

@@ -16,7 +16,7 @@ class Profile extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('PRofile'),
+        title: Text('Logout'),
         automaticallyImplyLeading: false,
       ),
       body: 

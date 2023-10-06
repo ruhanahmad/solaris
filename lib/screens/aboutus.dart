@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:onesignal_flutter/onesignal_flutter.dart';
 
 
 
@@ -65,9 +66,19 @@ class _AboutUsScreenState extends State<AboutUsScreen> {
             // ),
             Padding(
               padding: EdgeInsets.all(16.0),
-              child: Text(
-                'Company Address',
-                style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold),
+              child: GestureDetector(
+                onTap: () async{
+                  
+//                                    await OneSignal.shared.postNotification(OSCreateNotification(
+//   playerIds: ["f291b37f-63a5-4173-be71-f38b277052ba"], // Replace with the recipient's player ID
+//   content: "You are added in netMetering Procedure!",
+//   heading: "Hey ! You are added",
+// ));
+                },
+                child: Text(
+                  'Company Address',
+                  style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold),
+                ),
               ),
             ),
             Padding(

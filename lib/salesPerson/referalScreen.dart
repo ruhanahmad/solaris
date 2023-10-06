@@ -8,7 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
 import 'package:permission_handler/permission_handler.dart';
-import 'package:record_mp3/record_mp3.dart';
+// import 'package:record_mp3/record_mp3.dart';
 import 'package:solaris/controllerRef.dart';
 import 'package:solaris/models/authentication_service.dart';
 import 'package:image_picker/image_picker.dart';
@@ -119,7 +119,7 @@ await   userController.createUserWithEmailAndPassword(userController.referalEmai
              // FlutterLogo(
              //   size: halfHeight * 0.25,
              //   colors: Colors.white,
-             // ),
+             // ),WW
           
           
 
@@ -130,14 +130,14 @@ await   userController.createUserWithEmailAndPassword(userController.referalEmai
 
 
              Text(
-               'Referal',
+               'Add Customer',
                style: TextStyle(
                  color: Colors.green,
                  fontSize: 24.0,
                  fontWeight: FontWeight.bold,
                ),
              ),
-             SizedBox(height: halfHeight * 0.1),
+             SizedBox(height: halfHeight * 0.001),
                 TextField(
                onChanged: (value) {
                  userController.referalName = value;
@@ -156,7 +156,7 @@ await   userController.createUserWithEmailAndPassword(userController.referalEmai
                ),
                style: TextStyle(color: Colors.green),
              ),
-              SizedBox(height: halfHeight * 0.1),
+              SizedBox(height: halfHeight * 0.03),
                 TextField(
                onChanged: (value) {
                  userController.referalCity = value;
@@ -175,7 +175,7 @@ await   userController.createUserWithEmailAndPassword(userController.referalEmai
                ),
                style: TextStyle(color: Colors.green),
              ),
-              SizedBox(height: halfHeight * 0.1),
+               SizedBox(height: halfHeight * 0.03),
                 TextField(
                onChanged: (value) {
                  userController.referalPhoneNumber = value;
@@ -194,7 +194,7 @@ await   userController.createUserWithEmailAndPassword(userController.referalEmai
                ),
                style: TextStyle(color: Colors.green),
              ),
-              SizedBox(height: halfHeight * 0.1),
+                SizedBox(height: halfHeight * 0.03),
                 TextField(
                onChanged: (value) {
                  userController.googleLocation = value;
@@ -213,7 +213,7 @@ await   userController.createUserWithEmailAndPassword(userController.referalEmai
                ),
                style: TextStyle(color: Colors.green),
              ),
-              SizedBox(height: halfHeight * 0.1),
+                SizedBox(height: halfHeight * 0.03),
                 TextField(
                onChanged: (value) {
                  userController.referalDescription = value;
@@ -233,7 +233,7 @@ await   userController.createUserWithEmailAndPassword(userController.referalEmai
                style: TextStyle(color: Colors.green),
              ),
           
-               SizedBox(height: halfHeight * 0.1),
+                 SizedBox(height: halfHeight * 0.03),
                 TextFormField(
                onChanged: (value) {
                  userController.referalEmail = value;
@@ -255,7 +255,7 @@ await   userController.createUserWithEmailAndPassword(userController.referalEmai
              ),
           
        
-             SizedBox(height: halfHeight * 0.1),
+               SizedBox(height: halfHeight * 0.03),
                 TextField(
                onChanged: (value) {
                  userController.customerIdss = value;
@@ -274,9 +274,9 @@ await   userController.createUserWithEmailAndPassword(userController.referalEmai
                ),
                style: TextStyle(color: Colors.green),
              ),
-              SizedBox(height: halfHeight * 0.1),
+               SizedBox(height: halfHeight * 0.03),
              Text("Net Metering Required"),
-               SizedBox(height: halfHeight * 0.1),
+                 SizedBox(height: halfHeight * 0.03),
               Column(
           children: <Widget>[
             RadioListTile(
@@ -303,7 +303,7 @@ await   userController.createUserWithEmailAndPassword(userController.referalEmai
             Text('Selected Option: $selectedOption'),
           ],
         ),
-                 SizedBox(height: halfHeight * 0.1),
+                   SizedBox(height: halfHeight * 0.03),
               
           
        

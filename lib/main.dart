@@ -49,6 +49,12 @@ OneSignal.shared.promptUserForPushNotificationPermission().then((accepted) {
   // final usersRef = FirebaseFirestore.instance.collection('users');
   // usersRef.doc(token).set({'token': token});
 
+
+//                                    await OneSignal.shared.postNotification(OSCreateNotification(
+//   playerIds: ["${token}"], // Replace with the recipient's player ID
+//   content: "You are added in netMetering Procedure!",
+//   heading: "Hey ! You are added",
+// ));
   runApp(MyApp());
   
  

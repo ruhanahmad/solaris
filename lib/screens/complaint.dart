@@ -7,7 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
 import 'package:permission_handler/permission_handler.dart';
-import 'package:record_mp3/record_mp3.dart';
+// import 'package:record_mp3/record_mp3.dart';
 import 'package:solaris/controllerRef.dart';
 import 'package:solaris/models/authentication_service.dart';
 import 'package:image_picker/image_picker.dart';

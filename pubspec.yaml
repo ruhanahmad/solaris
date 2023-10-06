@@ -45,15 +45,15 @@ dependencies:
   image_picker: 
   firebase_messaging:
   http: ^1.1.0
-  onesignal_flutter:
+  onesignal_flutter: ^3.5.1
   flutter_local_notifications: ^15.1.0+1
   flutter_rating_bar: ^4.0.1
   pdf:
   path_provider:
   image:
   flutter_sound: ^9.2.13
-  record_mp3: 
-  just_audio: ^0.9.34
+  # record_mp3: 
+  # just_audio: ^0.9.34
   sizer:
   blue_thermal_printer:
   flutter_blue: 

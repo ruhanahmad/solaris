@@ -41,7 +41,7 @@ class _OfficerHomeScreenState extends State<OfficerHomeScreen > {
 
    Links(),
  NetMeteringOfficer(),
-   CustomerList(),
+  //  CustomerList(),
    ReferalScreen(),
   // NetMeteringCustomers(),
    netMeteringTabs(),
@@ -79,14 +79,14 @@ class _OfficerHomeScreenState extends State<OfficerHomeScreen > {
           ),  
           BottomNavigationBarItem(  
             icon: Icon(Icons.comment),  
-         label: "For Approval",  
+         label: "Complaint",  
             backgroundColor: Colors.white, 
           ),  
-          BottomNavigationBarItem(  
-            icon: Icon(Icons.task_sharp),  
-             label: "Tasks",   
-            backgroundColor: Colors.white,  
-          ),
+          // BottomNavigationBarItem(  
+          //   icon: Icon(Icons.task_sharp),  
+          //    label: "Tasks",   
+          //   backgroundColor: Colors.white,  
+          // ),
            BottomNavigationBarItem(  
             icon: Icon(Icons.task_sharp),  
              label: "Referal Screen",   
@@ -104,7 +104,7 @@ class _OfficerHomeScreenState extends State<OfficerHomeScreen > {
           ),  
            BottomNavigationBarItem(  
             icon: Icon(Icons.verified_user),  
-             label: "Profile",   
+             label: "Logout",   
             backgroundColor: Colors.white,  
           ),  
         ],  
@@ -115,7 +115,8 @@ class _OfficerHomeScreenState extends State<OfficerHomeScreen > {
         
         iconSize: 40,  
         onTap: _onItemTapped,  
-        elevation: 5  
+        elevation: 5  ,
+        type: BottomNavigationBarType.fixed,
       ),  
     );  
   }  

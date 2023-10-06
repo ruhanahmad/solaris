@@ -67,46 +67,13 @@ class _StepsCompletedState extends State<StepsCompleted> {
                
       
                  return
-                 Container(
-                  height: MediaQuery.of(context).size.height -300,
-                  width: MediaQuery.of(context).size.width,
-                   child: 
-                   ListView.builder(
-                    itemCount: snapshot.data!.docs.length,
-                    itemBuilder: (context,index){
-                      // int totalPayment = 0;
-                        var ids = documents[index].id;
-                       var name = documents[index]['name'];
-                var approved = documents[index]['approved'];
-                var sendApprovalDateTime = documents[index]["sendApprovalDateTime"];
-                var netMeteringOfficerName  =documents[index]['officerName'];
-                var paymentss  =documents[index]['payment'];
-              // int payment  =    int.tryParse(documents[index]['payment'])??0 ;
-               // Calculate total payment by summing payment values
- int totalPayment = snapshot.data!.docs
-              .map<int>((doc) => int.tryParse(doc["payment"] ?? '0') ?? 0)
-              .reduce((total, payment) => total + payment);
+                 Column(
 
-          // for (var document in snapshot.data!.docs) {
-          //   var userData = document.data();
-          //   int payment = int.tryParse(userData['payment'] ?? '0') ?? 0;
-          //   totalPayment += payment;
-          // }
-
-              // totalPayment += payment;
-                             final Timestamp timestamp = sendApprovalDateTime;
- DateTime dateTime = timestamp.toDate();
-    String formattedDate = DateFormat('MMM d, yyyy').format(dateTime);
-    String formattedTime = DateFormat('h:mm a').format(dateTime); 
-                 return   
-
-
-                 Center(
-        child: 
-        Table(
-          border: TableBorder.all(),
-          children: [
-            TableRow(
+                   children: [
+                    
+Table(
+  children:[
+ TableRow(
               children: [
                 TableCell(
                   child: Center(child: Text('Step')),
@@ -128,25 +95,74 @@ class _StepsCompletedState extends State<StepsCompleted> {
                 ),
               ],
             ),
+  ]
+  
+  
+            ),
+                    
+
+
+
+
+                     Container(
+                      height: MediaQuery.of(context).size.height -300,
+                      width: MediaQuery.of(context).size.width,
+                       child: 
+                       ListView.builder(
+                        itemCount: snapshot.data!.docs.length,
+                        itemBuilder: (context,index){
+                          // int totalPayment = 0;
+                            var ids = documents[index].id;
+                           var name = documents[index]['name'];
+                var approved = documents[index]['approved'];
+                var sendApprovalDateTime = documents[index]["sendApprovalDateTime"];
+                var netMeteringOfficerName  =documents[index]['officerName'];
+                var paymentss  =documents[index]['payment'];
+              // int payment  =    int.tryParse(documents[index]['payment'])??0 ;
+               // Calculate total payment by summing payment values
+ int totalPayment = snapshot.data!.docs
+              .map<int>((doc) => int.tryParse(doc["payment"] ?? '0') ?? 0)
+              .reduce((total, payment) => total + payment);
+
+          // for (var document in snapshot.data!.docs) {
+          //   var userData = document.data();
+          //   int payment = int.tryParse(userData['payment'] ?? '0') ?? 0;
+          //   totalPayment += payment;
+          // }
+
+              // totalPayment += payment;
+                                 final Timestamp timestamp = sendApprovalDateTime;
+ DateTime dateTime = timestamp.toDate();
+    String formattedDate = DateFormat('MMM d, yyyy').format(dateTime);
+    String formattedTime = DateFormat('h:mm a').format(dateTime); 
+                     return   
+
+
+                     Center(
+        child: 
+        Table(
+          border: TableBorder.all(),
+          children: [
+           
             TableRow(
               children: [
                 TableCell(
-                  child: Center(child: Text('Step ${index}')),
+                      child: Center(child: Text('Step ${index}')),
                 ),
                 TableCell(
-                  child: Center(child: Text('${name}')),
+                      child: Center(child: Text('${name}')),
                 ),
                 TableCell(
-                  child: Center(child: Text('${formattedDate} - ${formattedTime}')),
+                      child: Center(child: Text('${formattedDate} - ${formattedTime}')),
                 ),
-                 TableCell(
-                  child: Center(child: Text('${netMeteringOfficerName}')),
+                     TableCell(
+                      child: Center(child: Text('${netMeteringOfficerName}')),
                 ),
                 TableCell(
-                  child: Center(child: Text('${paymentss}')),
+                      child: Center(child: Text('${paymentss}')),
                 ),
-                 TableCell(
-                  child: Center(child: Text('${totalPayment}')),
+                     TableCell(
+                      child: Center(child: Text('${totalPayment}')),
                 ),
               ],
             ),
@@ -154,7 +170,7 @@ class _StepsCompletedState extends State<StepsCompleted> {
           ],
         ),
       );
-                 
+                     
     //                Padding(
     //                   padding: const EdgeInsets.all(4.0),
     //                   child: Container(
@@ -165,16 +181,16 @@ class _StepsCompletedState extends State<StepsCompleted> {
     //                     child: Column(
     //                       children: [
              
-                         
+                             
     //                      Text("Step ${index} \n | \n | \n | \n | "),
     //                         ListTile(
-                              
+                                  
     //                           title: Text("${name} : Completed by ${netMeteringOfficerName} " ), 
     //                           // trailing:Text("${status}",style: TextStyle(color: Colors.green),) ,
     //                           // subtitle:Text("Complaint received from ${ids} " ), 
     //                         ),
-                                        
-                       
+                                            
+                           
     // //                                     ElevatedButton(
     // //                     onPressed: () async{
     // //               // sendNotification();
@@ -184,13 +200,15 @@ class _StepsCompletedState extends State<StepsCompleted> {
     // //                     },
     // //                     child: Text('Resolve'),
     // //                                     )
-                                        
-                                        
+                                            
+                                            
     //                       ],
     //                     ),
     //                   ),
     //                 );
-                    }),
+                        }),
+                     ),
+                   ],
                  );
               
                },
