@@ -44,12 +44,29 @@ class _RequestFormNetMeteringState extends State<RequestFormNetMetering> {
   "sentToFinanceDateTime":"",
   "adminName":"",
   
+  
 
   });
- await usersRef.doc(userController.selectedUserId).update({"inProcess":"inProcess"});
+
+_priceController.text == "" ?
+await usersRef.doc(userController.selectedUserId).update({"nonPaymentCounter":FieldValue.increment(1),}) 
+:
+await usersRef.doc(userController.selectedUserId).update({"paymentCounter":FieldValue.increment(1),}) 
+;
+
+
+
+
+ await usersRef.doc(userController.selectedUserId).update({"inProcess":"inProcess",});
   _descriptionController.text  = "";
   _priceController.text  = "";
 
+
+
+
+
+
+ 
     
 
   //   final usersRefs = await FirebaseFirestore.instance.collection('reviews').add({

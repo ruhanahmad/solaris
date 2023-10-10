@@ -80,8 +80,78 @@ List<String>? documents;
         automaticallyImplyLeading: false,
           bottom: TabBar(
             tabs: [
-              Tab(text: 'Payments'),
-              Tab(text: 'Non Payments'),
+              StreamBuilder<QuerySnapshot>(
+                stream: 
+               FirebaseFirestore.instance.collection('users')
+                  .where("netMetering",isEqualTo: true)
+                  .snapshots(),
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return Tab(text: 'payments');
+                  }
+
+                  if (snapshot.hasError) {
+                    return Tab(text: 'payments');
+                  }
+
+                  if (snapshot.hasData) {
+                    int totalPaymentCounter = 0;
+
+              // Calculate the sum of paymentcounter values from all documents
+              snapshot.data!.docs.forEach((document) {
+                final data = document.data() as Map<String, dynamic>;
+                if (data.containsKey('paymentCounter')) {
+                  totalPaymentCounter += data['paymentCounter'] as int;
+             
+                }
+
+              });
+                   print(totalPaymentCounter);
+                 return Tab(text:  'Payments(${totalPaymentCounter})');
+                    // int recordCount = snapshot.data!.docs.length;
+                    // return Tab(text:  'NonPayments($recordCount)');
+                  }
+
+                  return Tab(text: 'Payments');
+                },
+              ),
+          //  Tab(text:  'Payments'),
+              StreamBuilder<QuerySnapshot>(
+                stream: 
+               FirebaseFirestore.instance.collection('users')
+                  .where("netMetering",isEqualTo: true)
+                  .snapshots(),
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return Tab(text: 'NonPayments');
+                  }
+
+                  if (snapshot.hasError) {
+                    return Tab(text: 'NonPayments');
+                  }
+
+                  if (snapshot.hasData) {
+                    int totalPaymentCounter = 0;
+
+              // Calculate the sum of paymentcounter values from all documents
+              snapshot.data!.docs.forEach((document) {
+                final data = document.data() as Map<String, dynamic>;
+                if (data.containsKey('nonPaymentCounter')) {
+                  totalPaymentCounter += data['nonPaymentCounter'] as int;
+             
+                }
+
+              });
+                   print(totalPaymentCounter);
+                 return Tab(text:  'NonPayments (${totalPaymentCounter})');
+                    // int recordCount = snapshot.data!.docs.length;
+                    // return Tab(text:  'NonPayments($recordCount)');
+                  }
+
+                  return Tab(text:  'NonPayments');
+                },
+              ),
+           
                Tab(text: 'Finished'),
              
             ],

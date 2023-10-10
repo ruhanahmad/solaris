@@ -61,6 +61,8 @@ Future<void>? _showAlertDialog(BuildContext context,bool net,String name,String 
                         "approvalDateTimeFinance":"",
                         "sentForApproval":true,
                         "finishedDateTime":DateTime.now(),
+                        "nonPaymentCounter":0,
+                        "paymentCounter":0,
                         });
                         }
                         catch(e){

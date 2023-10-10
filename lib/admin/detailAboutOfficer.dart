@@ -24,13 +24,19 @@ DetailAboutOfficer({required this.name,required this.ids});
 class _DetailAboutOfficerState extends State<DetailAboutOfficer> {
 
   Stream<QuerySnapshot>? _recordsStream;
+List<dynamic> myList =["name"];
 
-  void _fetchRecords() {
+ 
+  void _fetch() {
+    myList.clear();
+    myList.add("asd");
     setState(() {
       // Set up a Firestore query to fetch records from your collection
       _recordsStream = FirebaseFirestore.instance.collection('netMeteringSteps').snapshots();
     });
-
+setState(() {
+  
+});
     showModalBottomSheet(
             context: context,
             builder: (context) {
@@ -49,23 +55,39 @@ class _DetailAboutOfficerState extends State<DetailAboutOfficer> {
           } else if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
             return Text('No records available.');
           } else {
+             Navigator.of(context).pop(); 
+             
             return ListView.builder(
               itemCount: snapshot.data!.docs.length,
               itemBuilder: (context, index) {
                 final document = snapshot.data!.docs[index];
                 final data = document.data() as Map<String, dynamic>;
+ 
 
+  // data.forEach((name, value) {
+  //   myList.add(value);
+  //   print(myList);
+  // });
+             myList.add(data["name"]);
+             print(myList);
                 // Display your record data in ListTile or other widgets as needed
-                return ListTile(
-                  title: Text(data['name']), // Replace with your data fields
+                return 
+                
+                ListTile(
+                  title: Text("Showing All Records"), // Replace with your data fields
                   onTap: () {
                     // Store the selected value in a variable here
                      userController.selectedValueForReview = data['name'];
+                     myList.clear();
+                      myList.add('newValue');
+                     myList .add(data["name"]);
                        userController.update();
                     print(userController.selectedValueForReview);
-                    Navigator.of(context).pop(); // Close the bottom sheet
+                   
+                  
                   },
                 );
+                
               },
             );
           }
@@ -76,7 +98,104 @@ class _DetailAboutOfficerState extends State<DetailAboutOfficer> {
           );
      }
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  void _fetchRecords() {
+    setState(() {
+      // Set up a Firestore query to fetch records from your collection
+      _recordsStream = FirebaseFirestore.instance.collection('netMeteringSteps').snapshots();
+    });
+setState(() {
+  
+});
+    showModalBottomSheet(
+            context: context,
+            builder: (context) {
+
+              return 
+              //RecordListBottomSheet(recordsStream: _recordsStream);
+              Container(
+      padding: EdgeInsets.all(16.0),
+      child: StreamBuilder<QuerySnapshot>(
+        stream: _recordsStream,
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return CircularProgressIndicator();
+          } else if (snapshot.hasError) {
+            return Text('Error: ${snapshot.error}');
+          } else if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
+            return Text('No records available.');
+          } else {
+            return Column(
+              children: [
+                 GestureDetector(
+                  onTap: () {
+                    
+                  },
+                  child: Text("All Records")),
+                Container(
+                  height: 400,
+                  child: ListView.builder(
+                    itemCount: snapshot.data!.docs.length,
+                    itemBuilder: (context, index) {
+                      final document = snapshot.data!.docs[index];
+                      final data = document.data() as Map<String, dynamic>;
+                 
+                
+                  // data.forEach((name, value) {
+                  //   myList.add(value);
+                  //   print(myList);
+                  // });
+                  // myList.clear();
+                  // myList.add("value");
+                  //  myList.add(data["name"]);
+                   print(myList);
+                      // Display your record data in ListTile or other widgets as needed
+                      return ListTile(
+                        title: Text(data['name']), // Replace with your data fields
+                        onTap: () {
+                          // Store the selected value in a variable here
+                           userController.selectedValueForReview = data['name'];
+                           myList.clear();
+                            myList.add('newValue');
+                           myList .add(data["name"]);
+                             userController.update();
+                          print(userController.selectedValueForReview);
+                          setState(() {
+                            
+                          });
+                          Navigator.of(context).pop(); // Close the bottom sheet
+                        },
+                      );
+                    },
+                  ),
+                ),
+              ],
+            );
+          }
+        },
+      ),
+    );
+            },
+          );
+     }
+
      bool isEditing= false;
+     bool isAll = false;
  
   @override
   Widget build(BuildContext context) {
@@ -124,6 +243,34 @@ class _DetailAboutOfficerState extends State<DetailAboutOfficer> {
           child: Text('Fetch Records'),
         ),
       ),
+
+       Center(
+        child: ElevatedButton(
+          onPressed: 
+          (){
+            setState(() {
+              isAll == true ? isAll = false : isAll = true;
+            });
+    _fetch();
+          },
+      
+          child: Text('All Records'),
+        ),
+      ),
+
+       Center(
+        child: ElevatedButton(
+          onPressed: 
+          (){
+            setState(() {
+            
+            });
+
+          },
+      
+          child: Text('Fetch'),
+        ),
+      ),
                   ],
                 ):
                 Container()
@@ -151,7 +298,7 @@ class _DetailAboutOfficerState extends State<DetailAboutOfficer> {
                            FirebaseFirestore.instance
                               .collection('reviews')
                               .where("officerName",isEqualTo: widget.name)
-                              .where("name",isEqualTo:userController.selectedValueForReview)
+                              .where("name",whereIn: myList)
                               .where("sendApprovalDateTime",isGreaterThanOrEqualTo:selectedStartDate ).where("sendApprovalDateTime",isLessThan: selectedEndDate)
                               .snapshots()
                               :
@@ -191,7 +338,9 @@ class _DetailAboutOfficerState extends State<DetailAboutOfficer> {
                 var customerName = documents[index]["customerName"];
                  var sendApprovalDateTime = documents[index]["sendApprovalDateTime"];
                                         // var token = documents[index]["token"];
-                              
+                            
+                             DateTime dateTime = sendApprovalDateTime.toDate();
+                             // Replace with your Firestore timestamp
                  return   
                    Padding(
                       padding: const EdgeInsets.all(4.0),
@@ -209,7 +358,7 @@ class _DetailAboutOfficerState extends State<DetailAboutOfficer> {
                         
                               title: Text("${officerName} ---  choose  ${name}   " ), 
                              
-                            //  subtitle:Text(" " ), 
+                             subtitle:Text(dateTime.toString() ), 
                             ),
                                         
                        
