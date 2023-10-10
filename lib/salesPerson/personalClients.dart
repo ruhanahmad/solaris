@@ -148,12 +148,10 @@ EasyLoading.dismiss();
                        var cusName = documents[index]['CustomerName'];
                 var customerCity = documents[index]['CustomerCity'];
                   var customerPhone = documents[index]['CustomerPhone'];
-                                var description = documents[index]["Description"];
-                                        var userId = documents[index]["userid"];
+                               
                                         var PickBy = documents[index]["PickBy"];
                                         var referedBy = documents[index]["referedBy"];
-                                        var customerId = documents[index]["customerId"];
-                                        var sendForApproval = documents[index]["sendForApproval"];
+                                      
                                         // var token = documents[index]["token"];
                               
                  return     Padding(
@@ -172,26 +170,26 @@ EasyLoading.dismiss();
                              
                               title: Text("This is Customer refered by ${referedBy}.Customer Name ${cusName}.Customer City ${customerCity}} .${PickBy == "" ?"NoOne":PickBy} pick that Customer " ), 
                               // trailing: PickBy == "" ? Text("Add to List",style: TextStyle(color: Colors.green),) :  null,
-                              subtitle:sendForApproval ==  false ? Text("Customer from ${ids} " ) :Text("This ${cusName}  send for approval to finance"),
+                              // subtitle:sendForApproval ==  false ? Text("Customer from ${ids} " ) :Text("This ${cusName}  send for approval to finance"),
                             ),
                                         
                        
-                                sendForApproval == false ?
-                                   ElevatedButton(
-                        onPressed: () async{
-                  // sendNotification();
-                  // await alerts(customerId,cusName,ids);
-                   await  await   salesPersonController.updateCustomer(ids);
-                  // await    validateAndSubmit(customerId,cusName,ids);
-    // await  salesPersonController.updateToken(ids,userController.userName!);
-                //  Get.to(()=>NotificationOpenedHandler()); 
-                          print('Button Pressed!');
-                        },
-                        child: Text('Sent For Approval'),
-                                        )
-                                        : 
+    //                             sendForApproval == false ?
+    //                                ElevatedButton(
+    //                     onPressed: () async{
+    //               // sendNotification();
+    //               // await alerts(customerId,cusName,ids);
+    //                await  await   salesPersonController.updateCustomer(ids);
+    //               // await    validateAndSubmit(customerId,cusName,ids);
+    // // await  salesPersonController.updateToken(ids,userController.userName!);
+    //             //  Get.to(()=>NotificationOpenedHandler()); 
+    //                       print('Button Pressed!');
+    //                     },
+    //                     child: Text('Sent For Approval'),
+    //                                     )
+    //                                     : 
                                        
-     Text("Sent to finance Department"),
+    //  Text("Sent to finance Department"),
 
     //                                                            ElevatedButton(
     //                     onPressed: () async{

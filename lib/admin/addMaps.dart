@@ -59,8 +59,8 @@ AuthenticationService auths = Get.put(AuthenticationService());
            
                
                 "name":_textEditingController.text,
-                "XAxis":double.parse(_textEditingControllerXAxis.text),
-                "YAxis":double.parse(_textEditingControllerYAxis.text),
+                "Location Link":_textEditingControllerXAxis.text,
+           
                  
 
                 
@@ -92,7 +92,7 @@ Future<void> _deleteDocument(String documentId) async {
     Future<void>? alerts(){
     showDialog(context: context, builder: (context){
       return     AlertDialog(
-        content: new
+        content: 
         Column(
           mainAxisSize: MainAxisSize.min,
           children: <Widget>[
@@ -108,17 +108,19 @@ Future<void> _deleteDocument(String documentId) async {
              TextFormField(
               controller: _textEditingControllerXAxis,
               decoration: InputDecoration(
-                labelText: 'X-axis Coordinates',
+                labelText: 'Past Location Link',
                 errorText: _isErrorVisible ? 'Text cannot be empty' : null,
               ),
+              //  onLongPress: () {
+              //   final clipboardData = Clipboard.getData(Clipboard.kTextPlain);
+              //   clipboardData.then((value) {
+              //     if (value != null) {
+              //       _textEditingController.text = value.text!;
+              //     }
+              //   });
+              // },
             ),
-            TextFormField(
-              controller: _textEditingControllerYAxis,
-              decoration: InputDecoration(
-                labelText: 'Y- axis Coordinates',
-                errorText: _isErrorVisible ? 'Text cannot be empty' : null,
-              ),
-            ),
+           
             SizedBox(height: 16.0),
             ElevatedButton(
               onPressed: _validateAndSubmit,

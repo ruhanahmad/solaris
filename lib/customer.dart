@@ -114,6 +114,7 @@ class _MyNavigationBarState extends State<MyNavigationBar > {
       //   title: const Text('Flutter BottomNavigationBar Example'),  
       //     backgroundColor: Colors.green  
       // ),  
+      
       body: Center(  
         child: _widgetOptions.elementAt(_selectedIndex),  
       ),  
@@ -125,9 +126,6 @@ class _MyNavigationBarState extends State<MyNavigationBar > {
             icon: Icon(Icons.link),  
             label: "Links",  
             backgroundColor: Colors.white  ,
-           
-           
-
           ),  
           BottomNavigationBarItem(  
             icon: Icon(Icons.comment),  

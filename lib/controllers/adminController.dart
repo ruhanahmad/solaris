@@ -98,7 +98,7 @@ final output = await File('${appDocumentsDir.path}/$num.pdf').create();
   // Store the download URL in Firestore
   final firestore = FirebaseFirestore.instance;
   await firestore.collection('users').doc(userId).collection("netMeteringProcedure").doc(docId).update({
-    'pdfUrl': downloadURL,"sentForApproval":true,"approved":true,"sentToFinanceDateTime":DateTime.now(),"adminName":userController.userName
+    'pdfUrl': downloadURL,"sentForApproval":true,"approved":true,"sentToFinanceDateTime":DateTime.now(),"adminName":userController.userName,"finishedDateTime":DateTime.now()
   });
   await firestore.collection('users').doc(userId).update({
     "Step":FieldValue.increment(1)
@@ -138,8 +138,8 @@ Future updateApproval(String id,String netId,String docname) async{
 try{
 
  final usersRef = await FirebaseFirestore.instance.collection('users');
- await usersRef.doc(id).collection("netMeteringProcedure").doc(netId).update({'approved':true,'sentForApproval':true,'approvedDateTime':DateTime.now(),"adminName":userController.userName});
- docname == "Net Metering Procedure Finished" ? await usersRef.doc(id).update({'inProcess':"Finished",}):await usersRef.doc(id).update({'inProcess':"inProcess",});
+ await usersRef.doc(id).collection("netMeteringProcedure").doc(netId).update({'approved':true,'sentForApproval':true,'approvedDateTime':DateTime.now(),"adminName":userController.userName,"finishedDateTime":DateTime.now()});
+ docname == "Finished" ? await usersRef.doc(id).update({'inProcess':"Finished","finishedDateTime":DateTime.now()}):await usersRef.doc(id).update({'inProcess':"inProcess",});
 
  usersRef.doc(id).update({"Step":FieldValue.increment(1)});
   }catch(e){

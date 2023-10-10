@@ -10,6 +10,7 @@ import 'package:solaris/controllerRef.dart';
 import 'package:solaris/electrician/electricianDoComplaints.dart';
 import 'package:solaris/electrician/receivedComplaints.dart';
 import 'package:solaris/links.dart';
+import 'package:solaris/salesPerson/referCustomer.dart';
 import 'package:solaris/screens/aboutus.dart';
 import 'package:solaris/screens/complaint.dart';
 import 'package:solaris/screens/profile.dart';
@@ -42,10 +43,11 @@ class _AdminHomeScreenState extends State<AdminHomeScreen > {
   StepsAndMaps(),
   NetMeteringCustomers(),
    AboutUsScreen(),
- Profile(),
+ ReferCustomer(),
    NetMeteringOfficersReviews(),
    netMeteringTabs(),
    FilesPending(),
+   Profile(),
 
   ];  
   
@@ -92,11 +94,11 @@ class _AdminHomeScreenState extends State<AdminHomeScreen > {
              label: "About us",   
             backgroundColor: Colors.white,  
           ),
-                     BottomNavigationBarItem(  
+           BottomNavigationBarItem(  
             icon: Icon(Icons.verified_user),  
-             label: "Logout",   
+             label: "Refer",   
             backgroundColor: Colors.white,  
-          ),   
+          ),           
            BottomNavigationBarItem(  
             icon: Icon(Icons.verified_user),  
              label: "Approval",   
@@ -112,7 +114,11 @@ class _AdminHomeScreenState extends State<AdminHomeScreen > {
              label: "Record",   
             backgroundColor: Colors.white,  
           ),  
- 
+    BottomNavigationBarItem(  
+            icon: Icon(Icons.verified_user),  
+             label: "Logout",   
+            backgroundColor: Colors.white,  
+          ),   
         ],  
         // type: BottomNavigationBarType.shifting,  
         currentIndex: _selectedIndex,  

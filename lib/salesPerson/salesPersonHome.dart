@@ -5,6 +5,7 @@ import 'package:solaris/controllerRef.dart';
 import 'package:solaris/electrician/electricianDoComplaints.dart';
 import 'package:solaris/electrician/receivedComplaints.dart';
 import 'package:solaris/links.dart';
+import 'package:solaris/salesPerson/referCustomer.dart';
 import 'package:solaris/salesPerson/referalClients.dart';
 import 'package:solaris/salesPerson/referalScreen.dart';
 import 'package:solaris/salesPerson/tabbarss.dart';
@@ -38,6 +39,7 @@ class _SalesPersonState extends State<SalesPerson > {
 
    Links(),
   ReferalScreen(),
+  ReferCustomer(),
 tabbs(),
 netMeteringTabs(),
    AboutUsScreen(),
@@ -75,6 +77,12 @@ netMeteringTabs(),
           BottomNavigationBarItem(  
             icon: Icon(Icons.comment),  
          label: "Customer",  
+            backgroundColor: Colors.white, 
+          ),  
+
+           BottomNavigationBarItem(  
+            icon: Icon(Icons.comment),  
+         label: "Refer",  
             backgroundColor: Colors.white, 
           ),  
           BottomNavigationBarItem(  

@@ -23,17 +23,25 @@ class _AddStepsState extends State<AddSteps> {
   
 AuthenticationService auths = Get.put(AuthenticationService());
   TextEditingController _textEditingController = TextEditingController();
+   TextEditingController _textEditingControllerOne = TextEditingController();
   bool _isErrorVisible = false;
 
   @override
   void dispose() {
     _textEditingController.dispose();
+    _textEditingControllerOne.dispose();
     super.dispose();
   }
+
+
+
+
+
 
   void _validateAndSubmit() {
     setState(() {
       _isErrorVisible = _textEditingController.text.isEmpty;
+      _isErrorVisible = _textEditingControllerOne.text.isEmpty;
     });
 
     if (!_isErrorVisible) {
@@ -44,13 +52,14 @@ AuthenticationService auths = Get.put(AuthenticationService());
            
                
                 "name":_textEditingController.text,
-                
+                "id":_textEditingControllerOne.text,
 
                 
                
 
            });
            EasyLoading.dismiss();
+           Navigator.pop(context);
      }catch(e){
 EasyLoading.dismiss();
 
@@ -71,26 +80,53 @@ Future<void> _deleteDocument(String documentId) async {
       print('Error deleting document: $error');
     }
   }
+
+
+  Future<void> _Update(String documentId) async {
+    try {
+      await FirebaseFirestore.instance
+          .collection('netMeteringSteps')
+          .doc(documentId).update({"id":_textEditingControllerOne.text,"name":_textEditingController.text,});
+      print('Document deleted successfully');
+    } catch (error) {
+      print('Error deleting document: $error');
+    }
+  }
   
     Future<void>? alerts(){
     showDialog(context: context, builder: (context){
       return     AlertDialog(
-        content: new
+        content: 
         Column(
           mainAxisSize: MainAxisSize.min,
           children: <Widget>[
           Text("Add NetMetering Steps"),
             SizedBox(height: 20,),
             TextFormField(
-              controller: _textEditingController,
+              controller: _textEditingControllerOne,
+            keyboardType: TextInputType.number,
               decoration: InputDecoration(
-                labelText: 'Enter some text',
+                
+                labelText: 'Enter Step Id',
                 errorText: _isErrorVisible ? 'Text cannot be empty' : null,
               ),
             ),
             SizedBox(height: 16.0),
+              TextFormField(
+              controller: _textEditingController,
+              decoration: InputDecoration(
+                labelText: 'Enter Step Name',
+                errorText: _isErrorVisible ? 'Text cannot be empty' : null,
+              ),
+            ),
+             SizedBox(height: 16.0),
             ElevatedButton(
-              onPressed: _validateAndSubmit,
+              onPressed:() 
+              {
+ _validateAndSubmit();
+              },
+              
+          
               child: Text('Submit'),
             ),
       
@@ -100,6 +136,54 @@ Future<void> _deleteDocument(String documentId) async {
     });
   }
 
+
+
+
+
+    Future<void>? alertsonly(String id,String name ,String ud){
+      _textEditingController.text = name;
+      _textEditingControllerOne.text = ud;
+    showDialog(context: context, builder: (context){
+      return     AlertDialog(
+        content: 
+        Column(
+          mainAxisSize: MainAxisSize.min,
+          children: <Widget>[
+          Text("Add NetMetering Steps"),
+            SizedBox(height: 20,),
+            TextFormField(
+              controller: _textEditingControllerOne,
+            keyboardType: TextInputType.number,
+              decoration: InputDecoration(
+                
+                labelText: 'Enter Step Id',
+                errorText: _isErrorVisible ? 'Text cannot be empty' : null,
+              ),
+            ),
+            SizedBox(height: 16.0),
+              TextFormField(
+              controller: _textEditingController,
+              decoration: InputDecoration(
+                labelText: 'Enter Step Name',
+                errorText: _isErrorVisible ? 'Text cannot be empty' : null,
+              ),
+            ),
+             SizedBox(height: 16.0),
+            ElevatedButton(
+              onPressed:() 
+              {
+  _Update(id);
+              },
+              
+          
+              child: Text('Submit'),
+            ),
+      
+          ],
+        ),
+      );
+    });
+  }
 
 
 
@@ -156,8 +240,9 @@ Future<void> _deleteDocument(String documentId) async {
                    ListView.builder(
                     itemCount: snapshot.data!.docs.length,
                     itemBuilder: (context,index){
-                        var ids = documents.first.id;
+                        var ids = documents[index].id;
                        var name = documents[index]['name'];
+                       var ud = documents[index]["id"];
                
                                        
                               
@@ -168,28 +253,41 @@ Future<void> _deleteDocument(String documentId) async {
                      borderRadius: BorderRadius.circular(10),
                      color: Colors.green.withOpacity(0.2),
                    ),
-                        child: Column(
+                        child: 
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-             
-                         
-                         
-                            ListTile(
-                              
-                              title: Text("${name} " ), 
-                            trailing: IconButton(
+                            Row(
+                              children: [
+                                Text("${ud}"),
+                                SizedBox(width: 20,),
+                                  Text("${name} " ),
+                              ],
+                            ),
+                           
+                             Row(
+                               children: [
+                                 IconButton(
                     icon: Icon(Icons.delete),
                     onPressed: () {
                       _deleteDocument(ids);
                     },
                   ),
-                            ),
-                                        
-                       
-                                     
-                                        
-                                        
-                          ],
+                  IconButton(
+                    icon: Icon(Icons.edit),
+                    onPressed: () {
+                      alertsonly(ids,name,ud);
+                    },
+                  ),
+                               ],
+                             ),
+                          
+
+                        ],
+                        
+                        
                         ),
+                        
                       ),
                     );
                     }),

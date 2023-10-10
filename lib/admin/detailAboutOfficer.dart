@@ -22,6 +22,61 @@ DetailAboutOfficer({required this.name,required this.ids});
 }
 
 class _DetailAboutOfficerState extends State<DetailAboutOfficer> {
+
+  Stream<QuerySnapshot>? _recordsStream;
+
+  void _fetchRecords() {
+    setState(() {
+      // Set up a Firestore query to fetch records from your collection
+      _recordsStream = FirebaseFirestore.instance.collection('netMeteringSteps').snapshots();
+    });
+
+    showModalBottomSheet(
+            context: context,
+            builder: (context) {
+
+              return 
+              //RecordListBottomSheet(recordsStream: _recordsStream);
+              Container(
+      padding: EdgeInsets.all(16.0),
+      child: StreamBuilder<QuerySnapshot>(
+        stream: _recordsStream,
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return CircularProgressIndicator();
+          } else if (snapshot.hasError) {
+            return Text('Error: ${snapshot.error}');
+          } else if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
+            return Text('No records available.');
+          } else {
+            return ListView.builder(
+              itemCount: snapshot.data!.docs.length,
+              itemBuilder: (context, index) {
+                final document = snapshot.data!.docs[index];
+                final data = document.data() as Map<String, dynamic>;
+
+                // Display your record data in ListTile or other widgets as needed
+                return ListTile(
+                  title: Text(data['name']), // Replace with your data fields
+                  onTap: () {
+                    // Store the selected value in a variable here
+                     userController.selectedValueForReview = data['name'];
+                       userController.update();
+                    print(userController.selectedValueForReview);
+                    Navigator.of(context).pop(); // Close the bottom sheet
+                  },
+                );
+              },
+            );
+          }
+        },
+      ),
+    );
+            },
+          );
+     }
+
+     bool isEditing= false;
  
   @override
   Widget build(BuildContext context) {
@@ -36,6 +91,48 @@ class _DetailAboutOfficerState extends State<DetailAboutOfficer> {
       body: SingleChildScrollView(
         child: Column(
           children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                IconButton(
+      icon: Icon(Icons.filter_2_sharp),
+      onPressed: () {
+    setState(() {
+      isEditing == false ? isEditing =true:isEditing = false;
+      print(isEditing);
+    });
+      }
+    ),    
+    isEditing == true ?
+                Row(
+                  children: [
+                    IconButton(
+      icon: Icon(Icons.calendar_today),
+      onPressed: () => _selectStartDate(context),
+    ),
+    IconButton(
+      icon: Icon(Icons.calendar_today),
+      onPressed: () => _selectEndDate(context),
+    ),
+    Center(
+        child: ElevatedButton(
+          onPressed: 
+          (){
+    _fetchRecords();
+          },
+      
+          child: Text('Fetch Records'),
+        ),
+      ),
+                  ],
+                ):
+                Container()
+                ,
+
+     
+              ],
+            ),
+   
   SizedBox(height: halfHeight * 0.1),
                Text(
                 'Performance',
@@ -46,13 +143,25 @@ class _DetailAboutOfficerState extends State<DetailAboutOfficer> {
                 ),
               ),
               SizedBox(height: halfHeight * 0.1),
+//here to add all logic
 
   StreamBuilder<QuerySnapshot>(
                stream:  
+               isEditing == true?
                            FirebaseFirestore.instance
                               .collection('reviews')
                               .where("officerName",isEqualTo: widget.name)
-                              .snapshots(),
+                              .where("name",isEqualTo:userController.selectedValueForReview)
+                              .where("sendApprovalDateTime",isGreaterThanOrEqualTo:selectedStartDate ).where("sendApprovalDateTime",isLessThan: selectedEndDate)
+                              .snapshots()
+                              :
+                               FirebaseFirestore.instance
+                              .collection('reviews')
+                              .where("officerName",isEqualTo: widget.name)
+                             
+                              .snapshots()
+                              
+                              ,
                
                builder: (context, snapshot) {
                  if (!snapshot.hasData) {
@@ -100,26 +209,26 @@ class _DetailAboutOfficerState extends State<DetailAboutOfficer> {
                         
                               title: Text("${officerName} ---  choose  ${name}   " ), 
                              
-                              subtitle:Text(" " ), 
+                            //  subtitle:Text(" " ), 
                             ),
                                         
                        
-                                        ElevatedButton(
-                        onPressed: () async{
+          //                               ElevatedButton(
+          //               onPressed: () async{
                     
-           ;       
+          //  ;       
      
 
   
       
                         
-                        },
-                        child: 
+          //               },
+          //               child: 
                    
-                        Text('Approve')
+          //               Text('Approve')
                        
-                        ,
-                                        )
+          //               ,
+          //                               )
                                         
                                         
                           ],
@@ -144,4 +253,51 @@ class _DetailAboutOfficerState extends State<DetailAboutOfficer> {
       ),
     );
   }
+
+    DateTime selectedStartDate = DateTime.now();
+  DateTime selectedEndDate = DateTime.now();
+
+  Future<void> _selectStartDate(BuildContext context) async {
+    final DateTime? picked = await showDatePicker(
+      context: context,
+      initialDate: selectedStartDate,
+      firstDate: DateTime(2000),
+      lastDate: DateTime(2101),
+    );
+    if (picked != null && picked != selectedStartDate) {
+      setState(() {
+        selectedStartDate = picked;
+        print(selectedStartDate);
+      });
+    }
+  }
+
+  Future<void> _selectEndDate(BuildContext context) async {
+    final DateTime? picked = await showDatePicker(
+      context: context,
+      initialDate: selectedEndDate,
+      firstDate: DateTime(2000),
+      lastDate: DateTime(2101),
+    );
+    if (picked != null && picked != selectedEndDate) {
+      setState(() {
+        selectedEndDate = picked;
+      });
+    }
+  }
 }
+
+
+
+// class RecordListBottomSheet extends StatelessWidget {
+//   final Stream<QuerySnapshot>? recordsStream;
+
+//   RecordListBottomSheet({this.recordsStream});
+
+//   @override
+//   Widget build(BuildContext context) {
+//     return 
+    
+    
+//   }
+// }

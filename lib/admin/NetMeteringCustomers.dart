@@ -30,7 +30,7 @@ Future<void>? _showAlertDialog(BuildContext context,bool net,String name,String 
         title: Text("Net Metering Customers "),
         actions: [
     net == false ? 
-    new SizedBox(
+     SizedBox(
                                       width: 190.0,
                                       height: 40.0,
                                       child: ElevatedButton(
@@ -60,12 +60,13 @@ Future<void>? _showAlertDialog(BuildContext context,bool net,String name,String 
                         "noted":false,
                         "approvalDateTimeFinance":"",
                         "sentForApproval":true,
+                        "finishedDateTime":DateTime.now(),
                         });
                         }
                         catch(e){
                          Get.snackbar("Error", "Issue in updating ${e}");
                         }
-                                    
+                                    Navigator.pop(context);
                                         },
                                         child: Text(
                                           'Add to Net Metering',
@@ -158,13 +159,26 @@ Future<void>? _showAlertDialog(BuildContext context,bool net,String name,String 
                         onTap: () async{
                         await   _showAlertDialog(context,netMetering,name,userid);
                         },
-                        child: Container(
-                          height: 50,
-                           decoration: BoxDecoration(
-                                           borderRadius: BorderRadius.circular(10),
-                                           color: Colors.green.withOpacity(0.2),
-                                         ),
-                          child: Center(child: Text("Customer Name : ${name}",style: TextStyle(fontSize: 20), )),
+                        child: Column(
+                          children: [
+                            Container(
+                              height: 50,
+                               decoration: BoxDecoration(
+                                               borderRadius: BorderRadius.circular(10),
+                                               color: Colors.green.withOpacity(0.2),
+                                             ),
+                              child: Center(child: Column(
+                                children: [
+                                  Text("Customer Name : ${name}",style: TextStyle(fontSize: 20), ),
+                                  netMetering == false ?
+                            Text("") 
+                            :
+                            Text("Added")
+                                ],
+                              )),
+                            ),
+                            
+                          ],
                         ),
                       ),
                     );

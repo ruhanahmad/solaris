@@ -77,8 +77,7 @@ class _ReferalClientsState extends State<ReferalClients> {
                        var cusName = documents[index]['CustomerName'];
                 var customerCity = documents[index]['CustomerCity'];
                   var customerPhone = documents[index]['CustomerPhone'];
-                                var description = documents[index]["Description"];
-                                        var userId = documents[index]["userid"];
+                               
                                         var PickBy = documents[index]["PickBy"];
                                         var referedBy = documents[index]["referedBy"];
                                         // var token = documents[index]["token"];

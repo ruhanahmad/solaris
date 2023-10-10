@@ -108,8 +108,8 @@ userController.selectedName = "";
     });
   }
 
-  void compareAndShowBottomSheet(BuildContext context,String id) {
-    Stream<List<String>> firstStream = getFirstCollectionData();
+  void compareAndShowBottomSheet(BuildContext context,String id) async {
+    Stream<List<String>> firstStream = await getFirstCollectionData();
 
     firstStream.listen((firstNames) {
       // Replace 'documentId' with the ID of the document you want to retrieve from the second collection
@@ -132,29 +132,62 @@ userController.selectedName = "";
       });
     });
   }
+  List netones = ["Finished","Others"];
+  
 var selectedNetMeteringStep = "";
   void _showBottomSheet(BuildContext context, List<String> names) {
     showModalBottomSheet(
       context: context,
       builder: (BuildContext context) {
-        return Container(
-          height: 500,
-          child: Center(
-            child: ListView.builder(
-              itemCount: names.length,
-              itemBuilder: (context, index) {
-                return ListTile(
-                  title: Text(names[index]),
-                  onTap: () {
-                    setState(() {
-                 selectedNetMeteringStep   =   names[index];
-                 print(selectedNetMeteringStep);
-                    });
-                        Navigator.pop(context);
-                  },
-                );
-              },
-            ),
+        return SingleChildScrollView(
+          child: Column(
+            children: [
+              Container(
+                height: 100,
+                width:  MediaQuery.of(context).size.width,
+          child:
+ ListView.builder(
+                    itemCount: netones.length,
+                    itemBuilder: (context, index) {
+                      return 
+                      ListTile(
+                        title: Text(netones[index]),
+                        onTap: () {
+                          setState(() {
+                       selectedNetMeteringStep   =   netones[index];
+                       print(selectedNetMeteringStep);
+                    
+                          });
+                              Navigator.pop(context);
+                        },
+                      );
+                    },
+                  ),
+              ),
+              Container(
+                height: 500,
+                child: Center(
+                  child:
+                   ListView.builder(
+                    itemCount: names.length,
+                    itemBuilder: (context, index) {
+                      return 
+                      ListTile(
+                        title: Text(names[index]),
+                        onTap: () {
+                          setState(() {
+                       selectedNetMeteringStep   =   names[index];
+                       print(selectedNetMeteringStep);
+                       print(selectedNetMeteringStep);
+                          });
+                              Navigator.pop(context);
+                        },
+                      );
+                    },
+                  ),
+                ),
+              ),
+            ],
           ),
         );
       },
@@ -290,8 +323,10 @@ var selectedNetMeteringStep = "";
                 ),
   ElevatedButton(
                   onPressed: () {
+                    
                     // Open the bottom sheet passing the field data
                 controller.selectedName == ""? null:     _onButtonPressed(context,controller.selectedUserId);
+                 print(controller.selectedUserId);
                   },
                   child: Text('Net Metering Steps'),
                 ),
@@ -375,8 +410,15 @@ var selectedNetMeteringStep = "";
         
                 // Get.snackbar("Complaint", "Complaint already registered.")
                 // :
-                
+
+
+          if(selectedNetMeteringStep == "Others" && _descriptionController.text == "" ) {
+            Get.snackbar("Error", "You selected others,Write description");
+          }      
+          else {
  await  submitApproval();
+          }
+
  
                
 //  await NetMeteringOfficerController.prepaid(userid,fieldValue);

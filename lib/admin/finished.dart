@@ -17,7 +17,7 @@ class _FinishedState extends State<Finished> {
     StreamBuilder<QuerySnapshot>(
       stream: 
       FirebaseFirestore.instance.collection('users')
-        .where('netMetering', isEqualTo: true).where("inProcess",isEqualTo: "Finished")
+        .where('netMetering', isEqualTo: true).where("inProcess",isEqualTo: "Finished").orderBy("finishedDateTime",descending: true)
         .snapshots(),
       builder: (context, snapshot) {
         if (snapshot.hasData) {

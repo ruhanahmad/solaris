@@ -37,15 +37,15 @@ class _NetMeteringOfficersReviewsState extends State<NetMeteringOfficersReviews>
         child: Column(
           children: [
   SizedBox(height: halfHeight * 0.1),
-               Text(
-                'Approval Received',
-                style: TextStyle(
-                  color: Colors.green,
-                  fontSize: 24.0,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              SizedBox(height: halfHeight * 0.1),
+              //  Text(
+              //   'Approval Received',
+              //   style: TextStyle(
+              //     color: Colors.green,
+              //     fontSize: 24.0,
+              //     fontWeight: FontWeight.bold,
+              //   ),
+              // ),
+              // SizedBox(height: halfHeight * 0.1),
 
   StreamBuilder<QuerySnapshot>(
                stream:  

@@ -33,6 +33,16 @@ var token;
 var complaintName;
 var complaint;
 var reviews;
+
+
+
+
+var referalNameCustomer = "";
+var referalPhoneNumberCustomer = "";
+var referalCityCustomer = "";
+
+var selectedValueForReview= "";
+
  blue.FlutterBlue flutterBlue = blue.FlutterBlue.instance;
   List<blue.BluetoothDevice> devicesList = [];
 Future updateToken()async {

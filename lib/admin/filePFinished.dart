@@ -104,7 +104,7 @@ class _FilesPFinishedState extends State<FilesPFinished> {
                 stream: 
               FirebaseFirestore.instance
                               .collection('users').doc(userId).collection('netMeteringProcedure')
-                              .where("approved",isEqualTo: true).where("sentForApproval",isEqualTo: true)
+                              .where("approved",isEqualTo: true).where("sentForApproval",isEqualTo: true).orderBy("finishedDateTime",descending: true)
                               .snapshots(),
                 //   .where('payment', isNotEqualTo: 
                 // "").where("noted",isEqualTo: false)
