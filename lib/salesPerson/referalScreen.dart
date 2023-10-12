@@ -44,42 +44,42 @@ if( userController.referalName == "" || userController.referalCity  == "" || use
 else {
      EasyLoading.show();
 var scene  =   await userController.tenNumberGenerated();
-await   userController.createUserWithEmailAndPassword(userController.referalEmail,userController.referalName,userController.customerIdss,userController.referalCity,userController.referalPhoneNumber,userController.referalDescription,userController.googleLocation,selectedOption,context);
-      FirebaseFirestore.instance.collection('ReferalCustomers').add({
-         "userid":auths.useri,
-         "referedBy":userController.userName,
-        'CustomerName': userController.referalName,
-        'CustomerCity': userController.referalCity,
-        "CustomerPhone":userController.referalPhoneNumber,
-        "Description":userController.referalDescription,
-        "PickBy":"",
-        "customerId":userController.customerIdss,
-        "phoneNumber":userController.referalPhoneNumber,
-        "googleLocation":userController.googleLocation,
-        "email":userController.referalEmail,
-        "netMeteringRequired":selectedOption,
-        "sendForApproval":false,
-        "notedByFinance":false,
+await   userController.createUserWithEmailAndPassword(userController.referalEmail,userController.referalName,userController.customerIdss,userController.referalCity,userController.referalPhoneNumber,userController.referalDescription,userController.googleLocation,selectedOption,userController.address,context);
+      // FirebaseFirestore.instance.collection('ReferalCustomers').add({
+      //    "userid":auths.useri,
+      //    "referedBy":userController.userName,
+      //   'CustomerName': userController.referalName,
+      //   'CustomerCity': userController.referalCity,
+      //   "CustomerPhone":userController.referalPhoneNumber,
+      //   "Description":userController.referalDescription,
+      //   "PickBy":"",
+      //   "customerId":userController.customerIdss,
+      //   "phoneNumber":userController.referalPhoneNumber,
+      //   "googleLocation":userController.googleLocation,
+      //   "email":userController.referalEmail,
+      //   "netMeteringRequired":selectedOption,
+      //   "sendForApproval":false,
+      //   "notedByFinance":false,
         
-      }).then((_) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Customer Added successfully!')),
-        );
-         userController.referalCity = "";
-        userController.referalName = "";
-        userController.referalDescription ="";
-         userController.customerIdss = "";
-        userController.referalPhoneNumber = "";
-        userController.googleLocation = "";
-        userController.referalEmail = "";
-        selectedOption = "";
-         EasyLoading.dismiss();
-      }).catchError((error) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(' Please try again.')),
-        );
-          EasyLoading.dismiss();
-      });
+      // }).then((_) {
+      //   ScaffoldMessenger.of(context).showSnackBar(
+      //     SnackBar(content: Text('Customer Added successfully!')),
+      //   );
+      //    userController.referalCity = "";
+      //   userController.referalName = "";
+      //   userController.referalDescription ="";
+      //    userController.customerIdss = "";
+      //   userController.referalPhoneNumber = "";
+      //   userController.googleLocation = "";
+      //   userController.referalEmail = "";
+      //   selectedOption = "";
+      //    EasyLoading.dismiss();
+      // }).catchError((error) {
+      //   ScaffoldMessenger.of(context).showSnackBar(
+      //     SnackBar(content: Text(' Please try again.')),
+      //   );
+      //     EasyLoading.dismiss();
+      // });
        EasyLoading.dismiss();
     // }
 }
@@ -204,6 +204,25 @@ await   userController.createUserWithEmailAndPassword(userController.referalEmai
                  filled: true,
                  fillColor: Colors.green.withOpacity(0.2),
                  hintText: "Google Location",
+                 hintStyle: TextStyle(color: Colors.green),
+                 border: OutlineInputBorder(
+                   borderRadius: BorderRadius.circular(8.0),
+                   borderSide: BorderSide.none,
+                 ),
+                 // prefixIcon: Icon(Icons.person, color: Colors.green),
+               ),
+               style: TextStyle(color: Colors.green),
+             ),
+               SizedBox(height: halfHeight * 0.03),
+                TextField(
+               onChanged: (value) {
+                 userController.address = value;
+               },
+               // controller: _nameController,
+               decoration: InputDecoration(
+                 filled: true,
+                 fillColor: Colors.green.withOpacity(0.2),
+                 hintText: "address",
                  hintStyle: TextStyle(color: Colors.green),
                  border: OutlineInputBorder(
                    borderRadius: BorderRadius.circular(8.0),

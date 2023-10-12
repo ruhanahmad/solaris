@@ -15,13 +15,13 @@ import 'package:image_picker/image_picker.dart';
 import 'package:solaris/screens/test.dart';
 import '../models/user_model.dart';
 
-class NetMeteringOfficersReviews extends StatefulWidget {
+class ReviewsDead extends StatefulWidget {
    
   @override
-  State<NetMeteringOfficersReviews> createState() => _NetMeteringOfficersReviewsState();
+  State<ReviewsDead> createState() => _ReviewsDeadState();
 }
 
-class _NetMeteringOfficersReviewsState extends State<NetMeteringOfficersReviews> {
+class _ReviewsDeadState extends State<ReviewsDead> {
  
   @override
   Widget build(BuildContext context) {
@@ -51,7 +51,7 @@ class _NetMeteringOfficersReviewsState extends State<NetMeteringOfficersReviews>
                stream:  
                            FirebaseFirestore.instance
                               .collection('users')
-                              .where("role",isEqualTo: "netMeteringOfficer").where("deceased",isEqualTo: "no")
+                              .where("role",isEqualTo: "netMeteringOfficer").where("deceased",isEqualTo: "yes")
                               .snapshots(),
                
                builder: (context, snapshot) {

@@ -149,6 +149,9 @@ Future<void>? _showAlertDialog(BuildContext context,bool net,String name,String 
                        var netMetering = documents[index]['netMetering'];
                        var userid = documents[index]['id'];
                        var token = documents[index]["token"];
+
+                         var inProcess = documents[index]["inProcess"];
+                       
                       //  adminController.id = documents[index]['id'];
                       //  adminController.update();
                
@@ -164,14 +167,19 @@ Future<void>? _showAlertDialog(BuildContext context,bool net,String name,String 
                         child: Column(
                           children: [
                             Container(
-                              height: 50,
+                              height: 70,
                                decoration: BoxDecoration(
                                                borderRadius: BorderRadius.circular(10),
                                                color: Colors.green.withOpacity(0.2),
                                              ),
                               child: Center(child: Column(
                                 children: [
-                                  Text("Customer Name : ${name}",style: TextStyle(fontSize: 20), ),
+                                  Column(
+                                    children: [
+                                      Text("Customer Name : ${name}",style: TextStyle(fontSize: 20), ),
+                                      Text("${inProcess}")
+                                    ],
+                                  ),
                                   netMetering == false ?
                             Text("") 
                             :

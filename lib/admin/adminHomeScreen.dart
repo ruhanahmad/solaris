@@ -5,6 +5,7 @@ import 'package:solaris/admin/NetMeteringCustomers.dart';
 import 'package:solaris/admin/addSteps.dart';
 import 'package:solaris/admin/netMeteringOfficersReviews.dart';
 import 'package:solaris/admin/netMeteringtabs.dart';
+import 'package:solaris/admin/reviewsTabbar.dart';
 import 'package:solaris/admin/stepsAndMaps.dart';
 import 'package:solaris/controllerRef.dart';
 import 'package:solaris/electrician/electricianDoComplaints.dart';
@@ -44,7 +45,7 @@ class _AdminHomeScreenState extends State<AdminHomeScreen > {
   NetMeteringCustomers(),
    AboutUsScreen(),
  ReferCustomer(),
-   NetMeteringOfficersReviews(),
+   reviewsTabbar(),
    netMeteringTabs(),
    FilesPending(),
    Profile(),

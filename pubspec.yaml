@@ -59,6 +59,8 @@ dependencies:
   flutter_blue: 
   auto_size_text:
   intl:
+  record_mp3: ^3.0.0
+  audioplayers:
 
 
   # The following adds the Cupertino Icons font to your application.

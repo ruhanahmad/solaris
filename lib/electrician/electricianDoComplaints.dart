@@ -1,10 +1,14 @@
 import 'dart:io';
 
+import 'package:audioplayers/audioplayers.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:permission_handler/permission_handler.dart';
+import 'package:record_mp3/record_mp3.dart';
 import 'package:solaris/controllerRef.dart';
 import 'package:solaris/models/authentication_service.dart';
 import 'package:image_picker/image_picker.dart';
@@ -20,7 +24,65 @@ class _ComplaintScreenElectricianState extends State<ComplaintScreenElectrician>
   final TextEditingController _complaintController = TextEditingController();
   
 AuthenticationService auths = Get.put(AuthenticationService());
+ bool isSending = false;
+bool?  isPlayingMsg ;
 
+    Future<bool> checkPermissionSound() async {
+    if (!await Permission.microphone.isGranted) {
+      PermissionStatus status = await Permission.microphone.request();
+      if (status != PermissionStatus.granted) {
+        return false;
+      }
+    }
+    return true;
+  }
+ int i = 0;
+  Future<String> getFilePath() async {
+    Directory storageDirectory = await getApplicationDocumentsDirectory();
+    String sdPath = storageDirectory.path + "/record";
+    var d = Directory(sdPath);
+    if (!d.existsSync()) {
+      d.createSync(recursive: true);
+    }
+    return sdPath + "/test_${i++}.mp3";
+  }
+  String recordFilePath="";
+  void startRecord() async {
+    bool hasPermission = await checkPermissionSound();
+    if (hasPermission) {
+      print("yes");
+      recordFilePath = await getFilePath();
+
+      RecordMp3.instance.start(recordFilePath, (type) {
+        setState(() {});
+      });
+    } else {}
+    setState(() {});
+  }
+
+
+  void stopRecord() async {
+    bool s = RecordMp3.instance.stop();
+    if (s) {
+      setState(() {
+        isSending = true;
+      });
+      // await uploadAudio();
+
+      setState(() {
+        isPlayingMsg = false;
+      });
+    }
+  }
+
+ void play()async {
+    if (recordFilePath != null && File(recordFilePath).existsSync()) {
+      AudioPlayer audioPlayer = AudioPlayer();
+      await audioPlayer.play(UrlSource(recordFilePath));
+      
+    }
+  }
+  
   
     Future<void>? alerts(){
     showDialog(context: context, builder: (context){
@@ -330,7 +392,84 @@ AuthenticationService auths = Get.put(AuthenticationService());
                           ],
               
               SizedBox(height: 24.0),
+GestureDetector(
+            behavior: HitTestBehavior.opaque,
+            onTap: () {
+              play();
+            },
+            child: Container(
+              margin: EdgeInsets.only(top: 30),
+              alignment: AlignmentDirectional.center,
+              width: 100,
+              height: 50,
+              child:  recordFilePath != null
+                  ? Text(
+                      "play",
+                      style: TextStyle(color: Colors.red, fontSize: 20),
+                    )
+                  : Container(),
+            ),
+          ),
+   
+ Row(
+  mainAxisAlignment: MainAxisAlignment.spaceAround,
+   children: [
+     SizedBox(
+                    width: 100,
+                    height: 48.0,
+                    child: ElevatedButton(
+                      onPressed: () async{
 
+                          setState(() {
+                        isPlayingMsg = true;
+                    });
+startRecord();
+                      },
+                      child: Text(
+                        'Record',
+                        style: TextStyle(fontSize: 16.0),
+                      ),
+                      style: ButtonStyle(
+                        backgroundColor: MaterialStateProperty.all<Color>(Colors.green),
+                        shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                          RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(24.0),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                  SizedBox(
+                width: 100,
+                height: 48.0,
+                child: ElevatedButton(
+                  onPressed: () async{
+
+                      setState(() {
+                    isPlayingMsg = false;
+                });
+stopRecord();
+                  },
+                  child: Text(
+                    'Stop',
+                    style: TextStyle(fontSize: 16.0),
+                  ),
+                  style: ButtonStyle(
+                    backgroundColor: MaterialStateProperty.all<Color>(Colors.green),
+                    shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                      RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(24.0),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+   ],
+ ),
+SizedBox(height: 10,),
+isPlayingMsg == true ? Text("Recording Start") :Text("Recording End"),
+
+ 
 
 
         _selectedValue != "" ?
@@ -343,7 +482,7 @@ AuthenticationService auths = Get.put(AuthenticationService());
               scene ==  true ?
 
               Get.snackbar("Complaint", "Complaint already registered."):
-                                  await       userController.uploadFilesPassport(_imageFile,context);
+                                  await       userController.uploadFilesPassport(_imageFile,context,recordFilePath);
                   },
                   child: Text(
                     'Submit Complaint',
