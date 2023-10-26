@@ -5,6 +5,7 @@ import 'package:solaris/controllerRef.dart';
 import 'package:solaris/models/auth.dart';
 import 'package:solaris/models/authentication_service.dart';
 import 'package:solaris/screens/tests.dart';
+import 'package:solaris/test.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 
@@ -32,7 +33,7 @@ class Profile extends StatelessWidget {
                       onPressed: ()async {
                         
                        await auths.signOut().then((value) => Get.to(()=> AuthPage()));
-                      
+                   //   Get.to(()=> AudioPlayerScreen());
                         
                         },
                       child: Text("Logout"),

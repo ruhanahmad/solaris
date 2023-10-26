@@ -10,6 +10,7 @@ import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:record_mp3/record_mp3.dart';
 import 'package:solaris/controllerRef.dart';
+import 'package:solaris/controllers/audioController.dart';
 import 'package:solaris/models/authentication_service.dart';
 import 'package:image_picker/image_picker.dart';
 import '../models/user_model.dart';
@@ -22,6 +23,7 @@ class ComplaintScreenSiteEngineer extends StatefulWidget {
 class _ComplaintScreenSiteEngineerState extends State<ComplaintScreenSiteEngineer> {
  final TextEditingController _nameController = TextEditingController();
   final TextEditingController _complaintController = TextEditingController();
+  AudioController audioController = Get.put(AudioController());
   
 AuthenticationService auths = Get.put(AuthenticationService());
  bool isSending = false;
@@ -59,6 +61,7 @@ bool?  isPlayingMsg ;
     } else {}
     setState(() {});
   }
+
 
 
   void stopRecord() async {
@@ -197,6 +200,54 @@ bool?  isPlayingMsg ;
 
 
   var selectedValues;
+
+
+
+  List vargya = ["Wifi","Breakers","Solar Panels","Battery","Solar Structure","Others"];
+
+  String selectedValuess = "";
+   void openBottomSheetss(BuildContext context) {
+    showModalBottomSheet(
+      context: context,
+      builder: (context) {
+        return
+    
+            ListView.builder(
+              itemCount: vargya.length,
+              itemBuilder: (context, index) {
+          
+                return ListTile(
+                  title: Text(vargya[index]),
+                  onTap: () {
+                    
+                  setState(() {
+             audioController.selectedValue = vargya[index]; 
+             audioController.update();
+                 print(vargya[index]);       
+                  });
+                     
+           
+                
+
+
+                    Navigator.pop(context);
+                  },
+                );
+                
+              },
+            );
+      
+      },
+    );
+   }
+
+
+
+
+
+
+
+
   @override
   Widget build(BuildContext context) {
     final mediaQuery = MediaQuery.of(context);
@@ -207,7 +258,11 @@ bool?  isPlayingMsg ;
         title: Text('Complaint'),
         automaticallyImplyLeading: false,
       ),
-      body: SingleChildScrollView(
+      body: 
+      
+     
+      
+      SingleChildScrollView(
         child: Column(
           children: [
   SizedBox(height: halfHeight * 0.1),
@@ -220,23 +275,32 @@ bool?  isPlayingMsg ;
                 ),
               ),
               SizedBox(height: halfHeight * 0.1),
-            StreamBuilder<QuerySnapshot>(
-               stream:  FirebaseFirestore.instance
-        .collection('users')
-        .where('role', isEqualTo:"customer" )
-        .snapshots(),
+        //     StreamBuilder<QuerySnapshot>(
+        //        stream:  FirebaseFirestore.instance
+        // .collection('users')
+        // .where('role', isEqualTo:"customer" )
+        // .snapshots(),
                
-               builder: (context, snapshot) {
-                 if (!snapshot.hasData) {
-                   return CircularProgressIndicator();
-                 }
+        //        builder: (context, snapshot) {
+        //          if (!snapshot.hasData) {
+        //            return CircularProgressIndicator();
+        //          }
       
-                 List<DocumentSnapshot> documents = snapshot.data!.docs;
+        //          List<DocumentSnapshot> documents = snapshot.data!.docs;
       
-                 List<String> names = documents.map((doc) => doc['name'] as String ).toList() ;
-        String fieldData = documents.first['name'];
-                 return Column(
-                   children: [
+        //          List<String> names = documents.map((doc) => doc['name'] as String ).toList() ;
+        // String fieldData = documents.first['name'];
+                //  return Column(
+                //    children: [
+ ElevatedButton(
+                onPressed: () {
+                  // Open the bottom sheet passing the field data
+                  openBottomSheetss(context);
+                },
+                child: Text('Steps'),
+              ),
+
+
                    ElevatedButton(
                 onPressed: () {
                   // Open the bottom sheet passing the field data
@@ -244,7 +308,7 @@ bool?  isPlayingMsg ;
                 },
                 child: Text('Select Customer'),
               ),
-         _selectedValue == "" ?     Text("Customer Name :No Customer Selected"):Text("Customer Name ${_selectedValue}"),
+         _selectedValue == "" ?     Text("Customer Name :No Customer Selected"):Text("Customer Name ${_selectedValue}")
                     //  Container(
                     //    width: MediaQuery.of(context).size.width /4,
                     //    child: DropdownButton<String>(
@@ -279,14 +343,14 @@ bool?  isPlayingMsg ;
                     //      },
                     //    ),
                     //  ),
-                   ],
-                 );
-               },
-             ),
+                //    ],
+                //  );
+            //    },
+            //  ),
 
 
 
-             
+    ,         
     Container(
           height: mediaQuery.size.height,
           padding: const EdgeInsets.all(16.0),
@@ -328,6 +392,9 @@ bool?  isPlayingMsg ;
               //   style: TextStyle(color: Colors.green),
               // ),
               // SizedBox(height: 16.0),
+              
+             audioController.selectedValue == "Others" ?
+
               TextField(
                   onChanged: (value) {
                   userController.complaint = value;
@@ -346,7 +413,10 @@ bool?  isPlayingMsg ;
                   prefixIcon: Icon(Icons.message, color: Colors.green),
                 ),
                 style: TextStyle(color: Colors.green),
-              ),
+              )
+              :
+              Container()
+              ,
                   SizedBox(height: 24.0),
                    Center(child: GestureDetector(
                 onTap: ()async{

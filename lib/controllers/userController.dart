@@ -15,6 +15,7 @@ import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:onesignal_flutter/onesignal_flutter.dart';
 import 'package:solaris/controllerRef.dart';
+import 'package:solaris/controllers/audioController.dart';
 import 'package:solaris/main.dart';
 import 'package:flutter/material.dart';
 
@@ -22,6 +23,9 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:flutter_blue/flutter_blue.dart' as blue;
 class UserController extends GetxController {
+
+
+AudioController audioController = Get.put(AudioController());
 var referalName = "";
 var referalPhoneNumber = "";
 var address;
@@ -311,6 +315,17 @@ EasyLoading.dismiss();
       String selectedUserId = "";
  String? selectedName;
  String? selectedCustomerId;
+
+
+   
+   
+   
+
+
+
+
+
+
      Future<UploadTask?> uploadFilesPassport(XFile? files,context,String recordFilePath)async {
    String strVal = "";
 
@@ -318,7 +333,8 @@ EasyLoading.dismiss();
     final Reference firebaseStorageRef = storage
         .ref()
         .child(
-            'profileaudios/audio${DateTime.now().millisecondsSinceEpoch.toString()}}.jpg');
+           'profilepics/audio${DateTime.now().millisecondsSinceEpoch.toString()}');
+
 
    UploadTask task = firebaseStorageRef.putFile(File(recordFilePath));
     // task.onComplete.then((value) async {
@@ -344,7 +360,7 @@ EasyLoading.dismiss();
       FirebaseFirestore.instance.collection("complaint").add({
              "userid":role == "customer" ?auths.useri : selectedUserId,
         'customerName':role == "customer" ? userName: selectedName,
-        'complaint': complaint,
+        'complaint': audioController.selectedValue == "Others" ? complaint:  audioController.selectedValue,
                
                 "complaintImage":"",
                 "role":role,
@@ -473,7 +489,7 @@ final auth.FirebaseAuth _firebaseAuth = auth.FirebaseAuth.instance;
       "netMetering":false,
       "FirstStepDateTime":DateTime.now(),
       "Step":0,
-      "inProcess":"null",
+      "inProcess":"notStarted",
       "address":address,
       "nonPaymentCounter":0,
       "paymentCounter":0

@@ -125,6 +125,8 @@ class _AdminHomeScreenState extends State<AdminHomeScreen > {
         currentIndex: _selectedIndex,  
         selectedItemColor: Colors.black,  
         unselectedItemColor: Colors.grey,
+        showSelectedLabels: false,
+        showUnselectedLabels: false,
         
         iconSize: 40,  
         onTap: _onItemTapped,  

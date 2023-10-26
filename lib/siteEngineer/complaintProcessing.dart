@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:audioplayers/audioplayers.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -125,9 +126,15 @@ AuthenticationService auths = Get.put(AuthenticationService());
 //   }
   
    
+ AudioPlayer audioPlayer = AudioPlayer();
 
-
-
+ void play(String recordFilePath)async {
+ 
+      AudioPlayer audioPlayer = AudioPlayer();
+      await audioPlayer.play(UrlSource(recordFilePath));
+      
+    
+  }
 
   var selectedValues;
   @override
@@ -184,6 +191,7 @@ AuthenticationService auths = Get.put(AuthenticationService());
                                         var userId = documents[index]["userid"];
 
                                         var assignedTo = documents[index]["assignedTo"] ?? "";
+                                        var audio = documents[index]["audio"];
                                         // var token = documents[index]["token"];
                               
                  return     Padding(
@@ -211,6 +219,11 @@ AuthenticationService auths = Get.put(AuthenticationService());
                               ),
                               title: Text("Complaint received from ${cusName} " ), 
                               trailing:Text("${status}",style: TextStyle(color: Colors.green),) ,
+                              subtitle: ElevatedButton(onPressed: ()async{
+                               print("object");
+                               print(audio);
+                               audioPlayer.play(UrlSource(audio));
+                              }, child: Text("Play")),
 
                               onTap: () {
                                  Get.to(BigImageScreen  (imagePath: image,id:ids,name:complaintDescription,assignedTo: assignedTo,)); 

@@ -94,6 +94,40 @@ Future<void>? _showAlertDialog(BuildContext context,bool net,String name,String 
   );
 }
 
+late List<QueryDocumentSnapshot> _initialData;
+  List<QueryDocumentSnapshot> _filteredData = [];
+  String _searchQuery = '';
+
+  @override
+  void initState() {
+    super.initState();
+    fetchInitialData();
+  }
+    final TextEditingController _searchController = TextEditingController();
+
+  Future<void> fetchInitialData() async {
+    final snapshot = await 
+   // usersCollection.where('role', isEqualTo: 'customer').where("netMetering",isEqualTo: true).get();
+   FirebaseFirestore.instance.collection('users').where("role",isEqualTo: "customer").get();
+    setState(() {
+      _initialData = snapshot.docs;
+      _filteredData = _initialData;
+    });
+  }
+
+  @override
+  void dispose() {
+    _searchController.dispose();
+    super.dispose();
+  }
+List<QueryDocumentSnapshot> filterData(String searchQuery) {
+  return _initialData.where((document) {
+    final name = document['name'].toString().toLowerCase();
+    final id = document['customerId'].toString().toLowerCase(); // Assuming 'id' is the field for ID
+
+    return name.contains(searchQuery.toLowerCase()) || id.contains(searchQuery.toLowerCase());
+  }).toList();
+}
 
    
 
@@ -107,106 +141,181 @@ Future<void>? _showAlertDialog(BuildContext context,bool net,String name,String 
         title: Text('Net Metering Customers'),
         automaticallyImplyLeading: false,
       ),
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
+      body: Column(
+        children: [
   SizedBox(height: halfHeight * 0.1),
-              //  Text(
-              //   'NetMetering Steps',
-              //   style: TextStyle(
-              //     color: Colors.green,
-              //     fontSize: 24.0,
-              //     fontWeight: FontWeight.bold,
-              //   ),
-              // ),
-              SizedBox(height: halfHeight * 0.1),
+            //  Text(
+            //   'NetMetering Steps',
+            //   style: TextStyle(
+            //     color: Colors.green,
+            //     fontSize: 24.0,
+            //     fontWeight: FontWeight.bold,
+            //   ),
+            // ),
+            TextField(
+          controller: _searchController,
+          onChanged: (value) {
+            setState(() {
+              _searchQuery = value;
+              _filteredData = filterData(_searchQuery);
+            });
+          },
+          decoration: InputDecoration(
+            hintText: 'Search by name or id',
+          ),
+        ),
+        SizedBox(height: 16.0),
+            SizedBox(height: halfHeight * 0.1),
 
-  StreamBuilder<QuerySnapshot>(
-               stream:  
-                           FirebaseFirestore.instance
-                              .collection('users').where("role",isEqualTo: "customer").snapshots(),
-                             
-               
-               builder: (context, snapshot) {
-                 if (!snapshot.hasData) {
-                   return CircularProgressIndicator();
-                 }
-      
-                 final documents = snapshot.data!.docs;
-      
-               
-      
-                 return
-                 Container(
-                  height:MediaQuery.of(context).size.height -300,
-                  width: MediaQuery.of(context).size.width,
-                   child: 
-                   ListView.builder(
-                    itemCount: snapshot.data!.docs.length,
-                    itemBuilder: (context,index){
-                        var ids = documents.first.id;
-                       var name = documents[index]['name'];
-                       var netMetering = documents[index]['netMetering'];
-                       var userid = documents[index]['id'];
-                       var token = documents[index]["token"];
 
-                         var inProcess = documents[index]["inProcess"];
-                       
-                      //  adminController.id = documents[index]['id'];
-                      //  adminController.update();
-               
-                              // adminController.name = documents[index]['name'];  
-                              //   adminController.update();     
-                              
-                 return     Padding(
-                      padding: const EdgeInsets.all(4.0),
-                      child: GestureDetector(
-                        onTap: () async{
-                        await   _showAlertDialog(context,netMetering,name,userid);
-                        },
-                        child: Column(
-                          children: [
-                            Container(
-                              height: 70,
-                               decoration: BoxDecoration(
-                                               borderRadius: BorderRadius.circular(10),
-                                               color: Colors.green.withOpacity(0.2),
-                                             ),
-                              child: Center(child: Column(
-                                children: [
-                                  Column(
-                                    children: [
-                                      Text("Customer Name : ${name}",style: TextStyle(fontSize: 20), ),
-                                      Text("${inProcess}")
-                                    ],
-                                  ),
-                                  netMetering == false ?
-                            Text("") 
-                            :
-                            Text("Added")
-                                ],
-                              )),
-                            ),
-                            
-                          ],
-                        ),
-                      ),
-                    );
-                    }),
-                 );
+            Expanded(
+              child:
+               _filteredData.isEmpty
+              ? Text('No data available.')
+              :
               
-               },
-             ),
+               ListView.builder(
+               itemCount: _filteredData.length,
+               itemBuilder: (context,index){
+                  final document = _filteredData[index];
+                  //  var ids = documents.first.id;
+                  // var name = documents[index]['name'];
+                  // var netMetering = documents[index]['netMetering'];
+                  // var userid = documents[index]['id'];
+                  // var token = documents[index]["token"];
+            
+                  //   var inProcess = documents[index]["inProcess"];
+                  
+                 //  adminController.id = documents[index]['id'];
+                 //  adminController.update();
+               
+                         // adminController.name = documents[index]['name'];  
+                         //   adminController.update();     
+                         
+                 return     
+                 Padding(
+                 padding: const EdgeInsets.all(4.0),
+                 child: GestureDetector(
+                   onTap: () async{
+                   await   _showAlertDialog(context,document["netMetering"],document["name"],document["id"]);
+                   },
+                   child: Column(
+                     children: [
+                       Container(
+                         height: 70,
+                          decoration: BoxDecoration(
+                                          borderRadius: BorderRadius.circular(10),
+                                          color: Colors.green.withOpacity(0.2),
+                                        ),
+                         child: Center(child: Column(
+                           children: [
+                             Column(
+                               children: [
+                                 Text("Customer Name : ${document["name"]}",style: TextStyle(fontSize: 20), ),
+                                 Text("${document["inProcess"]}")
+                               ],
+                             ),
+                             document["netMetering"] == false ?
+                       Text("") 
+                       :
+                       Text("Added")
+                           ],
+                         )),
+                       ),
+                       
+                     ],
+                   ),
+                 ),
+               );
+               }),
+            ),
 
-
-
-
-
+  // StreamBuilder<QuerySnapshot>(
+  //              stream:  
+  //                          FirebaseFirestore.instance
+  //                             .collection('users').where("role",isEqualTo: "customer").snapshots(),
+                           
              
+  //              builder: (context, snapshot) {
+  //                if (!snapshot.hasData) {
+  //                  return CircularProgressIndicator();
+  //                }
+      
+  //                final documents = snapshot.data!.docs;
+      
+             
+      
+  //                return
+  //                Container(
+  //                 height:MediaQuery.of(context).size.height -300,
+  //                 width: MediaQuery.of(context).size.width,
+  //                  child: 
+  //                  ListView.builder(
+  //                   itemCount: snapshot.data!.docs.length,
+  //                   itemBuilder: (context,index){
+  //                       var ids = documents.first.id;
+  //                      var name = documents[index]['name'];
+  //                      var netMetering = documents[index]['netMetering'];
+  //                      var userid = documents[index]['id'];
+  //                      var token = documents[index]["token"];
+
+  //                        var inProcess = documents[index]["inProcess"];
+                     
+  //                     //  adminController.id = documents[index]['id'];
+  //                     //  adminController.update();
+             
+  //                             // adminController.name = documents[index]['name'];  
+  //                             //   adminController.update();     
+                            
+  //                return     
+  //                Padding(
+  //                     padding: const EdgeInsets.all(4.0),
+  //                     child: GestureDetector(
+  //                       onTap: () async{
+  //                       await   _showAlertDialog(context,netMetering,name,userid);
+  //                       },
+  //                       child: Column(
+  //                         children: [
+  //                           Container(
+  //                             height: 70,
+  //                              decoration: BoxDecoration(
+  //                                              borderRadius: BorderRadius.circular(10),
+  //                                              color: Colors.green.withOpacity(0.2),
+  //                                            ),
+  //                             child: Center(child: Column(
+  //                               children: [
+  //                                 Column(
+  //                                   children: [
+  //                                     Text("Customer Name : ${name}",style: TextStyle(fontSize: 20), ),
+  //                                     Text("${inProcess}")
+  //                                   ],
+  //                                 ),
+  //                                 netMetering == false ?
+  //                           Text("") 
+  //                           :
+  //                           Text("Added")
+  //                               ],
+  //                             )),
+  //                           ),
+                          
+  //                         ],
+  //                       ),
+  //                     ),
+  //                   );
+  //                   }),
+  //                );
+            
+  //              },
+  //            ),
+
+
+
+
+
+           
    
 
-          ],
-        ),
+        ],
       ),
     );
   }
